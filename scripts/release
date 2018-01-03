@@ -12,28 +12,3 @@ main ()
 
     _ npmCommit "${1}" "$2"
 }
-
-main ()
-{
-    verbose true
-    strict true
-
-    _ hello "${HELLO}"
-    echo "Script name: $(basename "${BASH_SOURCE[0]}")"
-    echo "Caller name: $(basename "$0")"
-    echo "Repository : ${MANAGE_REPOSITORY}"
-    echo "PWD        : ${PWD}"
-    echo "Argument 1 : $1"
-    echo "Argument 2 : $2"
-    echo "Argument 3 : $3"
-}
-
-onExit ()
-{
-    if (( $1 == 0 ))
-    then
-        _ warn "Exiting."
-    else
-        _ error "An error with exit code \"$1\" has occured."
-    fi
-}
