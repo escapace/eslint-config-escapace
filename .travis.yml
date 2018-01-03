@@ -13,9 +13,12 @@ after_script: greenkeeper-lockfile-upload
 script:
 - gpg --keyserver ha.pool.sks-keyservers.net --recv-key 13F26F82E955B8B8CE469054F29CCEBC83FD4525
 - mkdir -p ~/bin && curl -sSL -o ~/bin/jq $JQ_BINARY && chmod +x ~/bin/jq
-- jq -r '.peerDependencies | to_entries[] | "\"\(.key)@\(.value)\""' package.json | xargs npm i
+- jq -r '.peerDependencies | to_entries[] | "\"\(.key)@\(.value)\""' package.json
+  | xargs npm i
 - "./manage ci"
 env:
   global:
   - JQ_BINARY="https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"
   - PATH="/usr/bin:$PATH"
+  - secure: S3QcOWzQ+9ceereB6EEXxIOsqlmFoWuDlGgUmrYlIlTGgaO3qot/l1XFlKVGUB7tpDSp3jgm8dYwqSb8vrwd+zk8X2RrUurN+chBh10KmDohI4m0Azb7dr3Gk68pOu4omj7ISOCdZMhbWu9WWfHxJ7+G7Lg8XaJJ8dhTyQkmOykK0Puc969MhglHe06Ca32X2lut79SgsmZ1tL/9PGG/dwGyMVgLriDgKIeDK8cT3DB15jto9Woxcxv+Cvs8RjQUzVfe9SUrM1MaXGSQcGH6hb//GReXkupcRBF9UrVsOylP8WAUvUuJxCCPStaBOf4iAcjPATkYRcokUeLTJvmxfy26AJYmviA4W3z0oVMuNKSbnjTeRCxa2kyEvn72jhoVF972IQeTT2fg+XOBCdJzoa4j2duqlbaHchTZDbPMk+do9C5mSEOxta/PiQlLE7UYO3fHX3lekHfpu41Lhv5xHjVxXRtAbmth34efZkFpb9UPrl/UjkloTJtbMx9C/SzJV1V0tmo2Hjwkjda7y1nuayp8aWZe8Szr9Qf0RpTGCi+4o4DF9z+69RTdBW1100zpathCBMax7G6o92NY5VkQ07qa7lkM5SV7FNzaAsOGyw2xQqOXen1KWzEesVvejLS5GhPOFmKjRqW9k8WTdugSUwNyiP9uWC+IwzKIXO2G4J0=
+  - secure: LXihHfAvcyfIsSqoP0uuj5VUt1BY20puKDC9NcwfdHzU952d1xQDX5JrXW07JFC3MMIvoksjBToXfFJlLR9oTPCD45Rtfz1SIDx5jOApKHt3s5PiyMCc48dCytzLhn2gCk2So9e6ZRPkejUdWM6Q5+5qe6GVgQRpv4ICIlFu8SlERtRvz638lB1nhjnRulIlZsx7QaZW9G70I6vmDrCWqpK7EImyTEDogVZHmNOvsJrK6+3v1JqF/3ArKXPUOANzylffWgveNFza39dSo9odpVoYXeec7VhqWYnd103gUXC+jdGqeV8Uk2t7fXFmiZ3xxDollG6nCUNb9sEhmD/frju9j4RCJKLzZUbaqm880mE116by3f6e0FNJMgsFeIYD7Iv8U/vb4zHsdLHt+dS2DFJTeoskAHg+0QTvcbS7wdJKVHl9eVxnyWklne6Okoveqo5zZ61m/tDt6X3qq7YcYHQb/I2ZPCUpVwhlMuCI/EOiGfMnRYbQI9CXwlb5Ob/MLBnRhI8JLpp4KsFP/AiAOP2Ognunv1bq++L8Q2m2F0XX9LVQo9Tagfi4TWPX3/AhXv4Iggwq55PyHXsrcnDFjvXG6cAWdWnIbxIgOgzoNl9JH9TFGHWOyYWmvqcX8T6/fTC5OSwMq62xkJ1U+WOwuDqn2yTyfKfJCuBr/zY93ac=
