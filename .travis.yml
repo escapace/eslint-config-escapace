@@ -1,20 +1,21 @@
+dist: xenial
 language: node_js
-node_js:
-- node
-addons:
-  apt:
-    packages:
-    - bc
 before_install:
 - npm install -g npm
 script:
-- gpg --keyserver ha.pool.sks-keyservers.net --recv-key 13F26F82E955B8B8CE469054F29CCEBC83FD4525
-- mkdir -p ~/bin && curl -sSL -o ~/bin/jq $JQ_BINARY && chmod +x ~/bin/jq
 - jq -r '.peerDependencies | to_entries[] | "\"\(.key)@\(.value)\""' package.json
   | xargs npm i
-- "./manage ci"
+- npm run test
+jobs:
+  include:
+  - stage: release
+    node_js: lts/*
+    deploy:
+      provider: script
+      skip_cleanup: true
+      script:
+      - npx semantic-release
 env:
   global:
-  - JQ_BINARY="https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"
-  - PATH="/usr/bin:$PATH"
-  - secure: AkuHO7qQ2NTk5D59Z7oRS6XIDIaWDLDTCLEo5x1GMdxJHaoTjva8unuP/zXq4YbEwal1banJ8/+x6cARyzesYAz2aZ6Nuygq7yPHL/KyyPs2dr7Ke+klEg6NAJNZtIgVz1txy0kFioxA846G784Xpovw8TCLngJskJmKId9liGONNhBmttvBD1ayWPRhjgVwKvP2uToLKD1lFvKU2RMq3rD12F/O+I34gtLw3uFDR+9NmqZ5ZBQN6fWoNiZHTMnlpET5MwlFuA79p0eoB/6UlhbmfO2pY0kZKhbzBVaKcGjW9E8KrTpySwWNIJhWsCDdarBAbWTYBI805EX7xk1iKayAzHywr1v+s40F4EI0/x667gFvbdkJxKSlPOzbx/lUzsr2ffXAGgMSSlabzWzxVvNq7HUNP8y/tPB3IX3QQ1XsILuHMU1v/EWLhIeE12VBUkXY8SiaURg5+A7n7Hmd7WIvBLs4S5qdN/3ZxJRq3Uo94pZ/ZVY2fudou11PuhHNhZ7Iy1fU/G+sr6OTf56chCZB238Pyw8RDW+AFlA/AIMqe0ULaA1o4+V3g61IDiHPem+cnaPlYEkSaA4kdz/xqrYq7qF4BtIWrPicOQo9C4ctjqltC2BQYLRg3WMGq0Qbn8qjofISAUciAfkOlVAcozNdogjVZjKON6mSV3XF3kU=
+  - secure: fmDcyXHYLerdCmBShPs2CzoTbugFWOz+2c4j6VNS45wUfE/jwHMIwtHwtsjrHc4FxNdlDiM3GfXJCctt2p7hy3LXqMo2FUdBKbPqWEQmGwCgGIm+xy2+lHP6BEEuF9P/ABwIla+Ofwi6TI/Mz03rqJgif7SWaioPyG3PTmI3NJ676/cXHTXk3ykSc1x3uFrLvPu+0FpRAD+rOa9oroo/Nb3E21iujGNGRiunVEZCU5T+2Cf4796a8jYIPGsRDxUvXq7FLhSQ3lg8KG9iywFZ74TwHhFM7fXSoeKSrUwbf9KVPVWrtPY20LPKQdJFC+WX8K759KGy5UUG7kYu7JbyLtYP7s5x62R1EPr++71VK821VY0HEno+EjzCLxKlcjEGEc6WhNL07+JDN0oPk3qjglYEFVB/DPHsAZ+nZmmyaqAc3NBzQNzIT1yJvltLH7P2xeSz5kqjrPK2E7BM+6q8zMpUXTNHHExEy2YedqcOt6pFwve7HutVPlztWCtrO18VxQ3xSi2G7PP5Dtu/4Wf8c+/pSpHHNtCDU/I0Lch3n66b2rhn8HPlTJLUA4C+5zihtISYvKEpll2r0+LFfDVf91lka/YGoJoHAfjQKcHPiR2GgnB1ZhM4DKWHizgcDxB8mRhNL0pkXgWnNa+93YZDb9RK3TkF6wX0ZEZE4l0Vx48=
+  - secure: awS846dLWW5VckGCkQY5o8NPPQy7il0QHfOZ9NK6zHQjrdP7YPJzVjTgnrtr/rZotUsIsVLuIAhUmC/BFyLQEYUh27ZVsFTW0ZCauNcOf+uefoyCUgp9j6uW0dc8awCfwGDoCt+LnCNVPiTmcbyOSF+iPveluXj+K+Ls7IhVbU4crN+fzt4fnqreuD+1ydNcMVEeDWLiNczlQ9ePVJKG0i8G5KXKw0TOqQrcMRHLp1b8+ruPIt5KmvgUZR0S7t+ISN4l+QwMnPIqndZ7IIBQgZ4uHH21KUd9+wv5mQBsz2r+oIoirL1anOiGYzZI/pFh1FHCqzRNOs8Sl90WE4+cgHYMDQ0yCCHB9ODXWt4Zt73zZhXD5J7rrICp4oPjZz2T+k7ZT3QnojnsveDoAf2QKlNirdppQ+nAiLSalaLmkyNE9g2/HkXxPJOwfO3G+iRH9xnPVWoLvfQWGgCURIcsbrR9b9HPLqm+snvBI6D4qyF5rKfl1GhV7fAccjzr3dWwxs7w2o0/xzYqVXNkzElZErPAazS37rBpxW4dhCIGEwEXvvLG99S45RQi8G9tolYVTlMSVdlO1m5ZXUM3Wu4RSxFTPlTxyXAPqjn456qhyLljDsnQkTy7KYtjqG/sV4kd8N7eL13B4rwNmPzvVerB8W73LWLsbb78wbBp7QeGLFs=

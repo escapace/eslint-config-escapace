@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-escapace",
-  "version": "1.4.0",
+  "version": "0.0.0",
   "description": "eslint configuration",
   "repository": "https://github.com/escapace/eslint-config-escapace.git",
   "author": "escapace <opensource@escapace.com>",
@@ -19,33 +19,22 @@
   ],
   "browsers": false,
   "scripts": {
-    "build": "echo 'No build required'",
-    "test:travis": "npm run lint",
-    "test": "npm run lint",
-    "lint": "eslint index.js"
+    "build": "echo \"Error: no build specified\" && exit 0",
+    "test": "eslint index.js"
   },
   "peerDependencies": {
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^4.2.0 || ^5.0.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-no-async-without-await": "^1.2.0",
-    "eslint-plugin-node": "^9.0.1",
-    "eslint-plugin-promise": "^4.1.1",
-    "eslint-plugin-standard": "^4.0.0"
-  },
-  "dependencies": {
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.16.0",
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.0.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^5.0.0",
     "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-no-async-without-await": "^1.2.0",
-    "eslint-plugin-node": "^9.0.1",
+    "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0"
+  },
+  "devDependencies": {
+    "semantic-release": "15.13.16"
   }
 }
