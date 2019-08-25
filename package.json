@@ -25,9 +25,9 @@
   "peerDependencies": {
     "babel-eslint": "^10.0.2",
     "eslint": "^6.0.0",
-    "eslint-config-airbnb-base": "^13.1.0 || ^14.0.0",
+    "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.0.0",
-    "eslint-config-standard": "^13.0.0",
+    "eslint-config-standard": "^14.0.0",
     "eslint-plugin-import": "^2.17.3",
     "eslint-plugin-no-async-without-await": "^1.2.0",
     "eslint-plugin-node": "^9.1.0",
