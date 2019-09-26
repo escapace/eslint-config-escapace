@@ -1,24 +1,72 @@
 module.exports = {
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    warnOnUnsupportedTypeScriptVersion: false
+  },
+  plugins: ['@typescript-eslint', 'no-null'],
   extends: [
-    'eslint-config-airbnb-base',
-    'eslint-config-airbnb-base/rules/strict',
-    'eslint-config-standard',
-    'eslint-config-prettier'
-  // Disabled due to possible issues with nodejs versions & es6 support
-  // eslint-disable-next-line prefer-arrow-callback, func-names
-  ].map(function (extension) {
-    if (!extension.startsWith('plugin:')) {
-      return require.resolve(extension)
-    }
-
-    return extension
-  }),
-
-  plugins: [
-    'no-async-without-await'
+    'standard-with-typescript',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended'
   ],
-  parser: 'babel-eslint',
   rules: {
-    'no-async-without-await/no-async-without-await': 1
+    indent: 'off',
+    '@typescript-eslint/indent': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/adjacent-overload-signatures': 'error',
+    '@typescript-eslint/array-type': 'error',
+    '@typescript-eslint/camelcase': [
+      'error',
+      { properties: 'never', allow: ['^[A-Za-z][a-zA-Za-z]+_[A-Za-z]+$'] }
+    ],
+    //
+    '@typescript-eslint/class-name-casing': 'error',
+    '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+    '@typescript-eslint/interface-name-prefix': 'error',
+    '@typescript-eslint/no-inferrable-types': 'error',
+    '@typescript-eslint/no-misused-new': 'error',
+    '@typescript-eslint/no-this-alias': 'error',
+    '@typescript-eslint/prefer-for-of': 'error',
+    '@typescript-eslint/prefer-function-type': 'error',
+    '@typescript-eslint/prefer-namespace-keyword': 'error',
+    '@typescript-eslint/quotes': [
+      'error',
+      'single',
+      { avoidEscape: true, allowTemplateLiterals: true }
+    ],
+    '@typescript-eslint/triple-slash-reference': 'error',
+    '@typescript-eslint/type-annotation-spacing': 'error',
+    '@typescript-eslint/unified-signatures': 'error',
+    'dot-notation': 'error',
+    eqeqeq: 'error',
+    'linebreak-style': ['error', 'unix'],
+    'new-parens': 'error',
+    'no-caller': 'error',
+    'no-duplicate-case': 'error',
+    'no-duplicate-imports': 'error',
+    'no-empty': 'error',
+    'no-eval': 'error',
+    'no-extra-bind': 'error',
+    'no-fallthrough': 'error',
+    'no-new-func': 'error',
+    'no-new-wrappers': 'error',
+    'no-return-await': 'error',
+    'no-sparse-arrays': 'error',
+    'no-template-curly-in-string': 'error',
+    'no-throw-literal': 'error',
+    'no-trailing-spaces': 'error',
+    'no-undef-init': 'error',
+    'no-unsafe-finally': 'error',
+    'no-unused-expressions': ['error', { allowTernary: true }],
+    'no-unused-labels': 'error',
+    'no-var': 'error',
+    'object-shorthand': 'error',
+    'prefer-const': 'error',
+    'prefer-object-spread': 'error',
+    'quote-props': ['error', 'as-needed'],
+    'space-in-parens': 'error',
+    'unicode-bom': ['error', 'never'],
+    'use-isnan': 'error'
   }
 }
