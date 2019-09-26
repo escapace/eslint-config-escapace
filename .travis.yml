@@ -4,7 +4,7 @@ before_install:
 - npm install -g npm
 script:
 - jq -r '.peerDependencies | to_entries[] | "\"\(.key)@\(.value)\""' package.json
-  | xargs npm i
+  | xargs npm install --no-save
 - npm run test
 jobs:
   include:
