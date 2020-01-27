@@ -23,23 +23,32 @@
     "build": "echo \"Error: no build specified\" && exit 0",
     "test": "eslint index.js"
   },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "npm run test"
+    }
+  },
   "peerDependencies": {
-    "eslint": "6.5.1",
-    "@typescript-eslint/eslint-plugin": "2.3.3",
-    "@typescript-eslint/parser": "2.3.3",
-    "eslint-config-prettier": "6.4.0",
-    "eslint-config-standard-with-typescript": "10.0.0",
-    "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-jsdoc": "15.10.0",
+    "eslint": "6.8.0",
+    "@typescript-eslint/eslint-plugin": "2.17.0",
+    "@typescript-eslint/parser": "2.17.0",
+    "eslint-config-prettier": "6.9.0",
+    "eslint-config-standard-with-typescript": "12.0.1",
+    "eslint-plugin-import": "2.20.0",
+    "eslint-plugin-jsdoc": "21.0.0",
     "eslint-plugin-no-null": "1.0.2",
-    "eslint-plugin-node": "10.0.0",
-    "eslint-plugin-prettier": "3.1.1",
+    "eslint-plugin-node": "11.0.0",
+    "eslint-plugin-prettier": "3.1.2",
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.1"
   },
   "devDependencies": {
-    "prettier": "1.18.2",
-    "semantic-release": "15.13.24",
-    "typescript": "3.6.4"
+    "husky": "4.2.1",
+    "prettier": "1.19.1",
+    "semantic-release": "16.0.3",
+    "typescript": "3.7.5",
+    "@commitlint/cli": "8.3.5",
+    "@commitlint/config-conventional": "8.3.4"
   }
 }
