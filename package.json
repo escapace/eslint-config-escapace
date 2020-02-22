@@ -31,8 +31,8 @@
   },
   "peerDependencies": {
     "eslint": "6.8.0",
-    "@typescript-eslint/eslint-plugin": "2.19.2",
-    "@typescript-eslint/parser": "2.19.2",
+    "@typescript-eslint/eslint-plugin": "2.20.0",
+    "@typescript-eslint/parser": "2.20.0",
     "eslint-config-prettier": "6.10.0",
     "eslint-config-standard-with-typescript": "13.0.0",
     "eslint-plugin-import": "2.20.1",
@@ -46,8 +46,8 @@
   "devDependencies": {
     "husky": "4.2.3",
     "prettier": "1.19.1",
-    "semantic-release": "17.0.3",
-    "typescript": "3.7.5",
+    "semantic-release": "17.0.4",
+    "typescript": "3.8.2",
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4"
   }
