@@ -2,8 +2,8 @@
 
 >  eslint configuration
 
-[![build status](https://secure.travis-ci.org/escapace/eslint-config-escapace.png)](https://travis-ci.org/escapace/eslint-config-escapace)
-[![license](https://img.shields.io/badge/license-Mozilla%20Public%20License%20Version%202.0-blue.svg)]()
+![Build Status](https://github.com/escapace/eslint-config-escapace/workflows/Release/badge.svg)
+![License](https://img.shields.io/badge/license-Mozilla%20Public%20License%20Version%202.0-blue.svg)
 
 ## Usage
 
