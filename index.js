@@ -10,6 +10,7 @@ module.exports = {
     'plugin:prettier/recommended'
   ],
   rules: {
+    '@typescript-eslint/return-await': 0,
     '@typescript-eslint/member-delimiter-style': [
       'error',
       {
