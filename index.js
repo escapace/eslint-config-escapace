@@ -10,6 +10,7 @@ module.exports = {
     'plugin:prettier/recommended'
   ],
   rules: {
+    '@typescript-eslint/prefer-includes': 0,
     '@typescript-eslint/return-await': 0,
     '@typescript-eslint/member-delimiter-style': [
       'error',
@@ -32,14 +33,7 @@ module.exports = {
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/adjacent-overload-signatures': 'error',
     '@typescript-eslint/array-type': 'error',
-    '@typescript-eslint/camelcase': [
-      'error',
-      { properties: 'never', allow: ['^[A-Za-z][a-zA-Za-z]+_[A-Za-z]+$'] }
-    ],
-    //
-    '@typescript-eslint/class-name-casing': 'error',
     '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-    '@typescript-eslint/interface-name-prefix': 'error',
     '@typescript-eslint/no-inferrable-types': 'error',
     '@typescript-eslint/no-misused-new': 'error',
     '@typescript-eslint/no-this-alias': 'error',
