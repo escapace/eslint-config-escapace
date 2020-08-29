@@ -10,6 +10,7 @@ module.exports = {
     'plugin:prettier/recommended'
   ],
   rules: {
+    '@typescript-eslint/ban-ts-comment': 0,
     '@typescript-eslint/ban-types': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
     '@typescript-eslint/prefer-includes': 0,
