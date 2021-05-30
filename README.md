@@ -1,10 +1,5 @@
 # eslint-config-escapace
 
->  eslint configuration
-
-![Build Status](https://github.com/escapace/eslint-config-escapace/workflows/Release/badge.svg)
-![License](https://img.shields.io/badge/license-Mozilla%20Public%20License%20Version%202.0-blue.svg)
-
 ## Usage
 
 Install the correct versions of each package, which are listed by the command:
