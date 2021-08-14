@@ -1,7 +1,7 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    extraFileExtensions: ['.mjs', 'cjs'],
+    extraFileExtensions: ['.mjs', '.cjs'],
     warnOnUnsupportedTypeScriptVersion: false
   },
   plugins: ['@typescript-eslint', 'no-null'],
