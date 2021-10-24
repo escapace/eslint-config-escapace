@@ -4,7 +4,6 @@ updates:
   directory: "/"
   allow:
     - dependency-name: "*"
-      dependency-type: "production"
   schedule:
     interval: weekly
     day: saturday
