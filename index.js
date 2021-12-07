@@ -1,15 +1,65 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
+  parser: '@babel/eslint-parser',
   parserOptions: {
-    extraFileExtensions: ['.mjs', '.cjs'],
-    warnOnUnsupportedTypeScriptVersion: false
+    requireConfigFile: false,
+    sourceType: 'script'
   },
-  plugins: ['@typescript-eslint', 'no-null', 'editorconfig'],
+  reportUnusedDisableDirectives: true,
+  plugins: ['no-null', 'editorconfig'],
   extends: [
-    'standard-with-typescript',
-    'plugin:@typescript-eslint/recommended',
+    'eslint:recommended',
+    'standard',
+    'plugin:eslint-comments/recommended',
+    'plugin:unicorn/recommended',
+    'plugin:node/recommended',
+    'plugin:import/recommended',
+    'plugin:promise/recommended',
     'prettier'
   ],
+  overrides: [
+    {
+      files: ['.*.js'],
+      rules: {
+        'max-lines': 0,
+        'no-magic-numbers': 0,
+        'node/no-unpublished-require': 0
+      }
+    },
+    {
+      files: ['*.mjs'],
+      parserOptions: {
+        sourceType: 'module'
+      },
+      rules: {
+        'import/extensions': [2, 'always']
+      }
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      extends: [
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:import/typescript',
+        'standard-with-typescript'
+      ]
+    }
+  ],
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx']
+    },
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.d.ts', '.ts', '.tsx']
+      },
+      typescript: {
+        alwaysTryTypes: true
+      }
+    },
+    node: {
+      tryExtensions: ['.js', '.ts', '.d.ts']
+    }
+  },
   rules: {
     'no-void': 0,
     '@typescript-eslint/ban-ts-comment': 0,
@@ -82,6 +132,44 @@ module.exports = {
     'quote-props': ['error', 'as-needed'],
     'space-in-parens': 'error',
     'unicode-bom': ['error', 'never'],
-    'use-isnan': 'error'
+    'use-isnan': 'error',
+
+    'eslint-comments/no-unused-disable': 0,
+    'eslint-comments/no-use': [
+      2,
+      {
+        allow: [
+          'eslint-disable-next-line',
+          'eslint-disable',
+          'eslint-enable',
+          'eslint-env'
+        ]
+      }
+    ],
+
+    'node/shebang': 0,
+    'unicorn/custom-error-definition': 2,
+    'unicorn/no-unused-properties': 2,
+    'unicorn/explicit-length-check': [2, { 'non-zero': 'not-equal' }],
+    // Too strict
+    'unicorn/no-null': 0,
+    'unicorn/no-array-reduce': 0,
+    'unicorn/no-array-for-each': 0,
+    'unicorn/prefer-module': 0,
+    'unicorn/prefer-object-from-entries': 0,
+    // Conflicts with no-unresolved and no-missing-import
+    'unicorn/prefer-node-protocol': 0,
+    // This rule gives too many false positives
+    'unicorn/prevent-abbreviations': 0,
+    // Conflicts with Prettier sometimes
+    'unicorn/number-literal-case': 0,
+    // Conflicts with the core ESLint `prefer-destructuring` rule
+    'unicorn/no-unreadable-array-destructuring': 0,
+    // Not useful for us
+    'unicorn/expiring-todo-comments': 0,
+    'unicorn/no-array-callback-reference': 0,
+    // TODO: enable those rules
+    'unicorn/no-process-exit': 0,
+    'unicorn/import-style': 0
   }
 }
