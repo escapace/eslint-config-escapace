@@ -1,5 +1,15 @@
 {
-  extends: ['config:base', 'schedule:weekly'],
+  extends: [
+    'config:base',
+    'schedule:weekly',
+    ':automergeLinters',
+    ':automergeMinor',
+    ':automergeTesters',
+    ':enableVulnerabilityAlerts',
+    ':rebaseStalePrs',
+    ':semanticCommits',
+    ':updateNotScheduled'
+  ],
   rangeStrategy: 'update-lockfile',
   automerge: true,
   major: {
