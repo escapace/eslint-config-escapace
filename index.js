@@ -4,7 +4,7 @@ module.exports = {
     extraFileExtensions: ['.mjs', '.cjs'],
     warnOnUnsupportedTypeScriptVersion: false
   },
-  plugins: ['@typescript-eslint', 'no-null'],
+  plugins: ['@typescript-eslint', 'no-null', 'editorconfig'],
   extends: [
     'standard-with-typescript',
     'plugin:@typescript-eslint/recommended',
