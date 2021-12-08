@@ -8,18 +8,29 @@
     ':enableVulnerabilityAlerts',
     ':rebaseStalePrs',
     ':semanticCommits',
-    ':updateNotScheduled'
+    ':updateNotScheduled',
+    'group:allNonMajor',
+    'helpers:disableTypesNodeMajor'
   ],
-  rangeStrategy: 'update-lockfile',
-  automerge: true,
   major: {
     automerge: false
   },
   lockFileMaintenance: {
     enabled: true
   },
-  rebaseWhen: 'conflicted',
+  packageRules: [
+    {
+      depTypeList: ['peerDependencies'],
+      enabled: false
+    }
+  ],
+  automerge: true,
+  dependencyDashboard: true,
   ignorePresets: [':prHourlyLimit2'],
-  semanticCommits: true,
-  dependencyDashboard: true
+  labels: ['dependencies'],
+  node: false,
+  pin: false,
+  rangeStrategy: 'update-lockfile',
+  rebaseWhen: 'conflicted',
+  semanticCommits: true
 }
