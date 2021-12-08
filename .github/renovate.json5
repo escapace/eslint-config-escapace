@@ -18,12 +18,6 @@
   lockFileMaintenance: {
     enabled: true
   },
-  packageRules: [
-    {
-      depTypeList: ['peerDependencies'],
-      enabled: false
-    }
-  ],
   automerge: true,
   dependencyDashboard: true,
   ignorePresets: [':prHourlyLimit2'],
