@@ -71,6 +71,7 @@ module.exports = {
           'error',
           { ignoreStringArrays: true }
         ],
+        'no-return-await': 'off',
         '@typescript-eslint/return-await': ['error', 'always'],
         '@typescript-eslint/restrict-plus-operands': [
           'error',
