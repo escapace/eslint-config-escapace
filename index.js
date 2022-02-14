@@ -239,7 +239,6 @@ module.exports = {
     '@typescript-eslint/no-duplicate-imports': ['error'],
     'no-extra-bind': 'error',
     'no-new-wrappers': 'error',
-    'no-return-await': 'error',
     'no-template-curly-in-string': 'error',
     'no-throw-literal': 'error',
     'no-undef-init': 'error',
