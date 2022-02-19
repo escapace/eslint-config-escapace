@@ -1,13 +1,14 @@
 name: release
 on:
-  schedule:
-    - cron: '10 16 * * 2'
-  workflow_dispatch:
-  repository_dispatch:
-    types: [release]
+  push:
+    branches:
+      - trunk
+  pull_request:
+    branches:
+      - trunk
 jobs:
   release:
-    name: Release
+    name: release
     runs-on: ubuntu-latest
     steps:
       - name: checkout

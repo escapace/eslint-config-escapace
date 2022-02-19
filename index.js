@@ -248,15 +248,7 @@ module.exports = {
     '@typescript-eslint/adjacent-overload-signatures': 'error',
     '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
     '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-    '@typescript-eslint/explicit-function-return-type': [
-      'error',
-      {
-        allowExpressions: true,
-        allowHigherOrderFunctions: true,
-        allowTypedFunctionExpressions: true,
-        allowDirectConstAssertionInArrowFunctions: true
-      }
-    ],
+    '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/method-signature-style': 'error',
     camelcase: 'off',
     '@typescript-eslint/naming-convention': [
