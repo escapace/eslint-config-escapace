@@ -9,6 +9,12 @@ module.exports = {
   ],
   overrides: [
     {
+      files: ['*.cts', '*.cjs'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off'
+      }
+    },
+    {
       files: ['*.ts', '*.tsx', '*.mts', '*.cts'],
       extends: [
         'plugin:@typescript-eslint/recommended-requiring-type-checking'
