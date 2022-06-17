@@ -87,6 +87,7 @@ module.exports = {
     }
   ],
   rules: {
+    'no-constant-binary-expression': ['error'],
     'no-array-constructor': 'off',
     '@typescript-eslint/no-array-constructor': ['error'],
     'lines-between-class-members': 'off',
