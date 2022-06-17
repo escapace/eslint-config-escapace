@@ -1,50 +1,51 @@
 {
   "name": "eslint-config-escapace",
-  "version": "0.0.0",
   "description": "eslint configuration",
-  "repository": "https://github.com/escapace/eslint-config-escapace.git",
+  "version": "0.0.0",
   "author": "escapace <opensource@escapace.com>",
-  "license": "MPL-2.0",
-  "main": "index.js",
+  "browsers": false,
+  "devDependencies": {
+    "@commitlint/cli": "17.0.2",
+    "@commitlint/config-conventional": "17.0.2",
+    "@typescript-eslint/eslint-plugin": "5.28.0",
+    "@typescript-eslint/parser": "5.28.0",
+    "eslint": "8.17.0",
+    "eslint-config-escapace": "3.12.5",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-editorconfig": "3.2.0",
+    "eslint-plugin-no-null": "1.0.2",
+    "husky": "8.0.1",
+    "prettier": "2.7.1",
+    "semantic-release": "19.0.3",
+    "syncpack": "8.0.0",
+    "typescript": "4.7.3"
+  },
   "files": [
     "index.js"
   ],
   "keywords": [
-    "eslint",
-    "eslintconfig",
     "config",
     "escapace",
+    "eslint",
+    "eslintconfig",
     "javascript",
     "styleguide",
     "typescript"
   ],
-  "browsers": false,
-  "scripts": {
-    "build": "echo \"Error: no build specified\" && exit 0",
-    "test": "eslint index.js",
-    "prepare": "husky install"
-  },
+  "license": "MPL-2.0",
+  "main": "index.js",
   "peerDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.11.0",
-    "@typescript-eslint/parser": "^5.11.0",
-    "eslint": "^8.9.0",
-    "eslint-config-prettier": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-editorconfig": "^3.2.0",
     "eslint-plugin-no-null": "^1.0.2"
   },
-  "devDependencies": {
-    "@commitlint/cli": "17.0.2",
-    "@commitlint/config-conventional": "17.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.11.0",
-    "@typescript-eslint/parser": "^5.11.0",
-    "eslint": "^8.9.0",
-    "eslint-config-escapace": "^3.12.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-editorconfig": "^3.2.0",
-    "eslint-plugin-no-null": "^1.0.2",
-    "husky": "8.0.1",
-    "prettier": "2.6.2",
-    "semantic-release": "19.0.3",
-    "typescript": "4.7.3"
+  "repository": "https://github.com/escapace/eslint-config-escapace.git",
+  "scripts": {
+    "build": "echo \"Error: no build specified\" && exit 0",
+    "prepare": "husky install",
+    "test": "eslint index.js"
   }
 }
