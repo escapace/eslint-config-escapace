@@ -3,11 +3,11 @@
 
 npx syncpack set-semver-ranges \
   --semver-range "^" \
-  --peer \
+  --types peer \
   --source 'package.json' || exit 1
 
 npx syncpack set-semver-ranges \
-  --dev \
+  --types dev \
   --source 'package.json' || exit 1
 
 npx syncpack format \
