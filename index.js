@@ -223,7 +223,7 @@ module.exports = {
     'no-useless-computed-key': 'error',
     'no-useless-escape': 'error',
     'no-useless-rename': 'error',
-    'no-useless-return': 'error',
+    'no-useless-return': 'off',
     'no-with': 'error',
     'one-var': ['error', { initialized: 'never' }],
     'prefer-const': ['error', { destructuring: 'all' }],
