@@ -17,14 +17,13 @@ jobs:
         uses: actions/setup-node@v3.6.0
         with:
           node-version: 18
-      - name: install dependencies
-        run: |
-          npm install
-          jq -r '.peerDependencies | to_entries[] | "\"\(.key)@\(.value)\""' package.json | xargs npm install --no-save
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
       - name: test
-        run: npm run test
+        run: pnpm run test
       - name: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm exec semantic-release
+        run: pnpm exec semantic-release
