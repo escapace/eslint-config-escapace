@@ -5,7 +5,7 @@ Install the correct versions of each package
 ```sh
 (
     export PKG=eslint-config-escapace;
-    npm info "$PKG@latest" peerDependencies --json | jq -r 'to_entries[] | "\"\(.key)@\(.value)\"" // empty' | xargs npm install --save-dev "$PKG@latest"
+    npm info "$PKG@latest" peerDependencies --json | jq -r 'to_entries[] | "\"\(.key)@\(.value)\"" // empty' | xargs pnpm install --save-dev "$PKG@latest"
 )
 ```
 
