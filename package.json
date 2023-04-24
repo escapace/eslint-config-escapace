@@ -5,8 +5,8 @@
   "author": "escapace <opensource@escapace.com>",
   "browsers": false,
   "devDependencies": {
-    "@commitlint/cli": "17.5.1",
-    "@commitlint/config-conventional": "17.4.4",
+    "@commitlint/cli": "17.6.1",
+    "@commitlint/config-conventional": "17.6.1",
     "eslint-config-escapace": "link:",
     "husky": "8.0.3",
     "prettier": "2.8.7",
