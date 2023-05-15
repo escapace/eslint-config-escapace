@@ -5,13 +5,13 @@
   "author": "escapace <opensource@escapace.com>",
   "browsers": false,
   "devDependencies": {
-    "@commitlint/cli": "17.6.1",
-    "@commitlint/config-conventional": "17.6.1",
+    "@commitlint/cli": "17.6.3",
+    "@commitlint/config-conventional": "17.6.3",
     "eslint-config-escapace": "link:",
     "husky": "8.0.3",
     "prettier": "2.8.8",
     "prettier-config-escapace": "1.0.5",
-    "semantic-release": "21.0.1",
+    "semantic-release": "21.0.2",
     "syncpack": "9.8.6",
     "typescript": "5.0.4"
   },
