@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 dependencies:
   '@typescript-eslint/eslint-plugin':
@@ -43,8 +47,8 @@ devDependencies:
     specifier: 21.0.2
     version: 21.0.2
   syncpack:
-    specifier: 9.8.6
-    version: 9.8.6
+    specifier: 10.0.0
+    version: 10.0.0
   typescript:
     specifier: 5.0.4
     version: 5.0.4
@@ -3075,8 +3079,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /syncpack@9.8.6:
-    resolution: {integrity: sha512-4S4cUoKK9WenA/Wdk9GvlekzPR9PxC7sqcsUIsK4ypsa/pIYv8Ju1vxGNvp6Y1yI2S9EdCk0QJsB3/wRB8XYVw==}
+  /syncpack@10.0.0:
+    resolution: {integrity: sha512-2NfjGsFNbsVUv/cdy6tnqFW4mCs02hJN/V/DGzPv8EYgVhdOyz52Q4RFSFm2P86utFkESnl5THqCcsUHNAqf8g==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
@@ -3089,7 +3093,7 @@ packages:
       read-yaml-file: 2.1.0
       semver: 7.5.0
       tightrope: 0.1.0
-      zod: 3.21.4
+      ts-toolbelt: 9.6.0
     dev: true
 
   /temp-dir@2.0.0:
@@ -3186,6 +3190,10 @@ packages:
       typescript: 5.0.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: true
+
+  /ts-toolbelt@9.6.0:
+    resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
     dev: true
 
   /tslib@1.14.1:
@@ -3388,8 +3396,4 @@ packages:
   /yocto-queue@1.0.0:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
-    dev: true
-
-  /zod@3.21.4:
-    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: true
