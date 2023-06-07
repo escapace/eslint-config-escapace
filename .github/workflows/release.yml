@@ -3,20 +3,24 @@ on:
   push:
     branches:
       - trunk
-  pull_request:
-    branches:
-      - trunk
 jobs:
   release:
     name: release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      issues: write
+      pull-requests: write
     steps:
       - name: checkout
         uses: actions/checkout@v3.5.2
       - name: setup node
         uses: actions/setup-node@v3.6.0
         with:
-          node-version: 18
+          node-version: lts
+      - name: upgrade npm
+        run: npm install -g npm
       - uses: pnpm/action-setup@v2
         with:
           version: latest
