@@ -5,15 +5,15 @@
   "author": "escapace <opensource@escapace.com>",
   "browsers": false,
   "devDependencies": {
-    "@commitlint/cli": "17.6.5",
-    "@commitlint/config-conventional": "17.6.5",
+    "@commitlint/cli": "17.6.6",
+    "@commitlint/config-conventional": "17.6.6",
     "eslint-config-escapace": "link:",
     "husky": "8.0.3",
-    "prettier": "2.8.8",
-    "prettier-config-escapace": "1.0.5",
-    "semantic-release": "21.0.3",
-    "syncpack": "10.5.1",
-    "typescript": "5.0.4"
+    "prettier": "3.0.0",
+    "prettier-config-escapace": "1.0.6",
+    "semantic-release": "21.0.7",
+    "syncpack": "10.7.3",
+    "typescript": "5.1.6"
   },
   "files": [
     "./lib/index.cjs"
@@ -30,9 +30,9 @@
   "license": "MPL-2.0",
   "main": "./lib/index.cjs",
   "peerDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.59.9",
-    "@typescript-eslint/parser": "^5.59.9",
-    "eslint": "^8.42.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-editorconfig": "^4.0.3",
     "eslint-plugin-no-null": "^1.0.2"
