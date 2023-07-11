@@ -5,6 +5,13 @@
       "strategy": "versionsByName"
     }
   },
+  "versionGroups": [
+    {
+      "packages": ["**"],
+      "dependencies": ["eslint-config-escapace"],
+      "isIgnored": true
+    }
+  ],
   "semverGroups": [
     {
       "dependencies": ["**"],
