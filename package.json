@@ -11,7 +11,7 @@
     "husky": "8.0.3",
     "prettier": "3.0.3",
     "prettier-config-escapace": "1.0.6",
-    "semantic-release": "21.1.1",
+    "semantic-release": "22.0.0",
     "syncpack": "11.2.1",
     "typescript": "5.2.2"
   },
@@ -30,9 +30,9 @@
   "license": "MPL-2.0",
   "main": "./lib/index.cjs",
   "peerDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.4.0",
-    "@typescript-eslint/parser": "^6.4.0",
-    "eslint": "^8.47.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-editorconfig": "^4.0.3",
     "eslint-plugin-no-null": "^1.0.2"
