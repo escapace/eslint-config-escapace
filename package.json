@@ -2,7 +2,10 @@
   "name": "eslint-config-escapace",
   "description": "eslint configuration",
   "version": "0.0.0",
-  "author": "escapace <opensource@escapace.com>",
+  "author": {
+    "name": "escapace",
+    "email": "opensource@escapace.com"
+  },
   "browsers": false,
   "devDependencies": {
     "@commitlint/cli": "17.7.1",
@@ -40,10 +43,17 @@
   "publishConfig": {
     "provenance": true
   },
-  "repository": "https://github.com/escapace/eslint-config-escapace.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/escapace/eslint-config-escapace.git"
+  },
   "scripts": {
     "build": "echo \"Error: no build specified\" && exit 0",
     "prepare": "husky install",
     "test": "eslint --env node test/* lib/*"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/escapace/eslint-config-escapace/issues"
+  },
+  "homepage": "https://github.com/escapace/eslint-config-escapace#readme"
 }
