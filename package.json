@@ -9,8 +9,8 @@
   "browsers": false,
   "bugs": "https://github.com/escapace/eslint-config-escapace/issues",
   "devDependencies": {
-    "@commitlint/cli": "17.7.2",
-    "@commitlint/config-conventional": "17.7.0",
+    "@commitlint/cli": "18.2.0",
+    "@commitlint/config-conventional": "18.1.0",
     "eslint-config-escapace": "link:",
     "husky": "8.0.3",
     "prettier": "3.0.3",
