@@ -21,7 +21,7 @@ jobs:
           node-version: 'lts/*'
       - name: upgrade npm
         run: npm install -g npm
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v3
         with:
           version: latest
           run_install: true
