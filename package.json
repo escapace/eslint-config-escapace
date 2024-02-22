@@ -12,7 +12,7 @@
     "@commitlint/cli": "18.4.3",
     "@commitlint/config-conventional": "18.4.3",
     "eslint-config-escapace": "link:",
-    "husky": "8.0.3",
+    "husky": "9.0.11",
     "prettier": "3.1.0",
     "prettier-config-escapace": "1.0.6",
     "semantic-release": "22.0.8",
