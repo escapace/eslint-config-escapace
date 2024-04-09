@@ -1,33 +1,24 @@
-import { FlatCompat } from '@eslint/eslintrc'
-import js from '@eslint/js'
+import eslint from '@eslint/js'
 import type { TSESLint } from '@typescript-eslint/utils'
 import prettierConfig from 'eslint-config-prettier'
 import globals from 'globals'
-import path from 'node:path'
 import tseslint from 'typescript-eslint'
-import { fileURLToPath } from 'url'
 
-const baseDirectory = path.dirname(fileURLToPath(import.meta.url))
-const compat = new FlatCompat({
-  baseDirectory,
-  resolvePluginsRelativeTo: baseDirectory
-  // recommendedConfig: js.configs.recommended
-})
+// import path from 'node:path'
+// import { fileURLToPath } from 'url'
+// import { FlatCompat } from '@eslint/eslintrc'
+// const baseDirectory = path.dirname(fileURLToPath(import.meta.url))
+// const compat = new FlatCompat({
+//   baseDirectory,
+//   resolvePluginsRelativeTo: baseDirectory
+//   // recommendedConfig: js.configs.recommended
+// })
 
 const config: TSESLint.FlatConfig.ConfigArray = tseslint.config(
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
-  js.configs.recommended,
-  ...tseslint.configs.recommended,
-  ...tseslint.configs.stylistic,
-  {
-    files: ['*.js', '*.cjs', '*.mjs'],
-    ...tseslint.configs.disableTypeChecked
-  },
-  {
-    files: ['*.ts', '*.tsx', '*.mts', '*.cts'],
-    ...tseslint.configs.recommendedTypeChecked,
-    ...tseslint.configs.stylisticTypeChecked
-  },
+  eslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
   {
     rules: {
       'no-constant-binary-expression': ['error'],
@@ -332,7 +323,7 @@ const config: TSESLint.FlatConfig.ConfigArray = tseslint.config(
     }
   },
   {
-    files: ['*.ts', '*.tsx', '*.mts', '*.cts'],
+    files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
     rules: {
       '@typescript-eslint/no-use-before-define': [
         'error',
@@ -401,17 +392,11 @@ const config: TSESLint.FlatConfig.ConfigArray = tseslint.config(
       '@typescript-eslint/restrict-plus-operands': 'error'
     }
   },
+  prettierConfig,
   {
-    files: ['*.js', '*.cjs', '*.mjs'],
-    rules: {
-      '@typescript-eslint/no-var-requires': 'off'
-    }
-  },
-  ...compat.config({
-    extends: ['plugin:editorconfig/all'],
-    plugins: ['editorconfig']
-  }),
-  prettierConfig
+    files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
+    ...tseslint.configs.disableTypeChecked
+  }
 )
 
 export default config
