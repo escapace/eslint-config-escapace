@@ -3,10 +3,7 @@
 Install the correct versions of each package
 
 ```sh
-(
-    export PKG=eslint-config-escapace;
-    npm info "$PKG@latest" peerDependencies --json | jq -r 'to_entries[] | "\"\(.key)@\(.value)\"" // empty' | xargs pnpm install --save-dev "$PKG@latest"
-)
+npm info "eslint-config-escapace@latest" peerDependencies --json | jq -r 'to_entries[] | "\"\(.key)@\(.value)\"" // empty' | xargs pnpm install --save-dev "eslint-config-escapace@latest"
 ```
 
 Add the extends to `eslint.config.mjs`:
