@@ -9,13 +9,10 @@ Install the correct versions of each package
 )
 ```
 
-Add the extends to `.eslintrc.json`:
+Add the extends to `eslint.config.mjs`:
 
-```json
-{
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
-  "extends": ["escapace"]
-}
+```js
+import config from 'eslint-config-escapace'
+
+export default config
 ```

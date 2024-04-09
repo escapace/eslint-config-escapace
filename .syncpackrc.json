@@ -19,6 +19,7 @@
     {
       "packages": ["**"],
       "dependencies": ["eslint-config-escapace"],
+      "dependencyTypes": ["dev"],
       "isIgnored": true
     }
   ],
