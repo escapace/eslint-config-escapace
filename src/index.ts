@@ -389,7 +389,8 @@ const config: TSESLint.FlatConfig.ConfigArray = tseslint.config(
       ],
       'no-return-await': 'off',
       '@typescript-eslint/return-await': ['error', 'always'],
-      '@typescript-eslint/restrict-plus-operands': 'error'
+      '@typescript-eslint/restrict-plus-operands': 'error',
+      '@typescript-eslint/consistent-indexed-object-style': 'off'
     }
   },
   prettierConfig,
