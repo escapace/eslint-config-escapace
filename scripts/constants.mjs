@@ -11,7 +11,8 @@ export const cwd = path.resolve(
 export const packageJSON = await fse.readJSON(path.join(cwd, 'package.json'))
 export const external = [
   ...Object.keys(packageJSON.dependencies ?? {}),
-  ...Object.keys(packageJSON.peerDependencies ?? {})
+  ...Object.keys(packageJSON.peerDependencies ?? {}),
+  '@eslint/js'
 ]
 export const target = [
   `node${semver.minVersion(packageJSON.engines.node).version}`,

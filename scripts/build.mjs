@@ -1,9 +1,9 @@
 import { build } from 'esbuild'
 import { execa } from 'execa'
 import fse from 'fs-extra'
-import { mkdir } from 'fs/promises'
-import path from 'path'
-import { cwd, target, external } from './constants.mjs'
+import { mkdir } from 'node:fs/promises'
+import path from 'node:path'
+import { cwd, external, target } from './constants.mjs'
 
 process.umask(0o022)
 process.chdir(cwd)
@@ -17,15 +17,15 @@ await build({
   bundle: true,
   entryPoints: ['src/index.ts'],
   external: ['esbuild', ...external],
-  splitting: true,
   format: 'esm',
   logLevel: 'info',
-  outExtension: { '.js': '.mjs' },
+  minifySyntax: true,
   outbase: path.join(cwd, 'src'),
   outdir,
+  outExtension: { '.js': '.mjs' },
   platform: 'node',
   sourcemap: true,
-  minifySyntax: true,
+  splitting: true,
   target,
   tsconfig: path.join(cwd, 'tsconfig-build.json')
 })

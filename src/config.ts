@@ -19,6 +19,7 @@ const disable = [
   'no-duplicate-imports',
   'no-return-await',
   'no-useless-return',
+  'array-callback-return',
   'no-void',
   'perfectionist/sort-exports',
   'perfectionist/sort-imports',
@@ -32,7 +33,6 @@ export const rules: Record<string, RuleEntry> = {
     {
       allowSamePrecedence: true,
       groups: [
-        ['+', '-', '*', '/', '%', '**'],
         ['&', '|', '^', '~', '<<', '>>', '>>>'],
         ['==', '!=', '===', '!==', '>', '>=', '<', '<='],
         ['&&', '||'],
@@ -195,7 +195,6 @@ export const rules: Record<string, RuleEntry> = {
   'unicorn/no-static-only-class': 'error',
   'unicorn/no-typeof-undefined': 'error',
   'unicorn/no-useless-fallback-in-spread': 'error',
-  'unicorn/no-useless-undefined': 'error',
   'unicorn/no-zero-fractions': 'error',
   'unicorn/number-literal-case': 'error',
   'unicorn/numeric-separators-style': 'error',
