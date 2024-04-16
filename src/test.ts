@@ -1,6 +1,6 @@
 import { isEmpty, isEqual, pickBy } from 'lodash-es'
 import { rules, rulesAll, rulesIncludedByDefault } from './config'
-import { RuleEntry } from './types'
+import type { RuleEntry } from './types'
 
 // import path from 'node:path'
 // import { fileURLToPath } from 'url'
