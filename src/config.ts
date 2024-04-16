@@ -21,125 +21,59 @@ const disable = [
   'no-useless-return',
   'array-callback-return',
   'no-void',
+  'no-loop-func',
+  'no-shadow',
   'perfectionist/sort-exports',
   'perfectionist/sort-imports',
   'perfectionist/sort-named-exports',
   'perfectionist/sort-named-imports'
 ]
 
+// prettier-ignore
 export const rules: Record<string, RuleEntry> = {
-  '@stylistic/no-mixed-operators': [
-    'error',
-    {
-      allowSamePrecedence: true,
-      groups: [
-        ['&', '|', '^', '~', '<<', '>>', '>>>'],
-        ['==', '!=', '===', '!==', '>', '>=', '<', '<='],
-        ['&&', '||'],
-        ['in', 'instanceof']
-      ]
-    }
-  ],
+  '@stylistic/no-mixed-operators': ['error', { allowSamePrecedence: true, groups: [['&', '|', '^', '~', '<<', '>>', '>>>'], ['==', '!=', '===', '!==', '>', '>=', '<', '<='], ['&&', '||'], ['in', 'instanceof']] }],
   '@stylistic/wrap-iife': 'error',
   '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
-  '@typescript-eslint/consistent-type-assertions': [
-    'error',
-    { assertionStyle: 'as', objectLiteralTypeAssertions: 'never' }
-  ],
+  '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'as', objectLiteralTypeAssertions: 'never' }],
   '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+  '@typescript-eslint/consistent-type-imports': ['error', { disallowTypeAnnotations: false, fixStyle: 'inline-type-imports', prefer: 'type-imports' }],
   '@typescript-eslint/dot-notation': ['error', { allowKeywords: true }],
   '@typescript-eslint/method-signature-style': 'error',
-  '@typescript-eslint/naming-convention': [
-    'error',
-    {
-      format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
-      leadingUnderscore: 'allow',
-      selector: 'variableLike',
-      trailingUnderscore: 'allow'
-    }
-  ],
+  '@typescript-eslint/naming-convention': ['error', { format: ['camelCase', 'PascalCase', 'UPPER_CASE'], leadingUnderscore: 'allow', selector: 'variableLike', trailingUnderscore: 'allow' }],
   '@typescript-eslint/no-dupe-class-members': 'off',
   '@typescript-eslint/no-dynamic-delete': 'error',
-  '@typescript-eslint/no-empty-interface': [
-    'error',
-    { allowSingleExtends: true }
-  ],
-  '@typescript-eslint/no-extraneous-class': [
-    'error',
-    { allowWithDecorator: true }
-  ],
+  '@typescript-eslint/no-empty-interface': ['error', { allowSingleExtends: true }],
+  '@typescript-eslint/no-extraneous-class': ['error', { allowWithDecorator: true }],
+  '@typescript-eslint/no-import-type-side-effects': 'error',
   '@typescript-eslint/no-invalid-void-type': 'error',
+  '@typescript-eslint/no-loop-func': 'error',
   '@typescript-eslint/no-loss-of-precision': ['error'],
   '@typescript-eslint/no-mixed-enums': 'error',
   '@typescript-eslint/no-non-null-assertion': 'error',
   '@typescript-eslint/no-redeclare': ['error', { builtinGlobals: false }],
   '@typescript-eslint/no-this-alias': ['error', { allowDestructuring: true }],
   '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
+  '@typescript-eslint/no-unnecessary-qualifier': 'error',
   '@typescript-eslint/no-unnecessary-type-arguments': 'error',
-  '@typescript-eslint/no-unused-expressions': [
-    'error',
-    { allowShortCircuit: true, allowTaggedTemplates: true, allowTernary: true }
-  ],
-  '@typescript-eslint/no-unused-vars': [
-    'error',
-    {
-      args: 'none',
-      caughtErrors: 'none',
-      ignoreRestSiblings: true,
-      vars: 'all'
-    }
-  ],
-  '@typescript-eslint/no-use-before-define': [
-    'error',
-    {
-      classes: false,
-      enums: false,
-      functions: false,
-      typedefs: false,
-      variables: false
-    }
-  ],
+  '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true, allowTaggedTemplates: true, allowTernary: true }],
+  '@typescript-eslint/no-unused-vars': ['error', { args: 'none', caughtErrors: 'none', ignoreRestSiblings: true, vars: 'all' }],
+  '@typescript-eslint/no-use-before-define': ['error', { classes: false, enums: false, functions: false, typedefs: false, variables: false }],
   '@typescript-eslint/no-useless-constructor': ['error'],
+  '@typescript-eslint/no-useless-empty-export': 'error',
   '@typescript-eslint/only-throw-error': 'error',
   '@typescript-eslint/prefer-includes': 'error',
-  '@typescript-eslint/prefer-nullish-coalescing': [
-    'error',
-    { ignoreConditionalTests: false, ignoreMixedLogicalExpressions: false }
-  ],
+  '@typescript-eslint/prefer-nullish-coalescing': ['error', { ignoreConditionalTests: false, ignoreMixedLogicalExpressions: false }],
   '@typescript-eslint/prefer-readonly': 'error',
   '@typescript-eslint/prefer-reduce-type-parameter': 'error',
   '@typescript-eslint/prefer-ts-expect-error': 'error',
   '@typescript-eslint/promise-function-async': 'error',
-  '@typescript-eslint/require-array-sort-compare': [
-    'error',
-    { ignoreStringArrays: true }
-  ],
+  '@typescript-eslint/require-array-sort-compare': ['error', { ignoreStringArrays: true }],
   '@typescript-eslint/return-await': ['error', 'always'],
-  '@typescript-eslint/strict-boolean-expressions': [
-    'error',
-    {
-      allowAny: false,
-      allowNullableBoolean: false,
-      allowNullableNumber: false,
-      allowNullableObject: false,
-      allowNullableString: false,
-      allowNumber: false,
-      allowString: false
-    }
-  ],
-  '@typescript-eslint/triple-slash-reference': [
-    'error',
-    { lib: 'never', path: 'never', types: 'never' }
-  ],
+  '@typescript-eslint/strict-boolean-expressions': ['error', { allowAny: false, allowNullableBoolean: false, allowNullableNumber: false, allowNullableObject: false, allowNullableString: false, allowNumber: false, allowString: false }],
+  '@typescript-eslint/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'never' }],
   '@typescript-eslint/unified-signatures': 'error',
-  'accessor-pairs': [
-    'error',
-    { enforceForClassMembers: true, setWithoutGet: true }
-  ],
-  'array-callback-return': [
-    'error',
-    { allowImplicit: false, checkForEach: false }
-  ],
+  'accessor-pairs': ['error', { enforceForClassMembers: true, setWithoutGet: true }],
+  'array-callback-return': ['error', { allowImplicit: false, checkForEach: false }],
   'constructor-super': 'error',
   'default-case-last': 'error',
   eqeqeq: ['error', 'always', { null: 'ignore' }],
@@ -205,10 +139,7 @@ export const rules: Record<string, RuleEntry> = {
   'unicorn/prefer-ternary': 'error',
   'unicorn/prefer-type-error': 'error',
   'unicorn/prevent-abbreviations': 'error',
-  'use-isnan': [
-    'error',
-    { enforceForIndexOf: true, enforceForSwitchCase: true }
-  ],
+  'use-isnan': ['error', { enforceForIndexOf: true, enforceForSwitchCase: true }],
   'valid-typeof': ['error', { requireStringLiterals: true }],
   yoda: ['error', 'never'],
   ...(Object.assign(
