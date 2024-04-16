@@ -26,7 +26,7 @@
   "semverGroups": [
     {
       "dependencies": ["**"],
-      "dependencyTypes": ["engines"],
+      "dependencyTypes": ["engines", "peer"],
       "packages": ["**"],
       "range": ">="
     },
@@ -38,7 +38,7 @@
     },
     {
       "dependencies": ["**"],
-      "dependencyTypes": ["prod", "peer"],
+      "dependencyTypes": ["prod"],
       "packages": ["**"],
       "range": "^"
     }
