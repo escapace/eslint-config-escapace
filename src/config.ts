@@ -74,6 +74,7 @@ export const rules: Record<string, RuleEntry> = {
   '@typescript-eslint/unified-signatures': 'error',
   'accessor-pairs': ['error', { enforceForClassMembers: true, setWithoutGet: true }],
   'array-callback-return': ['error', { allowImplicit: false, checkForEach: false }],
+  "arrow-body-style": ["error", "as-needed", { requireReturnForObjectLiteral: false }],
   'constructor-super': 'error',
   'default-case-last': 'error',
   eqeqeq: ['error', 'always', { null: 'ignore' }],
