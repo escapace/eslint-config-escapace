@@ -125,7 +125,6 @@ export const rules: Record<string, RuleEntry> = {
   'unicorn/error-message': 'error',
   'unicorn/no-instanceof-array': 'error',
   'unicorn/no-keyword-prefix': 'off',
-  'unicorn/no-new-array': 'error',
   'unicorn/no-new-buffer': 'error',
   'unicorn/no-static-only-class': 'error',
   'unicorn/no-typeof-undefined': 'error',
