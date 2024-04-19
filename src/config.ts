@@ -130,7 +130,6 @@ export const rules: Record<string, RuleEntry> = {
   'unicorn/no-typeof-undefined': 'error',
   'unicorn/no-useless-fallback-in-spread': 'error',
   'unicorn/no-zero-fractions': 'error',
-  'unicorn/number-literal-case': 'error',
   'unicorn/numeric-separators-style': 'error',
   'unicorn/prefer-blob-reading-methods': 'error',
   'unicorn/prefer-event-target': 'error',
