@@ -1,5 +1,15 @@
 import { isEmpty, isEqual, pickBy } from 'lodash-es'
-import { rules, rulesAll, rulesIncludedByDefault } from './config'
+import {
+  rulesTypescriptIncluded,
+  listRules,
+  rulesTypescriptDefaults,
+  rulesYAMLIncluded,
+  rulesYAMLDefaults,
+  rulesJSONIncluded,
+  rulesJSONDefaults,
+  rulesVueIncluded,
+  rulesVueDefaults,
+} from './config'
 import type { RuleEntry } from './types'
 
 // import path from 'node:path'
@@ -12,26 +22,27 @@ import type { RuleEntry } from './types'
 //   // recommendedConfig: js.configs.recommended
 // })
 
-const checks = (rules: Record<string, RuleEntry>) => {
+const rulesAll = listRules()
+
+const checks = (rules: Record<string, RuleEntry>, defaults: Record<string, RuleEntry>) => {
   // check if rule exists
-  const absent = pickBy(rules, (_, key) => rulesAll[key] === undefined)
+  const absent = pickBy(rules, (_, key) => !rulesAll.includes(key))
 
   if (!isEmpty(absent)) {
-    throw new Error(
-      `The following rules do not exist: ${JSON.stringify(absent, null, 2)}`
-    )
+    throw new Error(`The following rules do not exist: ${JSON.stringify(absent, null, 2)}`)
   }
 
   // check if rule is default
-  const duplicates = pickBy(rules, (value, key) =>
-    isEqual(rulesIncludedByDefault[key], value)
-  )
+  const duplicates = pickBy(rules, (value, key) => isEqual(defaults[key], value))
 
   if (!isEmpty(duplicates)) {
     throw new Error(
-      `The following rules are already set to their defaults: ${JSON.stringify(duplicates, null, 2)}`
+      `The following rules are already set to their defaults: ${JSON.stringify(duplicates, null, 2)}`,
     )
   }
 }
 
-checks(rules)
+checks(rulesTypescriptIncluded, rulesTypescriptDefaults)
+checks(rulesYAMLIncluded, rulesYAMLDefaults)
+checks(rulesJSONIncluded, rulesJSONDefaults)
+checks(rulesVueIncluded, rulesVueDefaults)

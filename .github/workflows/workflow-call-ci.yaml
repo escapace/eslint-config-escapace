@@ -1,13 +1,13 @@
 on:
   workflow_call:
     inputs:
-      ref:
-        required: true
-        type: string
       node-version:
         required: true
         type: string
       pnpm-version:
+        required: true
+        type: string
+      ref:
         required: true
         type: string
       version:
@@ -44,16 +44,16 @@ jobs:
       - name: install pnpm
         uses: pnpm/action-setup@v3.0.0
         with:
-          version: ${{ inputs.pnpm-version }}
           run_install: false
-      - name: get pnpm store directory
-        id: pnpm-store-path
+          version: ${{ inputs.pnpm-version }}
+      - id: pnpm-store-path
+        name: get pnpm store directory
         run: echo "value=$(pnpm store path)" >> $GITHUB_OUTPUT
       - name: pnpm cache
         uses: actions/cache@v4
         with:
-          path: ${{ steps.pnpm-store-path.outputs.value }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ${{ steps.pnpm-store-path.outputs.value }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store
       - name: install dependencies
@@ -68,15 +68,15 @@ jobs:
         uses: codecov/codecov-action@v4.3.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      - name: pnpm pack
-        if: inputs.version != ''
+      - if: inputs.version != ''
+        name: pnpm pack
         run: |
           echo "$(jq '.version="${{ inputs.version }}"' package.json)" > package.json
           pnpm pack
-      - name: upload
-        if: inputs.version != ''
+      - if: inputs.version != ''
+        name: upload
         uses: actions/upload-artifact@v4
         with:
-          retention-days: 3
           name: package
           path: '*.tgz'
+          retention-days: 3

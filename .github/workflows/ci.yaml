@@ -1,12 +1,6 @@
 name: ci
 
 on:
-  push:
-    branches:
-      - trunk
-    paths-ignore:
-      - README.md
-      - LICENSE
   pull_request:
     branches:
       - trunk
@@ -14,6 +8,12 @@ on:
       - README.md
       - LICENSE
 
+  push:
+    branches:
+      - trunk
+    paths-ignore:
+      - README.md
+      - LICENSE
 permissions:
   contents: read
   packages: read
@@ -26,13 +26,14 @@ env:
 jobs:
   context:
     uses: ./.github/workflows/workflow-call-context.yaml
+
   ci:
-    uses: ./.github/workflows/workflow-call-ci.yaml
     needs:
       - context
-    with:
-      ref: ${{ needs.context.outputs.ref }}
-      node-version: ${{ needs.context.outputs.node-version }}
-      pnpm-version: ${{ needs.context.outputs.pnpm-version }}
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    uses: ./.github/workflows/workflow-call-ci.yaml
+    with:
+      node-version: ${{ needs.context.outputs.node-version }}
+      pnpm-version: ${{ needs.context.outputs.pnpm-version }}
+      ref: ${{ needs.context.outputs.ref }}

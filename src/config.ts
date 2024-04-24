@@ -1,38 +1,118 @@
 import eslint from '@eslint/js'
-import stylistic from '@stylistic/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
-import gitignore from 'eslint-config-flat-gitignore'
-import prettierConfig from 'eslint-config-prettier'
-import tseslint, { type ConfigWithExtends } from 'typescript-eslint'
+import eslintConfigPrettier from 'eslint-config-prettier'
 import type { RuleEntry } from './types'
+import { compose } from './utilities/compose'
 import { normalizeRules } from './utilities/normalize-rules'
 // @ts-expect-error no-types
-import unicorn from 'eslint-plugin-unicorn'
-// @ts-expect-error no-types
-import perfectionist from 'eslint-plugin-perfectionist/configs/recommended-alphabetical'
+import eslintConfigPerfectionist from 'eslint-plugin-perfectionist/configs/recommended-alphabetical'
+import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility'
+import { pickBy } from 'lodash-es'
+import assert from 'node:assert'
+import tseslint from 'typescript-eslint'
+import { pluginsAll } from './plugins'
 
-const disable = [
+const plugins = await pluginsAll()
+
+const ok = <T>(value: T): Exclude<T, undefined> => {
+  assert(value !== undefined)
+
+  return value as Exclude<T, undefined>
+}
+
+export const listRules = () => [
+  ...Object.keys(eslint.configs.all.rules),
+  ...Object.keys(plugins.json.rules).map((value) => `json/${value}`),
+  ...Object.keys(ok(plugins.perfectionist.rules)).map((value) => `perfectionist/${value}`),
+  ...Object.keys(plugins.regexp.rules).map((value) => `regexp/${value}`),
+  ...Object.keys(ok(plugins.tsdoc.rules)).map((value) => `tsdoc/${value}`),
+  ...Object.keys(ok(plugins.unicorn.rules)).map((value) => `unicorn/${value}`),
+  ...Object.keys(ok(plugins.vue.rules)).map((value) => `vue/${value}`),
+  ...Object.keys(plugins.yaml.rules).map((value) => `yaml/${value}`),
+  ...Object.keys(plugins.stylistic.rules).map((value) => `stylistic/${value}`),
+  ...Object.keys(plugins.typescript.rules ?? {}).map((value) => `@typescript-eslint/${value}`),
+  ...Object.keys(plugins['vue-a11y']).map((value) => `vue-a11y/${value}`),
+]
+
+export const rulesVueIncluded = normalizeRules({
+  'vue/block-order': [
+    'error',
+    {
+      order: [['script', 'template'], 'style'],
+    },
+  ],
+  'vue/component-definition-name-casing': ['error', 'PascalCase'],
+  'vue/component-name-in-template-casing': [
+    'error',
+    'PascalCase',
+    {
+      ignores: [],
+      registeredComponentsOnly: true,
+    },
+  ],
+  'vue/component-options-name-casing': ['error', 'PascalCase'],
+  'vue/custom-event-name-casing': ['error', 'camelCase'],
+  'vue/define-macros-order': [
+    'error',
+    {
+      defineExposeLast: false,
+      order: ['defineProps', 'defineEmits'],
+    },
+  ],
+  'vue/multi-word-component-names': 'off',
+  'vue/no-boolean-default': ['error', 'default-false'],
+  'vue/no-empty-component-block': 'error',
+  'vue/no-ref-object-reactivity-loss': 'error',
+  'vue/no-required-prop-with-default': [
+    'error',
+    {
+      autofix: true,
+    },
+  ],
+  'vue/no-setup-props-reactivity-loss': 'error',
+  'vue/prop-name-casing': ['error', 'camelCase'],
+})
+
+export const rulesVueDefaults: Record<string, RuleEntry> = pickBy(
+  normalizeRules(
+    ...compose(
+      ...(ok(plugins.vue.configs)['flat/base'] as TSESLint.FlatConfig.Config[]),
+      ...(ok(plugins.vue.configs)['flat/essential'] as TSESLint.FlatConfig.Config[]),
+      ...(ok(plugins.vue.configs)['flat/recommended'] as TSESLint.FlatConfig.Config[]),
+      ...(ok(plugins.vue.configs)['flat/strongly-recommended'] as TSESLint.FlatConfig.Config[]),
+      ...eslintPluginVueA11y.configs['flat/recommended'].map((value) => ({ rules: value.rules })),
+      {
+        rules: pickBy(
+          eslintConfigPrettier.rules,
+          (_, key) => key.startsWith('vue/') || key.startsWith('vue-a11y/'),
+        ),
+      },
+    ).map((value) => value.rules),
+  ),
+)
+
+export const rulesVue = { ...rulesVueDefaults, ...rulesVueIncluded }
+
+const rulesTypescriptDisable = [
   '@typescript-eslint/ban-types',
   '@typescript-eslint/consistent-indexed-object-style',
   '@typescript-eslint/explicit-function-return-type',
+  'array-callback-return',
   'camelcase',
   'no-duplicate-imports',
-  'no-return-await',
-  'no-useless-return',
-  'array-callback-return',
-  'no-void',
   'no-loop-func',
   'no-shadow',
+  'no-useless-return',
+  'no-void',
   'perfectionist/sort-exports',
   'perfectionist/sort-imports',
   'perfectionist/sort-named-exports',
-  'perfectionist/sort-named-imports'
+  'perfectionist/sort-named-imports',
+  'perfectionist/sort-vue-attributes',
 ]
 
 // prettier-ignore
-export const rules: Record<string, RuleEntry> = {
-  '@stylistic/no-mixed-operators': ['error', { allowSamePrecedence: true, groups: [['&', '|', '^', '~', '<<', '>>', '>>>'], ['==', '!=', '===', '!==', '>', '>=', '<', '<='], ['&&', '||'], ['in', 'instanceof']] }],
-  '@stylistic/wrap-iife': 'error',
+export const rulesTypescriptIncluded: Record<string, RuleEntry> = {
   '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
   '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'as', objectLiteralTypeAssertions: 'never' }],
   '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
@@ -74,7 +154,7 @@ export const rules: Record<string, RuleEntry> = {
   '@typescript-eslint/unified-signatures': 'error',
   'accessor-pairs': ['error', { enforceForClassMembers: true, setWithoutGet: true }],
   'array-callback-return': ['error', { allowImplicit: false, checkForEach: false }],
-  "arrow-body-style": ["error", "as-needed", { requireReturnForObjectLiteral: false }],
+  'arrow-body-style': ['error', 'as-needed', { requireReturnForObjectLiteral: false }],
   'constructor-super': 'error',
   'default-case-last': 'error',
   eqeqeq: ['error', 'always', { null: 'ignore' }],
@@ -95,7 +175,8 @@ export const rules: Record<string, RuleEntry> = {
   'no-multi-str': 'error',
   'no-new': 'error',
   'no-new-func': 'error',
-  'no-new-symbol': 'error',
+  // 'no-new-symbol': 'error',
+  'no-new-native-nonconstructor': 'error',
   'no-obj-calls': 'error',
   'no-object-constructor': 'error',
   'no-octal-escape': 'error',
@@ -119,8 +200,28 @@ export const rules: Record<string, RuleEntry> = {
   'prefer-const': ['error', { destructuring: 'all' }],
   'prefer-promise-reject-errors': 'error',
   'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
+  'regexp/sort-alternatives': 'warn',
+  'regexp/unicode-escape': [
+    'error',
+    'unicodeCodePointEscape', // or "unicodeEscape"
+  ],
+  'regexp/unicode-property': [
+    'error',
+    {
+      generalCategory: 'never',
+      key: 'ignore',
+      property: {
+        binary: 'ignore',
+        generalCategory: 'ignore',
+        script: 'long',
+      },
+    },
+  ],
+  'stylistic/no-mixed-operators': ['warn', { allowSamePrecedence: true, groups: [['&', '|', '^', '~', '<<', '>>', '>>>'], ['==', '!=', '===', '!==', '>', '>=', '<', '<='], ['&&', '||'], ['in', 'instanceof']] }],
+  'stylistic/wrap-iife': 'warn',
   'symbol-description': 'error',
-  'unicorn/better-regex': 'error',
+  'tsdoc/syntax': 'warn',
+  // 'unicorn/better-regex': 'off',
   'unicorn/consistent-function-scoping': 'error',
   'unicorn/error-message': 'error',
   'unicorn/no-instanceof-array': 'error',
@@ -133,6 +234,7 @@ export const rules: Record<string, RuleEntry> = {
   'unicorn/numeric-separators-style': 'error',
   'unicorn/prefer-blob-reading-methods': 'error',
   'unicorn/prefer-event-target': 'error',
+  'unicorn/prefer-modern-math-apis': 'error',
   'unicorn/prefer-node-protocol': 'error',
   'unicorn/prefer-reflect-apply': 'error',
   'unicorn/prefer-ternary': 'error',
@@ -143,62 +245,82 @@ export const rules: Record<string, RuleEntry> = {
   yoda: ['error', 'never'],
   ...(Object.assign(
     {},
-    ...disable.map((value) => ({ [value]: 'off' }))
+    ...rulesTypescriptDisable.map((value) => ({ [value]: 'off' }))
   ) as Record<string, 'off'>)
 }
 
-export const rulesAll = normalizeRules(
-  eslint.configs.all.rules,
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  stylistic.configs['all-flat'].rules!,
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  stylistic.configs['recommended-flat'].rules!,
-  ...tseslint.configs.all.map((value) => value.rules ?? []).flat(),
-  ...tseslint.configs.stylisticTypeChecked
-    .map((value) => value.rules ?? [])
-    .flat(),
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-  unicorn.configs['flat/all'].rules,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-  perfectionist.rules
-  // ...tseslint.configs.recommendedTypeChecked,
-  // ...tseslint.configs.stylisticTypeChecked
+export const rulesTypescriptDefaults = normalizeRules(
+  ...compose(
+    eslint.configs.recommended,
+    ...tseslint.configs.recommendedTypeChecked,
+    ...tseslint.configs.stylisticTypeChecked,
+    plugins.stylistic.configs['disable-legacy'],
+    eslintConfigPerfectionist as TSESLint.FlatConfig.Config,
+    plugins.regexp.configs['flat/recommended'] as TSESLint.FlatConfig.Config,
+    eslintConfigPrettier,
+  ).map((value) => value.rules),
 )
 
-// the order matters here and should be the same as in config below
-export const rulesIncludedByDefault = normalizeRules(
-  eslint.configs.recommended.rules,
-  ...tseslint.configs.recommendedTypeChecked
-    .map((value) => value.rules ?? [])
-    .flat(),
-  ...tseslint.configs.stylisticTypeChecked
-    .map((value) => value.rules ?? [])
-    .flat(),
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  stylistic.configs['disable-legacy'].rules!,
-  prettierConfig.rules
+export const rulesTypescript = normalizeRules(rulesTypescriptDefaults, rulesTypescriptIncluded)
+
+export const rulesJavascript = normalizeRules(
+  rulesTypescriptDefaults,
+  rulesTypescriptIncluded,
+  ...compose(tseslint.configs.disableTypeChecked).map((value) => value.rules),
+  { 'tsdoc/syntax': 'off' },
 )
 
-const config: TSESLint.FlatConfig.ConfigArray = tseslint.config(
-  gitignore({
-    files: ['.gitignore', '.eslintignore'],
-    strict: false
-  }),
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  { plugins: { '@stylistic': stylistic, unicorn } },
-  eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  ...tseslint.configs.stylisticTypeChecked,
-  stylistic.configs['disable-legacy'],
-  perfectionist as ConfigWithExtends,
-  prettierConfig,
-  {
-    rules
-  },
-  {
-    files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
-    ...tseslint.configs.disableTypeChecked
-  }
+export const rulesYAMLDefaults = normalizeRules(
+  ...compose(
+    ...plugins.yaml.configs['flat/base'],
+    ...plugins.yaml.configs['flat/recommended'],
+    ...plugins.yaml.configs['flat/prettier'],
+  ).map((value) => value.rules),
 )
 
-export default config
+export const rulesYAMLIncluded = normalizeRules({
+  'yaml/block-mapping-colon-indicator-newline': 'error',
+  'yaml/block-mapping-question-indicator-newline': 'error',
+  'yaml/block-sequence-hyphen-indicator-newline': 'error',
+  'yaml/file-extension': 'error',
+  'yaml/flow-mapping-curly-newline': 'error',
+  'yaml/flow-sequence-bracket-newline': 'error',
+  'yaml/no-empty-mapping-value': 'off',
+  'yaml/no-multiple-empty-lines': 'error',
+  'yaml/no-trailing-zeros': 'error',
+  'yaml/sort-keys': [
+    'error',
+    {
+      allowLineSeparatedGroups: true,
+      minKeys: 2,
+      order: { caseSensitive: true, natural: false, type: 'asc' },
+      pathPattern: '.*',
+    },
+  ],
+  'yaml/spaced-comment': 'error',
+})
+
+export const rulesYAML = { ...rulesYAMLDefaults, ...rulesYAMLIncluded }
+
+export const rulesJSONDefaults: Record<string, RuleEntry> = normalizeRules(
+  ...compose(
+    ...plugins.json.configs['flat/recommended-with-json'],
+    ...plugins.json.configs['flat/prettier'],
+  ).map((value) => value.rules),
+)
+
+export const rulesJSONIncluded = normalizeRules({
+  'json/no-floating-decimal': 'error',
+  'json/sort-keys': [
+    'error',
+    {
+      allowLineSeparatedGroups: true,
+      minKeys: 2,
+      order: { caseSensitive: true, natural: false, type: 'asc' },
+      pathPattern: '.*',
+    },
+  ],
+  'json/space-unary-ops': 'error',
+})
+
+export const rulesJSON = { ...rulesJSONDefaults, ...rulesJSONIncluded }

@@ -1,7 +1,8 @@
 ls:
-  .ts: kebab-case
+  .d.json.ts: kebab-case
   .d.ts: kebab-case
   .spec.ts: kebab-case
+  .ts: kebab-case
 
 ignore:
   - coverage
