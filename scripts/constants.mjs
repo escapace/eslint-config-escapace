@@ -1,20 +1,13 @@
 import fse from 'fs-extra'
-import path from 'path'
+import path from 'node:path'
 import semver from 'semver'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 
-export const cwd = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  '../'
-)
+export const cwd = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../')
 
 export const packageJSON = await fse.readJSON(path.join(cwd, 'package.json'))
 export const external = [
   ...Object.keys(packageJSON.dependencies ?? {}),
   ...Object.keys(packageJSON.peerDependencies ?? {}),
-  '@eslint/js'
 ]
-export const target = [
-  `node${semver.minVersion(packageJSON.engines.node).version}`,
-  'esnext'
-]
+export const target = [`node${semver.minVersion(packageJSON.engines.node).version}`, 'esnext']
