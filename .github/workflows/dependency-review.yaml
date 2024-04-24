@@ -2,6 +2,7 @@ name: 'Dependency Review'
 on: [pull_request]
 permissions:
   contents: read
+
 jobs:
   dependency-review:
     runs-on: ubuntu-latest
@@ -11,8 +12,6 @@ jobs:
       - name: dependency review
         uses: actions/dependency-review-action@v4
         with:
-          # Possible values: "critical", "high", "moderate", "low"
-          fail-on-severity: high
           #
           # You can only include one of these two options: `allow-licenses` and `deny-licences`
           #
@@ -21,3 +20,5 @@ jobs:
           #
           # Possible values: Any `spdx_id` value(s) from https://docs.github.com/en/rest/licenses
           deny-licenses: GPL-3.0, AGPL-3.0
+          # Possible values: "critical", "high", "moderate", "low"
+          fail-on-severity: high

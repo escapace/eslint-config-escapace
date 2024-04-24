@@ -1,4 +1,10 @@
 {
+  "customTypes": {
+    "engines": {
+      "path": "engines",
+      "strategy": "versionsByName"
+    }
+  },
   "dependencyTypes": [
     "dev",
     "engines",
@@ -8,20 +14,6 @@
     "pnpmOverrides",
     "prod",
     "resolutions"
-  ],
-  "customTypes": {
-    "engines": {
-      "path": "engines",
-      "strategy": "versionsByName"
-    }
-  },
-  "versionGroups": [
-    {
-      "packages": ["**"],
-      "dependencies": ["eslint-config-escapace"],
-      "dependencyTypes": ["dev"],
-      "isIgnored": true
-    }
   ],
   "semverGroups": [
     {
@@ -43,5 +35,13 @@
       "range": "^"
     }
   ],
-  "source": ["package.json"]
+  "source": ["package.json"],
+  "versionGroups": [
+    {
+      "dependencies": ["eslint-config-escapace"],
+      "dependencyTypes": ["dev"],
+      "isIgnored": true,
+      "packages": ["**"]
+    }
+  ]
 }

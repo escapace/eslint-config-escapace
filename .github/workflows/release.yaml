@@ -13,28 +13,30 @@ env:
 jobs:
   context:
     uses: ./.github/workflows/workflow-call-context.yaml
+
   ci:
     if: needs.context.outputs.environment == 'production'
-    uses: ./.github/workflows/workflow-call-ci.yaml
     needs:
       - context
-    with:
-      ref: ${{ needs.context.outputs.ref }}
-      node-version: ${{ needs.context.outputs.node-version }}
-      pnpm-version: ${{ needs.context.outputs.pnpm-version }}
-      version: ${{ needs.context.outputs.version }}
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    uses: ./.github/workflows/workflow-call-ci.yaml
+    with:
+      node-version: ${{ needs.context.outputs.node-version }}
+      pnpm-version: ${{ needs.context.outputs.pnpm-version }}
+      ref: ${{ needs.context.outputs.ref }}
+      version: ${{ needs.context.outputs.version }}
+
   release:
     if: needs.context.outputs.environment == 'production'
-    runs-on: ubuntu-latest
     needs:
       - context
       - ci
     permissions:
+      contents: write
       id-token: write
       packages: write
-      contents: write
+    runs-on: ubuntu-latest
     steps:
       - name: setup node
         uses: actions/setup-node@v4
@@ -60,7 +62,9 @@ jobs:
       #     npm publish --provenance --access public *.tgz
       #   env:
       #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: publish to npmjs
+      - env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        name: publish to npmjs
         run: |
           cat << EOF > "$HOME/.npmrc"
             //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}
@@ -70,13 +74,13 @@ jobs:
           EOF
 
           npm publish --provenance --access public *.tgz
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ steps.ref.outputs.value }}
-      - name: github release
+      - env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: github release
         run: |
           echo "${{ needs.context.outputs.changelog }}" > changelog.md
 
@@ -88,5 +92,3 @@ jobs:
             gh release create v${{ needs.context.outputs.version }} \
               --notes-file changelog.md
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
