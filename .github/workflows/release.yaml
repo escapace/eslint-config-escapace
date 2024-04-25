@@ -30,7 +30,7 @@ jobs:
     if: needs.context.outputs.environment == 'production' || needs.context.outputs.environment == 'staging'
     needs:
       - context
-    uses: escapace/workflows/.github/workflows/ci-typescript.yaml@trunk
+    uses: escapace/workflows/.github/workflows/release-typescript.yaml@trunk
     with:
       changelog: ${{ needs.context.outputs.changelog }}
       enable-npm-registry: true
