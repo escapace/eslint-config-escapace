@@ -15,7 +15,7 @@ jobs:
     uses: escapace/workflows/.github/workflows/context.yaml@trunk
 
   ci:
-    if: needs.context.outputs.environment == 'production'
+    if: needs.context.outputs.environment == 'production' || needs.context.outputs.environment == 'staging'
     needs:
       - context
     uses: escapace/workflows/.github/workflows/ci-typescript.yaml@trunk
@@ -27,67 +27,14 @@ jobs:
       version: ${{ needs.context.outputs.version }}
 
   release:
-    if: needs.context.outputs.environment == 'production'
+    if: needs.context.outputs.environment == 'production' || needs.context.outputs.environment == 'staging'
     needs:
       - context
-      - ci
-    permissions:
-      contents: write
-      id-token: write
-      packages: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ needs.context.outputs.node-version }}
-      - name: download package
-        uses: actions/download-artifact@v4
-        with:
-          name: package
-      - name: install latest npm
-        run: |
-          npm install -g npm
-          npm --version
-      # - name: publish to github packages
-      #   run: |
-      #     cat << EOF > "$HOME/.npmrc"
-      #       //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
-      #       @escapace:registry=https://npm.pkg.github.com
-      #       provenance=true
-      #       always-auth=true
-      #     EOF
-      #
-      #     npm publish --provenance --access public *.tgz
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        name: publish to npmjs
-        run: |
-          cat << EOF > "$HOME/.npmrc"
-            //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}
-            @escapace:registry=https://registry.npmjs.org
-            provenance=true
-            always-auth=true
-          EOF
-
-          npm publish --provenance --access public *.tgz
-      - name: checkout
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.ref.outputs.value }}
-      - env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        name: github release
-        run: |
-          echo "${{ needs.context.outputs.changelog }}" > changelog.md
-
-          if [[ "${{ needs.context.outputs.prerelease }}" == "true" ]]; then
-            gh release create v${{ needs.context.outputs.version }} \
-              --prerelease \
-              --notes-file changelog.md
-          else
-            gh release create v${{ needs.context.outputs.version }} \
-              --notes-file changelog.md
-          fi
+    uses: escapace/workflows/.github/workflows/ci-typescript.yaml@trunk
+    with:
+      changelog: ${{ needs.context.outputs.changelog }}
+      enable-npm-registry: true
+      node-version: ${{ needs.context.outputs.node-version }}
+      prerelease: ${{ needs.context.outputs.prerelease }}
+      ref: ${{ needs.context.outputs.ref }}
+      version: ${{ needs.context.outputs.version }}

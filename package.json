@@ -76,6 +76,7 @@
   },
   "private": false,
   "publishConfig": {
+    "access": "public",
     "provenance": true
   },
   "repository": "escapace/eslint-config-escapace",
