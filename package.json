@@ -27,6 +27,7 @@
     "@commitlint/cli": "19.3.0",
     "@commitlint/config-conventional": "19.2.2",
     "@escapace/canonicalize": "0.1.2",
+    "@escapace/pnpm-pack": "0.2.0",
     "@ls-lint/ls-lint": "2.2.3",
     "@types/eslint-config-prettier": "6.11.3",
     "@types/eslint__js": "8.42.3",
@@ -81,6 +82,7 @@
   "scripts": {
     "build": "tsx ./src/codegen.ts && prettier --write ./src/rules/* && node ./scripts/build.mjs",
     "lint": "ls-lint --config .ls-lint.yaml && knip && eslint",
+    "pack": "pnpm-pack package --pack-destination lib",
     "prepare": "is-ci || husky",
     "test": "pnpm run lint && tsx ./src/test.ts",
     "typecheck": "tsc --noEmit"
