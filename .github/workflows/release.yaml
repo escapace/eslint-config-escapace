@@ -36,6 +36,6 @@ jobs:
       changelog: ${{ needs.context.outputs.changelog }}
       enable-npm-registry: true
       node-version: ${{ needs.context.outputs.node-version }}
-      prerelease: ${{ needs.context.outputs.prerelease }}
+      prerelease: ${{ fromJSON(needs.context.outputs.prerelease) }}
       ref: ${{ needs.context.outputs.ref }}
       version: ${{ needs.context.outputs.version }}
