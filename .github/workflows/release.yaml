@@ -30,6 +30,7 @@ jobs:
     if: needs.context.outputs.environment == 'production' || needs.context.outputs.environment == 'staging'
     needs:
       - context
+      - ci
     uses: escapace/workflows/.github/workflows/release-typescript.yaml@trunk
     with:
       changelog: ${{ needs.context.outputs.changelog }}
