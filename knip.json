@@ -1,11 +1,21 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": [
+    "eslint.config.mjs",
+    "src/**/*.spec.ts",
+    "src/**/example*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,vue}",
+    "src/cli.ts!",
     "src/index.ts!",
-    "src/codegen.ts",
-    "scripts/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}",
-    "eslint.config.mjs"
+    "src/types.ts",
+    "{scripts,perf}/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}"
   ],
   "ignore": ["./src/rules/*.d.json.ts"],
-  "ignoreDependencies": ["eslint-config-escapace"]
+  "ignoreDependencies": ["@commitlint/cli", "prettier", "syncpack", "eslint-config-escapace"],
+  "ignoreExportsUsedInFile": {
+    "interface": true,
+    "type": true
+  },
+  "lefthook": {
+    "config": []
+  }
 }
