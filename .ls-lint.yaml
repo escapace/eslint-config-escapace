@@ -1,4 +1,5 @@
 ls:
+  .config.ts: kebab-case
   .d.json.ts: kebab-case
   .d.ts: kebab-case
   .spec.ts: kebab-case
@@ -6,11 +7,7 @@ ls:
 
 ignore:
   - coverage
-  - .circleci
-  - .eslintrc.json
   - .git
   - .github
-  - .manage_modules
-  - .vscode
   - lib
   - node_modules

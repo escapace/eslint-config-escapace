@@ -205,7 +205,13 @@
   "perfectionist/sort-imports": "off",
   "perfectionist/sort-interfaces": [
     "warn",
-    { "ignore-case": false, "order": "asc", "type": "alphabetical" }
+    {
+      "ignore-case": false,
+      "optionality-order": "required-first",
+      "order": "asc",
+      "partition-by-new-line": true,
+      "type": "alphabetical"
+    }
   ],
   "perfectionist/sort-intersection-types": [
     "warn",
@@ -223,11 +229,11 @@
   "perfectionist/sort-named-imports": "off",
   "perfectionist/sort-object-types": [
     "warn",
-    { "ignore-case": false, "order": "asc", "type": "alphabetical" }
+    { "ignore-case": false, "order": "asc", "partition-by-new-line": true, "type": "alphabetical" }
   ],
   "perfectionist/sort-objects": [
     "warn",
-    { "ignore-case": false, "order": "asc", "partition-by-comment": false, "type": "alphabetical" }
+    { "ignore-case": false, "order": "asc", "partition-by-new-line": true, "type": "alphabetical" }
   ],
   "perfectionist/sort-svelte-attributes": [
     "warn",
@@ -235,7 +241,7 @@
   ],
   "perfectionist/sort-union-types": [
     "warn",
-    { "ignore-case": false, "order": "asc", "type": "alphabetical" }
+    { "ignore-case": false, "nullable-last": true, "order": "asc", "type": "alphabetical" }
   ],
   "perfectionist/sort-vue-attributes": "off",
   "prefer-const": ["error", { "destructuring": "all" }],
