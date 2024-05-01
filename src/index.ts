@@ -7,6 +7,8 @@ import eslintParserYAML from 'yaml-eslint-parser'
 import { interopDefault, pluginsDefault, pluginsVue } from './plugins'
 import rulesJavascript from './rules/javascript.json'
 import rulesJSON from './rules/json.json'
+import rulesJSONC from './rules/jsonc.json'
+import rulesJSON5 from './rules/json5.json'
 import rulesTypescript from './rules/typescript.json'
 import rulesVue from './rules/vue.json'
 import rulesYAML from './rules/yaml.json'
@@ -150,11 +152,30 @@ export const escapace = async (options: Options = {}) => {
       rules: rulesYAML,
     },
     {
-      files: ['**/*.json', '**/*.json5', '**/*.jsonc'],
+      files: ['**/*.json'],
       languageOptions: {
         parser: eslintParserJSON,
       },
       rules: rulesJSON,
+    },
+    {
+      files: ['**/*.json5'],
+      languageOptions: {
+        parser: eslintParserJSON,
+      },
+      rules: rulesJSON5,
+    },
+    {
+      files: [
+        '**/*.jsonc',
+        '**/tsconfig.{json,jsonc}',
+        '**/tsconfig{-,.}[:alnum:].{json,jsonc}',
+        '**/api-extractor.{json,jsonc}',
+      ],
+      languageOptions: {
+        parser: eslintParserJSON,
+      },
+      rules: rulesJSONC,
     },
     {
       files: ['**/package.json'],

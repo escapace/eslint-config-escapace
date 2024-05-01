@@ -8,7 +8,7 @@
   },
   "bugs": "https://github.com/escapace/eslint-config-escapace/issues",
   "dependencies": {
-    "@stylistic/eslint-plugin": "^1.7.2",
+    "@stylistic/eslint-plugin": "^1.8.0",
     "eslint-config-flat-gitignore": "^0.1.5",
     "eslint-plugin-jsonc": "^2.15.1",
     "eslint-plugin-perfectionist": "^2.10.0",
@@ -19,7 +19,7 @@
     "eslint-plugin-vuejs-accessibility": "^2.3.0",
     "eslint-plugin-yml": "^1.14.0",
     "jsonc-eslint-parser": "^2.4.0",
-    "typescript-eslint": "^7.7.1",
+    "typescript-eslint": "^7.8.0",
     "vue-eslint-parser": "^9.4.2",
     "yaml-eslint-parser": "^1.2.2"
   },
@@ -33,18 +33,18 @@
     "@types/eslint__js": "8.42.3",
     "@types/lodash-es": "4.17.12",
     "@types/node": "20.12.7",
-    "@typescript-eslint/utils": "7.7.1",
+    "@typescript-eslint/utils": "7.8.0",
     "eslint": "9.1.1",
     "eslint-config-escapace": "link:",
     "eslint-config-prettier": "9.1.0",
+    "esroll": "0.1.0",
     "knip": "5.11.0",
     "lefthook": "1.6.10",
     "lodash-es": "4.17.21",
     "prettier": "3.2.5",
     "prettier-config-escapace": "1.2.0",
     "syncpack": "12.3.2",
-    "tsup": "8.0.2",
-    "tsx": "4.7.3",
+    "tsx": "4.8.2",
     "typescript": "5.4.5"
   },
   "engines": {
@@ -74,7 +74,7 @@
   },
   "repository": "escapace/eslint-config-escapace",
   "scripts": {
-    "build": "tsx ./src/codegen.ts && prettier --write ./src/rules/* && tsup",
+    "build": "tsx ./src/codegen.ts && prettier --write ./src/rules/* && tsx scripts/build.ts",
     "lint": "ls-lint --config .ls-lint.yaml && knip && eslint",
     "pack": "pnpm-pack package --pack-destination lib",
     "prepare": "lefthook install",

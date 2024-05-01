@@ -7,7 +7,7 @@ import { normalizeRules } from './utilities/normalize-rules'
 // @ts-expect-error no-types
 import eslintConfigPerfectionist from 'eslint-plugin-perfectionist/configs/recommended-alphabetical'
 import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility'
-import { pickBy } from 'lodash-es'
+import { mapValues, pickBy } from 'lodash-es'
 import assert from 'node:assert'
 import tseslint from 'typescript-eslint'
 import { pluginsAll } from './plugins'
@@ -306,11 +306,19 @@ export const rulesYAMLIncluded = normalizeRules({
 
 export const rulesYAML = { ...rulesYAMLDefaults, ...rulesYAMLIncluded }
 
-export const rulesJSONDefaults: Record<string, RuleEntry> = normalizeRules(
-  ...compose(
-    ...plugins.json.configs['flat/recommended-with-json'],
-    ...plugins.json.configs['flat/prettier'],
-  ).map((value) => value.rules),
+export const [rulesJSONDefaults, rulesJSON5Defaults, rulesJSONCDefaults] = (
+  [
+    'flat/recommended-with-json',
+    'flat/recommended-with-json5',
+    'flat/recommended-with-jsonc',
+  ] as const
+).map(
+  (key): Record<string, RuleEntry> =>
+    normalizeRules(
+      ...compose(...plugins.json.configs[key], ...plugins.json.configs['flat/prettier']).map(
+        (value) => value.rules,
+      ),
+    ),
 )
 
 export const rulesJSONIncluded = normalizeRules({
@@ -327,4 +335,12 @@ export const rulesJSONIncluded = normalizeRules({
   'json/space-unary-ops': 'error',
 })
 
-export const rulesJSON = { ...rulesJSONDefaults, ...rulesJSONIncluded }
+export const [rulesJSON, rulesJSON5, rulesJSONC] = (
+  [rulesJSONDefaults, rulesJSON5Defaults, rulesJSONCDefaults] as const
+).map(
+  (object): Record<string, RuleEntry> => ({
+    ...mapValues(rulesJSONDefaults, () => 'off'),
+    ...object,
+    ...rulesJSONIncluded,
+  }),
+)
