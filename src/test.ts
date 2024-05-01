@@ -1,14 +1,16 @@
 import { isEmpty, isEqual, pickBy } from 'lodash-es'
 import {
-  rulesTypescriptIncluded,
   listRules,
-  rulesTypescriptDefaults,
-  rulesYAMLIncluded,
-  rulesYAMLDefaults,
-  rulesJSONIncluded,
+  rulesJSON5Defaults,
+  rulesJSONCDefaults,
   rulesJSONDefaults,
-  rulesVueIncluded,
+  rulesJSONIncluded,
+  rulesTypescriptDefaults,
+  rulesTypescriptIncluded,
   rulesVueDefaults,
+  rulesVueIncluded,
+  rulesYAMLDefaults,
+  rulesYAMLIncluded,
 } from './config'
 import type { RuleEntry } from './types'
 
@@ -45,4 +47,6 @@ const checks = (rules: Record<string, RuleEntry>, defaults: Record<string, RuleE
 checks(rulesTypescriptIncluded, rulesTypescriptDefaults)
 checks(rulesYAMLIncluded, rulesYAMLDefaults)
 checks(rulesJSONIncluded, rulesJSONDefaults)
+checks(rulesJSONIncluded, rulesJSON5Defaults)
+checks(rulesJSONIncluded, rulesJSONCDefaults)
 checks(rulesVueIncluded, rulesVueDefaults)
