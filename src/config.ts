@@ -119,7 +119,7 @@ export const rulesTypescriptIncluded: Record<string, RuleEntry> = {
   '@typescript-eslint/consistent-type-imports': ['error', { disallowTypeAnnotations: false, fixStyle: 'inline-type-imports', prefer: 'type-imports' }],
   '@typescript-eslint/dot-notation': ['error', { allowKeywords: true }],
   '@typescript-eslint/method-signature-style': 'error',
-  '@typescript-eslint/naming-convention': ['error', { format: ['camelCase', 'PascalCase', 'UPPER_CASE'], leadingUnderscore: 'allow', selector: 'variableLike', trailingUnderscore: 'allow' }],
+  '@typescript-eslint/naming-convention': ['error', { format: ['camelCase', 'PascalCase', 'UPPER_CASE'], leadingUnderscore: 'allowSingleOrDouble', selector: 'variableLike', trailingUnderscore: 'allowSingleOrDouble' }],
   '@typescript-eslint/no-dupe-class-members': 'off',
   '@typescript-eslint/no-dynamic-delete': 'error',
   '@typescript-eslint/no-empty-interface': ['error', { allowSingleExtends: true }],
