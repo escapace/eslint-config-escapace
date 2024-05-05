@@ -199,7 +199,7 @@ export const rulesTypescriptIncluded: Record<string, RuleEntry> = {
   'one-var': ['error', { initialized: 'never' }],
   'perfectionist/sort-interfaces': ['warn', { "ignore-case": false, 'optionality-order': 'required-first', "order": "asc", 'partition-by-new-line': true, "type": "alphabetical", }],
   'perfectionist/sort-object-types': ['warn', { "ignore-case": false, "order": "asc", 'partition-by-new-line': true, "type": "alphabetical", }],
-  'perfectionist/sort-objects': ['warn', { "ignore-case": false, "order": "asc", 'partition-by-new-line': true, "type": "alphabetical", }],
+  'perfectionist/sort-objects': ['warn', { "ignore-case": false, "order": "asc", 'partition-by-comment': true, 'partition-by-new-line': true, "type": "alphabetical", }],
   'perfectionist/sort-union-types': ['warn', { "ignore-case": false, 'nullable-last': true, "order": "asc", "type": "alphabetical" }],
   'prefer-const': ['error', { destructuring: 'all' }],
   'prefer-promise-reject-errors': 'error',
