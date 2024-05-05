@@ -233,7 +233,13 @@
   ],
   "perfectionist/sort-objects": [
     "warn",
-    { "ignore-case": false, "order": "asc", "partition-by-new-line": true, "type": "alphabetical" }
+    {
+      "ignore-case": false,
+      "order": "asc",
+      "partition-by-comment": true,
+      "partition-by-new-line": true,
+      "type": "alphabetical"
+    }
   ],
   "perfectionist/sort-svelte-attributes": [
     "warn",
