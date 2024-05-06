@@ -7,13 +7,13 @@
   },
   "dependencyTypes": [
     "dev",
-    "engines",
-    "local",
     "overrides",
     "peer",
     "pnpmOverrides",
     "prod",
-    "resolutions"
+    "resolutions",
+    "local",
+    "engines"
   ],
   "semverGroups": [
     {
@@ -35,11 +35,10 @@
       "range": "^"
     }
   ],
-  "source": ["package.json"],
+  "source": ["package.json", "packages/*/package.json"],
   "versionGroups": [
     {
-      "dependencies": ["eslint-config-escapace"],
-      "dependencyTypes": ["dev"],
+      "dependencies": ["$LOCAL"],
       "isIgnored": true,
       "packages": ["**"]
     }
