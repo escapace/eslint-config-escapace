@@ -1,4 +1,6 @@
 import { isEmpty, isEqual, pickBy } from 'lodash-es'
+import { exec as _exec } from 'node:child_process'
+import { promisify } from 'node:util'
 import { it } from 'vitest'
 import {
   listRules,
@@ -14,6 +16,7 @@ import {
   rulesYAMLIncluded,
 } from './config'
 import type { RuleEntry } from './types'
+const exec = promisify(_exec)
 
 const rulesAll = listRules()
 
@@ -42,4 +45,8 @@ it('rules', () => {
   checks(rulesJSONIncluded, rulesJSON5Defaults)
   checks(rulesJSONIncluded, rulesJSONCDefaults)
   checks(rulesVueIncluded, rulesVueDefaults)
+})
+
+it('eslint', async () => {
+  await exec('eslint')
 })
