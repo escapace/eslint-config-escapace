@@ -2,7 +2,6 @@ import eslint from '@eslint/js'
 import type { TSESLint } from '@typescript-eslint/utils'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import type { RuleEntry } from './types'
-import { compose } from './utilities/compose'
 import { normalizeRules } from './utilities/normalize-rules'
 // @ts-expect-error no-types
 import eslintConfigPerfectionist from 'eslint-plugin-perfectionist/configs/recommended-alphabetical'
@@ -13,6 +12,13 @@ import tseslint from 'typescript-eslint'
 import { pluginsAll } from './plugins'
 
 const plugins = await pluginsAll()
+
+const compose = (
+  ...configs: Array<TSESLint.FlatConfig.Config | undefined>
+): TSESLint.FlatConfig.ConfigArray =>
+  configs
+    .filter((value): value is TSESLint.FlatConfig.Config => value !== undefined)
+    .flatMap((config) => [config])
 
 const ok = <T>(value: T): Exclude<T, undefined> => {
   assert(value !== undefined)
@@ -30,7 +36,7 @@ export const listRules = () => [
   ...Object.keys(ok(plugins.vue.rules)).map((value) => `vue/${value}`),
   ...Object.keys(plugins.yaml.rules).map((value) => `yaml/${value}`),
   ...Object.keys(plugins.stylistic.rules).map((value) => `stylistic/${value}`),
-  ...Object.keys(plugins.typescript.rules ?? {}).map((value) => `@typescript-eslint/${value}`),
+  ...Object.keys(plugins.typescript.rules ?? {}).map((value) => `typescript/${value}`),
   ...Object.keys(plugins['vue-a11y']).map((value) => `vue-a11y/${value}`),
 ]
 
@@ -94,9 +100,9 @@ export const rulesVueDefaults: Record<string, RuleEntry> = pickBy(
 export const rulesVue = { ...rulesVueDefaults, ...rulesVueIncluded }
 
 const rulesTypescriptDisable = [
-  '@typescript-eslint/ban-types',
-  '@typescript-eslint/consistent-indexed-object-style',
-  '@typescript-eslint/explicit-function-return-type',
+  'typescript/ban-types',
+  'typescript/consistent-indexed-object-style',
+  'typescript/explicit-function-return-type',
   'array-callback-return',
   'camelcase',
   'no-duplicate-imports',
@@ -113,45 +119,6 @@ const rulesTypescriptDisable = [
 
 // prettier-ignore
 export const rulesTypescriptIncluded: Record<string, RuleEntry> = {
-  '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
-  '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'as', objectLiteralTypeAssertions: 'never' }],
-  '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-  '@typescript-eslint/consistent-type-imports': ['error', { disallowTypeAnnotations: false, fixStyle: 'inline-type-imports', prefer: 'type-imports' }],
-  '@typescript-eslint/dot-notation': ['error', { allowKeywords: true }],
-  '@typescript-eslint/method-signature-style': 'error',
-  '@typescript-eslint/naming-convention': ['error', { format: ['camelCase', 'PascalCase', 'UPPER_CASE'], leadingUnderscore: 'allowSingleOrDouble', selector: 'variableLike', trailingUnderscore: 'allowSingleOrDouble' }],
-  '@typescript-eslint/no-dupe-class-members': 'off',
-  '@typescript-eslint/no-dynamic-delete': 'error',
-  '@typescript-eslint/no-empty-interface': ['error', { allowSingleExtends: true }],
-  '@typescript-eslint/no-extraneous-class': ['error', { allowWithDecorator: true }],
-  '@typescript-eslint/no-import-type-side-effects': 'error',
-  '@typescript-eslint/no-invalid-void-type': 'error',
-  '@typescript-eslint/no-loop-func': 'error',
-  '@typescript-eslint/no-loss-of-precision': ['error'],
-  '@typescript-eslint/no-mixed-enums': 'error',
-  '@typescript-eslint/no-non-null-assertion': 'error',
-  '@typescript-eslint/no-redeclare': ['error', { builtinGlobals: false }],
-  '@typescript-eslint/no-this-alias': ['error', { allowDestructuring: true }],
-  '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
-  '@typescript-eslint/no-unnecessary-qualifier': 'error',
-  '@typescript-eslint/no-unnecessary-type-arguments': 'error',
-  '@typescript-eslint/no-unused-expressions': ['error', { allowShortCircuit: true, allowTaggedTemplates: true, allowTernary: true }],
-  '@typescript-eslint/no-unused-vars': ['error', { args: 'none', caughtErrors: 'none', ignoreRestSiblings: true, vars: 'all' }],
-  '@typescript-eslint/no-use-before-define': ['error', { classes: false, enums: false, functions: false, typedefs: false, variables: false }],
-  '@typescript-eslint/no-useless-constructor': ['error'],
-  '@typescript-eslint/no-useless-empty-export': 'error',
-  '@typescript-eslint/only-throw-error': 'error',
-  '@typescript-eslint/prefer-includes': 'error',
-  '@typescript-eslint/prefer-nullish-coalescing': ['error', { ignoreConditionalTests: false, ignoreMixedLogicalExpressions: false }],
-  '@typescript-eslint/prefer-readonly': 'error',
-  '@typescript-eslint/prefer-reduce-type-parameter': 'error',
-  '@typescript-eslint/prefer-ts-expect-error': 'error',
-  '@typescript-eslint/promise-function-async': 'error',
-  '@typescript-eslint/require-array-sort-compare': ['error', { ignoreStringArrays: true }],
-  '@typescript-eslint/return-await': ['error', 'always'],
-  '@typescript-eslint/strict-boolean-expressions': ['error', { allowAny: false, allowNullableBoolean: false, allowNullableNumber: false, allowNullableObject: false, allowNullableString: false, allowNumber: false, allowString: false }],
-  '@typescript-eslint/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'never' }],
-  '@typescript-eslint/unified-signatures': 'error',
   'accessor-pairs': ['error', { enforceForClassMembers: true, setWithoutGet: true }],
   'array-callback-return': ['error', { allowImplicit: false, checkForEach: false }],
   'arrow-body-style': ['error', 'as-needed', { requireReturnForObjectLiteral: false }],
@@ -175,6 +142,45 @@ export const rulesTypescriptIncluded: Record<string, RuleEntry> = {
   'no-multi-str': 'error',
   'no-new': 'error',
   'no-new-func': 'error',
+  'typescript/array-type': ['error', { default: 'array-simple' }],
+  'typescript/consistent-type-assertions': ['error', { assertionStyle: 'as', objectLiteralTypeAssertions: 'never' }],
+  'typescript/consistent-type-definitions': ['error', 'interface'],
+  'typescript/consistent-type-imports': ['error', { disallowTypeAnnotations: false, fixStyle: 'inline-type-imports', prefer: 'type-imports' }],
+  'typescript/dot-notation': ['error', { allowKeywords: true }],
+  'typescript/method-signature-style': 'error',
+  'typescript/naming-convention': ['error', { format: ['camelCase', 'PascalCase', 'UPPER_CASE'], leadingUnderscore: 'allowSingleOrDouble', selector: 'variableLike', trailingUnderscore: 'allowSingleOrDouble' }],
+  'typescript/no-dupe-class-members': 'off',
+  'typescript/no-dynamic-delete': 'error',
+  'typescript/no-empty-interface': ['error', { allowSingleExtends: true }],
+  'typescript/no-extraneous-class': ['error', { allowWithDecorator: true }],
+  'typescript/no-import-type-side-effects': 'error',
+  'typescript/no-invalid-void-type': 'error',
+  'typescript/no-loop-func': 'error',
+  'typescript/no-loss-of-precision': ['error'],
+  'typescript/no-mixed-enums': 'error',
+  'typescript/no-non-null-assertion': 'error',
+  'typescript/no-redeclare': ['error', { builtinGlobals: false }],
+  'typescript/no-this-alias': ['error', { allowDestructuring: true }],
+  'typescript/no-unnecessary-boolean-literal-compare': 'error',
+  'typescript/no-unnecessary-qualifier': 'error',
+  'typescript/no-unnecessary-type-arguments': 'error',
+  'typescript/no-unused-expressions': ['error', { allowShortCircuit: true, allowTaggedTemplates: true, allowTernary: true }],
+  'typescript/no-unused-vars': ['error', { args: 'none', caughtErrors: 'none', ignoreRestSiblings: true, vars: 'all' }],
+  'typescript/no-use-before-define': ['error', { classes: false, enums: false, functions: false, typedefs: false, variables: false }],
+  'typescript/no-useless-constructor': ['error'],
+  'typescript/no-useless-empty-export': 'error',
+  'typescript/only-throw-error': 'error',
+  'typescript/prefer-includes': 'error',
+  'typescript/prefer-nullish-coalescing': ['error', { ignoreConditionalTests: false, ignoreMixedLogicalExpressions: false }],
+  'typescript/prefer-readonly': 'error',
+  'typescript/prefer-reduce-type-parameter': 'error',
+  'typescript/prefer-ts-expect-error': 'error',
+  'typescript/promise-function-async': 'error',
+  'typescript/require-array-sort-compare': ['error', { ignoreStringArrays: true }],
+  'typescript/return-await': ['error', 'always'],
+  'typescript/strict-boolean-expressions': ['error', { allowAny: false, allowNullableBoolean: false, allowNullableNumber: false, allowNullableObject: false, allowNullableString: false, allowNumber: false, allowString: false }],
+  'typescript/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'never' }],
+  'typescript/unified-signatures': 'error',
   // 'no-new-symbol': 'error',
   'no-new-native-nonconstructor': 'error',
   'no-obj-calls': 'error',

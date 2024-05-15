@@ -1,4 +1,30 @@
-import type { TSESLint } from '@typescript-eslint/utils'
+import type { Rules } from '../types'
 
-declare const data: Record<string, TSESLint.SharedConfig.RuleEntry>
+declare const data: Rules<
+  | 'no-irregular-whitespace'
+  | 'no-unused-vars'
+  | 'spaced-comment'
+  | 'yaml/block-mapping-colon-indicator-newline'
+  | 'yaml/block-mapping-question-indicator-newline'
+  | 'yaml/block-sequence-hyphen-indicator-newline'
+  | 'yaml/file-extension'
+  | 'yaml/flow-mapping-curly-newline'
+  | 'yaml/flow-mapping-curly-spacing'
+  | 'yaml/flow-sequence-bracket-newline'
+  | 'yaml/flow-sequence-bracket-spacing'
+  | 'yaml/indent'
+  | 'yaml/key-spacing'
+  | 'yaml/no-empty-document'
+  | 'yaml/no-empty-key'
+  | 'yaml/no-empty-mapping-value'
+  | 'yaml/no-empty-sequence-entry'
+  | 'yaml/no-irregular-whitespace'
+  | 'yaml/no-multiple-empty-lines'
+  | 'yaml/no-tab-indent'
+  | 'yaml/no-trailing-zeros'
+  | 'yaml/quotes'
+  | 'yaml/sort-keys'
+  | 'yaml/spaced-comment'
+  | 'yaml/vue-custom-block/no-parsing-error'
+>
 export default data

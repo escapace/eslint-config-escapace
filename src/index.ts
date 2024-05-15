@@ -1,4 +1,4 @@
-import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
+// import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
 import gitignore from 'eslint-config-flat-gitignore'
 import eslintParserJSON from 'jsonc-eslint-parser'
 import { defaultsDeep, omit } from 'lodash-es'
@@ -7,17 +7,19 @@ import eslintParserYAML from 'yaml-eslint-parser'
 import { interopDefault, pluginsDefault, pluginsVue } from './plugins'
 import rulesJavascript from './rules/javascript.json'
 import rulesJSON from './rules/json.json'
-import rulesJSONC from './rules/jsonc.json'
 import rulesJSON5 from './rules/json5.json'
+import rulesJSONC from './rules/jsonc.json'
 import rulesTypescript from './rules/typescript.json'
 import rulesVue from './rules/vue.json'
 import rulesYAML from './rules/yaml.json'
-import { compose } from './utilities/compose'
+import type { Config } from './types'
 import { normalizeRules } from './utilities/normalize-rules'
 
-export { compose, normalizeRules }
+export type { RulesIntersection } from './rules-intersection'
+export type { Config, Prettify, RuleEntry, RuleEntryAlphanumeric, Rules } from './types'
+export { normalizeRules }
 
-export const globs = {
+const globs = {
   javascript: ['**/*.?([cm])js', '**/*.?([cm])jsx'],
   json: ['**/*.json', '**/*.json5', '**/*.jsonc'],
   typescript: ['**/*.?([cm])ts', '**/*.?([cm])tsx'],
@@ -25,13 +27,27 @@ export const globs = {
   yaml: ['**/*.y?(a)ml'],
 }
 
+/**
+ * @public
+ */
 export interface Options {
-  javascript?: FlatConfig.Config
-  typescript?: FlatConfig.Config
-  vue?: { enabled?: boolean } & FlatConfig.Config
+  javascript?: Config
+  typescript?: Config
+  vue?: { enabled?: boolean } & Config
 }
 
-export const escapace = async (options: Options = {}) => {
+/**
+ * @public
+ */
+export const compose = (...configs: Array<Config | undefined>): Config[] =>
+  configs.filter((value): value is Config => value !== undefined).flatMap((config) => [config])
+
+/**
+ * blabalo
+ *
+ * @public
+ */
+export const escapace = async (options: Options = {}): Promise<Config[]> => {
   const flags = {
     vue: options?.vue?.enabled === true,
   }
@@ -39,7 +55,7 @@ export const escapace = async (options: Options = {}) => {
   const plugins = { ...pluginsDefault, ...(flags.vue ? await pluginsVue() : undefined) }
   const parser = flags.vue ? await interopDefault(import('vue-eslint-parser')) : tseslint.parser
 
-  const typescript: FlatConfig.Config = {
+  const typescript: Config = {
     ...options.typescript,
     files: options.typescript?.files ?? globs.typescript,
     languageOptions: {
@@ -68,7 +84,7 @@ export const escapace = async (options: Options = {}) => {
     },
   }
 
-  const javascript: FlatConfig.Config = {
+  const javascript: Config = {
     ...options.javascript,
     files: options.javascript?.files ?? globs.javascript,
     languageOptions: defaultsDeep(
@@ -79,9 +95,9 @@ export const escapace = async (options: Options = {}) => {
           ...typescript.languageOptions?.parserOptions,
           project: undefined,
         },
-      } satisfies FlatConfig.LanguageOptions,
+      } satisfies Config['languageOptions'],
       options.javascript,
-    ) as FlatConfig.LanguageOptions,
+    ) as Config['languageOptions'],
     rules: {
       ...rulesJavascript,
       ...(flags.vue ? rulesVue : {}),
@@ -89,7 +105,7 @@ export const escapace = async (options: Options = {}) => {
     },
   }
 
-  const vue: FlatConfig.Config | undefined = flags.vue
+  const vue: Config | undefined = flags.vue
     ? {
         ...omit(options.vue, 'enabled'),
         files: options.vue?.files ?? globs.vue,
@@ -97,7 +113,7 @@ export const escapace = async (options: Options = {}) => {
           {},
           typescript.languageOptions,
           options.vue?.languageOptions,
-        ) as FlatConfig.LanguageOptions,
+        ) as Config['languageOptions'],
         // eslint-disable-next-line typescript/no-non-null-assertion
         processor: plugins.vue!.processors!['.vue'],
         rules: { ...typescript.rules, ...normalizeRules(options.vue?.rules) },

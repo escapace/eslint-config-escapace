@@ -47,3 +47,5 @@ for (const value of Object.values(constants.builds)) {
 await exec(
   'pnpm exec tsc -p ./tsconfig-build.json --emitDeclarationOnly --declarationDir lib/types',
 )
+
+await exec('pnpm exec api-extractor run --local')
