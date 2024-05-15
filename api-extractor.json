@@ -1,0 +1,52 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+  "apiReport": {
+    "enabled": true,
+    "reportFileName": "api.md",
+    "reportFolder": "<projectFolder>/src",
+    "reportTempFolder": "<projectFolder>/node_modules/.tmp/api-report"
+  },
+  "bundledPackages": ["@typescript-eslint/utils"],
+  "compiler": {
+    "tsconfigFilePath": "<projectFolder>/tsconfig-build.json"
+  },
+  "docModel": {
+    "enabled": false
+  },
+  "dtsRollup": {
+    "enabled": true,
+    // "untrimmedFilePath": "",
+    // "alphaTrimmedFilePath": "<projectFolder>/dist/<unscopedPackageName>-alpha.d.ts",
+    // "betaTrimmedFilePath": "<projectFolder>/dist/<unscopedPackageName>-beta.d.ts",
+    "publicTrimmedFilePath": "<projectFolder>/lib/types/index-public.d.ts"
+    // "omitTrimmingComments": true
+  },
+  "enumMemberOrder": "preserve",
+  "mainEntryPointFilePath": "<projectFolder>/lib/types/index.d.ts",
+  "messages": {
+    "compilerMessageReporting": {
+      "default": {
+        "logLevel": "warning"
+      }
+    },
+    "extractorMessageReporting": {
+      "ae-internal-missing-underscore": {
+        "addToApiReportFile": false,
+        "logLevel": "none"
+      },
+      "default": {
+        "logLevel": "warning"
+      }
+    },
+    "tsdocMessageReporting": {
+      "default": {
+        "logLevel": "warning"
+        // "addToApiReportFile": false
+      }
+    }
+  },
+  "newlineKind": "lf",
+  "tsdocMetadata": {
+    "enabled": false
+  }
+}

@@ -29,6 +29,7 @@
     "@escapace/canonicalize": "0.1.2",
     "@escapace/pnpm-pack": "0.3.0",
     "@ls-lint/ls-lint": "2.2.3",
+    "@microsoft/api-extractor": "7.43.5",
     "@types/eslint-config-prettier": "6.11.3",
     "@types/eslint__js": "8.42.3",
     "@types/lodash-es": "4.17.12",

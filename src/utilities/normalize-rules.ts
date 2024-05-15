@@ -1,10 +1,9 @@
-import type { TSESLint } from '@typescript-eslint/utils'
-import type { RuleEntry } from '../types'
+import type { RuleEntry, RuleEntryAlphanumeric } from '../types'
 
 const levelToString = (
   key: string,
-  value: TSESLint.SharedConfig.Severity | TSESLint.SharedConfig.SeverityString,
-): TSESLint.SharedConfig.SeverityString => {
+  value: 'error' | 'off' | 'warn' | 0 | 1 | 2,
+): 'error' | 'off' | 'warn' => {
   switch (value) {
     case 0:
     case 'off':
@@ -44,8 +43,11 @@ const normalizeRuleKey = (key: string) => {
   }
 }
 
+/**
+ * @public
+ */
 export const normalizeRules = (
-  ...rules: Array<Partial<Record<string, TSESLint.SharedConfig.RuleEntry>> | undefined>
+  ...rules: Array<Partial<Record<string, RuleEntryAlphanumeric>> | undefined>
 ): Record<string, RuleEntry> => {
   if (rules.length === 0) {
     return {}
@@ -56,10 +58,9 @@ export const normalizeRules = (
       Object.assign(
         {},
         ...rules.filter(
-          (value): value is Partial<Record<string, TSESLint.SharedConfig.RuleEntry>> =>
-            value !== undefined,
+          (value): value is Partial<Record<string, RuleEntryAlphanumeric>> => value !== undefined,
         ),
-      ) as Partial<Record<string, TSESLint.SharedConfig.RuleEntry>>,
+      ) as Partial<Record<string, RuleEntryAlphanumeric>>,
     )
       .map(([_key, value]): [string, RuleEntry] | undefined => {
         const key = normalizeRuleKey(_key)
