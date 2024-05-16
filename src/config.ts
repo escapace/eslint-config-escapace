@@ -1,5 +1,7 @@
 import eslint from '@eslint/js'
 import type { TSESLint } from '@typescript-eslint/utils'
+import type { LooseRuleCreateFunction } from '@typescript-eslint/utils/ts-eslint'
+import type { Rule } from 'eslint'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import type { RuleEntry } from './types'
 import { normalizeRules } from './utilities/normalize-rules'
@@ -26,18 +28,52 @@ const ok = <T>(value: T): Exclude<T, undefined> => {
   return value as Exclude<T, undefined>
 }
 
-export const listRules = () => [
-  ...Object.keys(eslint.configs.all.rules),
-  ...Object.keys(plugins.json.rules).map((value) => `json/${value}`),
-  ...Object.keys(ok(plugins.perfectionist.rules)).map((value) => `perfectionist/${value}`),
-  ...Object.keys(plugins.regexp.rules).map((value) => `regexp/${value}`),
-  ...Object.keys(ok(plugins.tsdoc.rules)).map((value) => `tsdoc/${value}`),
-  ...Object.keys(ok(plugins.unicorn.rules)).map((value) => `unicorn/${value}`),
-  ...Object.keys(ok(plugins.vue.rules)).map((value) => `vue/${value}`),
-  ...Object.keys(plugins.yaml.rules).map((value) => `yaml/${value}`),
-  ...Object.keys(plugins.stylistic.rules).map((value) => `stylistic/${value}`),
-  ...Object.keys(plugins.typescript.rules ?? {}).map((value) => `typescript/${value}`),
-  ...Object.keys(plugins['vue-a11y']).map((value) => `vue-a11y/${value}`),
+type RuleMetaData = {
+  docs?: Pick<Exclude<Rule.RuleMetaData['docs'], undefined>, 'description' | 'url'> | undefined
+} & Omit<Rule.RuleMetaData, 'docs'>
+
+type LooseRuleDefinition =
+  | {
+      meta?: RuleMetaData | undefined
+      schema?: RuleMetaData['schema']
+    }
+  | LooseRuleCreateFunction
+  | undefined
+
+export const listRules = (): Array<[string, LooseRuleDefinition]> => [
+  ...Object.entries(eslint.configs.all.rules).map(
+    ([key]) => [key, {}] satisfies [string, LooseRuleDefinition],
+  ),
+  ...Object.entries(plugins.json.rules).map(
+    ([key, value]) => [`json/${key}`, value] satisfies [string, LooseRuleDefinition],
+  ),
+  ...Object.entries(ok(plugins.perfectionist.rules)).map(
+    ([key, value]) => [`perfectionist/${key}`, value] satisfies [string, LooseRuleDefinition],
+  ),
+  ...Object.entries(plugins.regexp.rules).map(
+    ([key, value]) => [`regexp/${key}`, value] satisfies [string, LooseRuleDefinition],
+  ),
+  ...Object.entries(ok(plugins.tsdoc.rules)).map(
+    ([key, value]) => [`tsdoc/${key}`, value] satisfies [string, LooseRuleDefinition],
+  ),
+  ...Object.entries(ok(plugins.unicorn.rules)).map(
+    ([key, value]) => [`unicorn/${key}`, value] satisfies [string, LooseRuleDefinition],
+  ),
+  ...Object.entries(ok(plugins.vue.rules)).map(
+    ([key, value]) => [`vue/${key}`, value] satisfies [string, LooseRuleDefinition],
+  ),
+  ...Object.entries(plugins.yaml.rules).map(
+    ([key, value]) => [`yaml/${key}`, value] satisfies [string, LooseRuleDefinition],
+  ),
+  ...Object.entries(plugins.stylistic.rules).map(
+    ([key, value]) => [`stylistic/${key}`, value] satisfies [string, LooseRuleDefinition],
+  ),
+  ...Object.entries(plugins.typescript.rules ?? {}).map(
+    ([key, value]) => [`typescript/${key}`, value] satisfies [string, LooseRuleDefinition],
+  ),
+  ...Object.entries(plugins['vue-a11y'].rules).map(
+    ([key, value]) => [`vue-a11y/${key}`, value] satisfies [string, LooseRuleDefinition],
+  ),
 ]
 
 export const rulesVueIncluded = normalizeRules({

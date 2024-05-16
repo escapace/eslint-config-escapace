@@ -49,3 +49,5 @@ await exec(
 )
 
 await exec('pnpm exec api-extractor run --local')
+await exec('find lib/types -mindepth 1 ! -name "index-public.d.ts" -exec rm -rf {} +')
+await exec('mv lib/types/index-public.d.ts lib/types/index.d.ts')

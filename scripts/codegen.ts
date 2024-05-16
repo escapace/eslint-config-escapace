@@ -30,6 +30,8 @@ const pairs = {
   yaml: rulesYAML,
 } as const
 
+const collator = new Intl.Collator('en')
+
 for (const [key, value] of Object.entries(pairs)) {
   await writeFile(
     path.join(import.meta.dirname, '../src/rules', `${key}.json`),
@@ -39,7 +41,7 @@ for (const [key, value] of Object.entries(pairs)) {
   const asd = `import type { Rules } from '../types'
 
 declare const data: Rules<${Object.keys(value)
-    .sort()
+    .sort((a, b) => collator.compare(a, b))
     .map((value) => `'${value}'`)
     .join(' | ')}>
 export default data
@@ -58,9 +60,86 @@ await writeFile(
 /**
  * @public
  */
-export type RulesIntersection = ${uniq(listRules().sort())
+export type RulesIntersection = ${uniq(
+      listRules()
+        .map((value) => value[0])
+        .sort((a, b) => collator.compare(a, b)),
+    )
       .map((value) => `'${value}'`)
       .join(' | ')}`,
     { ...prettierConfig, parser: 'typescript' },
   ),
 )
+
+// type RuleMetaData = Rule.RuleMetaData
+
+// import type { JSONSchema4 } from '@typescript-eslint/utils/json-schema'
+// import { compile } from 'json-schema-to-typescript'
+//
+// for (const [key, value] of listRules()) {
+//   if (isFunction(value)) {
+//     continue
+//   }
+//
+//   const description = value?.meta?.docs?.description
+//   const url = value?.meta?.docs?.url
+//   const type = value?.meta?.type
+//   const schema = value?.meta?.schema
+//
+//   if (Array.isArray(schema) && schema.length >= 2) {
+//
+//   const sc = Array.isArray(schema)
+//     ? schema.length === 1
+//       ? schema[0]
+//       : schema.length === 0
+//         ? undefined
+//         : { prefixItems: schema, type: 'array' }
+//     : schema
+//
+//   const scc = isEmpty(sc)
+//     ? undefined
+//     : (mapValuesDeep(
+//       mapKeys(sc, (_, key) =>
+//         key === 'definitions' ? '$defs' : key === '$definitions' ? '$defs' : key,
+//       ) as JSONSchema4,
+//       (value: unknown, key) => key === '$ref' && typeof value === 'string'
+//         // eslint-disable-next-line regexp/no-unused-capturing-group
+//         ? value.replace(/(#\/definitions\/|#\/items\/\d+\/\$defs\/)/i, `#/$defs/`)
+//         : value,
+//     ) as JSONSchema4)
+//
+//   if (!isEmpty(scc)) {
+//     try {
+//       console.log(key)
+//
+//       console.log(
+//         await compile(scc, key, {
+//           bannerComment: '',
+//           declareExternallyReferenced: true,
+//           format: false,
+//           strictIndexSignatures: true,
+//         }),
+//       )
+//       // console.log('----')
+//     } catch (e) {
+//       console.log(key)
+//       console.log(JSON.stringify(scc, null, 2))
+//
+//       throw e
+//     }
+//   } else {
+//     // console.log(sc, schema)
+//   }
+//   // console.log(value?.meta)
+// }
+//
+// import { isEmpty, isFunction, isObject, isPlainObject, map, mapKeys, mapValues, pickBy } from 'lodash-es'
+// const mapValuesDeep = (object: object | null | undefined, function_: (key: unknown, value: unknown) => unknown, key?: unknown): unknown =>
+//   Array.isArray(object)
+//     ? map(object, (innerObject, index) => mapValuesDeep(innerObject as object, function_, index))
+//     : isPlainObject(object)
+//       ? mapValues(object, (value, key) => mapValuesDeep(value, function_, key))
+//       : isObject(object)
+//         ? object
+//         : function_(object, key)
+//
