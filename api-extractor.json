@@ -1,9 +1,9 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
   "apiReport": {
-    "enabled": false,
-    "reportFileName": "api.md",
-    "reportFolder": "<projectFolder>/src",
+    "enabled": true,
+    "reportFileName": "api-report.md",
+    "reportFolder": "<projectFolder>/lib",
     "reportTempFolder": "<projectFolder>/node_modules/.tmp/api-report"
   },
   "bundledPackages": ["@typescript-eslint/utils"],
