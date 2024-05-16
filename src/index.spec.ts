@@ -18,7 +18,7 @@ import {
 import type { RuleEntry } from './types'
 const exec = promisify(_exec)
 
-const rulesAll = listRules()
+const rulesAll = listRules().map(([key]) => key)
 
 const checks = (rules: Record<string, RuleEntry>, defaults: Record<string, RuleEntry>) => {
   // check if rule exists

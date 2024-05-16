@@ -43,8 +43,6 @@ export const compose = (...configs: Array<Config | undefined>): Config[] =>
   configs.filter((value): value is Config => value !== undefined).flatMap((config) => [config])
 
 /**
- * blabalo
- *
  * @public
  */
 export const escapace = async (options: Options = {}): Promise<Config[]> => {
