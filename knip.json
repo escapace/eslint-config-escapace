@@ -13,10 +13,10 @@
   "ignore": ["**/*.d.+([a-zA-Z0-9]).ts", "**/*.d.ts", "lib/**"],
   "ignoreDependencies": [
     "@commitlint/cli",
-    "prettier",
-    "syncpack",
+    "@microsoft/api-extractor",
     "eslint-config-escapace",
-    "@microsoft/api-extractor"
+    "prettier",
+    "syncpack"
   ],
   "ignoreExportsUsedInFile": {
     "interface": true,

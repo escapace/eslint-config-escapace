@@ -40,7 +40,7 @@
     "eslint-config-escapace": "link:",
     "eslint-config-prettier": "9.1.0",
     "esroll": "0.1.1",
-    "knip": "5.12.3",
+    "knip": "5.13.0",
     "lefthook": "1.6.11",
     "lodash-es": "4.17.21",
     "prettier": "3.2.5",
@@ -78,6 +78,8 @@
   "repository": "escapace/eslint-config-escapace",
   "scripts": {
     "build": "tsx scripts/codegen.ts && tsx scripts/build.ts",
+    "codegen": "tsx scripts/codegen.ts",
+    "format": "eslint --no-warn-ignored --fix && prettier -uw .",
     "lint": "ls-lint --config .ls-lint.yaml && knip && eslint",
     "pack": "pnpm-pack package --pack-destination lib",
     "prepare": "lefthook install",
