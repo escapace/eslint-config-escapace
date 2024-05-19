@@ -47,7 +47,3 @@ for (const value of Object.values(constants.builds)) {
 await exec(
   'pnpm exec tsc -p ./tsconfig-build.json --emitDeclarationOnly --declarationDir lib/types',
 )
-
-await exec('pnpm exec api-extractor run --local')
-await exec('find lib/types -mindepth 1 ! -name "index-public.d.ts" -exec rm -rf {} +')
-await exec('mv lib/types/index-public.d.ts lib/types/index.d.ts')

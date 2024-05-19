@@ -1,17 +1,15 @@
 import eslint from '@eslint/js'
 import type { TSESLint } from '@typescript-eslint/utils'
-import type { LooseRuleCreateFunction } from '@typescript-eslint/utils/ts-eslint'
-import type { Rule } from 'eslint'
 import eslintConfigPrettier from 'eslint-config-prettier'
-import type { RuleEntry } from './types'
+import type { RuleEntry, Rules } from './types'
 import { normalizeRules } from './utilities/normalize-rules'
 // @ts-expect-error no-types
 import eslintConfigPerfectionist from 'eslint-plugin-perfectionist/configs/recommended-alphabetical'
 import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility'
 import { mapValues, pickBy } from 'lodash-es'
-import assert from 'node:assert'
 import tseslint from 'typescript-eslint'
-import { pluginsAll } from './plugins'
+import { ok } from './utilities/ok'
+import { pluginsAll } from './utilities/plugins'
 
 const plugins = await pluginsAll()
 
@@ -21,60 +19,6 @@ const compose = (
   configs
     .filter((value): value is TSESLint.FlatConfig.Config => value !== undefined)
     .flatMap((config) => [config])
-
-const ok = <T>(value: T): Exclude<T, undefined> => {
-  assert(value !== undefined)
-
-  return value as Exclude<T, undefined>
-}
-
-type RuleMetaData = {
-  docs?: Pick<Exclude<Rule.RuleMetaData['docs'], undefined>, 'description' | 'url'> | undefined
-} & Omit<Rule.RuleMetaData, 'docs'>
-
-type LooseRuleDefinition =
-  | {
-      meta?: RuleMetaData | undefined
-      schema?: RuleMetaData['schema']
-    }
-  | LooseRuleCreateFunction
-  | undefined
-
-export const listRules = (): Array<[string, LooseRuleDefinition]> => [
-  ...Object.entries(eslint.configs.all.rules).map(
-    ([key]) => [key, {}] satisfies [string, LooseRuleDefinition],
-  ),
-  ...Object.entries(plugins.json.rules).map(
-    ([key, value]) => [`json/${key}`, value] satisfies [string, LooseRuleDefinition],
-  ),
-  ...Object.entries(ok(plugins.perfectionist.rules)).map(
-    ([key, value]) => [`perfectionist/${key}`, value] satisfies [string, LooseRuleDefinition],
-  ),
-  ...Object.entries(plugins.regexp.rules).map(
-    ([key, value]) => [`regexp/${key}`, value] satisfies [string, LooseRuleDefinition],
-  ),
-  ...Object.entries(ok(plugins.tsdoc.rules)).map(
-    ([key, value]) => [`tsdoc/${key}`, value] satisfies [string, LooseRuleDefinition],
-  ),
-  ...Object.entries(ok(plugins.unicorn.rules)).map(
-    ([key, value]) => [`unicorn/${key}`, value] satisfies [string, LooseRuleDefinition],
-  ),
-  ...Object.entries(ok(plugins.vue.rules)).map(
-    ([key, value]) => [`vue/${key}`, value] satisfies [string, LooseRuleDefinition],
-  ),
-  ...Object.entries(plugins.yaml.rules).map(
-    ([key, value]) => [`yaml/${key}`, value] satisfies [string, LooseRuleDefinition],
-  ),
-  ...Object.entries(plugins.stylistic.rules).map(
-    ([key, value]) => [`stylistic/${key}`, value] satisfies [string, LooseRuleDefinition],
-  ),
-  ...Object.entries(plugins.typescript.rules ?? {}).map(
-    ([key, value]) => [`typescript/${key}`, value] satisfies [string, LooseRuleDefinition],
-  ),
-  ...Object.entries(plugins['vue-a11y'].rules).map(
-    ([key, value]) => [`vue-a11y/${key}`, value] satisfies [string, LooseRuleDefinition],
-  ),
-]
 
 export const rulesVueIncluded = normalizeRules({
   'vue/block-order': [
@@ -154,7 +98,7 @@ const rulesTypescriptDisable = [
 ]
 
 // prettier-ignore
-export const rulesTypescriptIncluded: Record<string, RuleEntry> = {
+export const rulesTypescriptIncluded: Rules = {
   'accessor-pairs': ['error', { enforceForClassMembers: true, setWithoutGet: true }],
   'array-callback-return': ['error', { allowImplicit: false, checkForEach: false }],
   'arrow-body-style': ['error', 'as-needed', { requireReturnForObjectLiteral: false }],
@@ -201,7 +145,7 @@ export const rulesTypescriptIncluded: Record<string, RuleEntry> = {
   'typescript/no-unnecessary-qualifier': 'error',
   'typescript/no-unnecessary-type-arguments': 'error',
   'typescript/no-unused-expressions': ['error', { allowShortCircuit: true, allowTaggedTemplates: true, allowTernary: true }],
-  'typescript/no-unused-vars': ['error', { args: 'none', caughtErrors: 'none', ignoreRestSiblings: true, vars: 'all' }],
+  'typescript/no-unused-vars': ['error', { args: 'none', argsIgnorePattern: '^_', caughtErrors: 'none', ignoreRestSiblings: true, vars: 'all', varsIgnorePattern: '^_' }],
   'typescript/no-use-before-define': ['error', { classes: false, enums: false, functions: false, typedefs: false, variables: false }],
   'typescript/no-useless-constructor': ['error'],
   'typescript/no-useless-empty-export': 'error',
@@ -237,7 +181,7 @@ export const rulesTypescriptIncluded: Record<string, RuleEntry> = {
   'no-useless-call': 'error',
   'no-useless-computed-key': 'error',
   'no-useless-rename': 'error',
-  'object-shorthand': ['warn', 'properties'],
+  'object-shorthand': ['warn', 'always'],
   'one-var': ['error', { initialized: 'never' }],
   'perfectionist/sort-interfaces': ['warn', { "ignore-case": false, 'optionality-order': 'required-first', "order": "asc", 'partition-by-new-line': true, "type": "alphabetical", }],
   'perfectionist/sort-object-types': ['warn', { "ignore-case": false, "order": "asc", 'partition-by-new-line': true, "type": "alphabetical", }],
@@ -344,7 +288,7 @@ export const rulesYAMLIncluded = normalizeRules({
     },
   ],
   'yaml/spaced-comment': 'error',
-})
+} satisfies Rules)
 
 export const rulesYAML = { ...rulesYAMLDefaults, ...rulesYAMLIncluded }
 
@@ -375,7 +319,7 @@ export const rulesJSONIncluded = normalizeRules({
     },
   ],
   'json/space-unary-ops': 'error',
-})
+} satisfies Rules)
 
 export const [rulesJSON, rulesJSON5, rulesJSONC] = (
   [rulesJSONDefaults, rulesJSON5Defaults, rulesJSONCDefaults] as const

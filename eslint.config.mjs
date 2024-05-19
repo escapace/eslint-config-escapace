@@ -1,5 +1,7 @@
 // @ts-check
 
-import { escapace } from 'eslint-config-escapace'
+import { compose, escapace } from 'eslint-config-escapace'
 
-export default escapace()
+export default compose(escapace(), {
+  ignores: ['src/types/*.ts', 'src/rules/*.ts'],
+})

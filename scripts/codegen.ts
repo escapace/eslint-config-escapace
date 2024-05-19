@@ -1,10 +1,10 @@
-import { canonicalize } from '@escapace/canonicalize'
+import { kebabCase } from 'lodash-es'
 import assert from 'node:assert'
 import { writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { format, resolveConfig, resolveConfigFile } from 'prettier'
+import { fs } from 'zx'
 import {
-  listRules,
   rulesJavascript,
   rulesJSON,
   rulesJSON5,
@@ -13,133 +13,101 @@ import {
   rulesVue,
   rulesYAML,
 } from '../src/config'
-import { uniq } from 'lodash-es'
+import type { RuleDefinition } from '../src/utilities/normalize-rule-definition'
+import { ruleDefinitions } from '../src/utilities/rule-definitions'
 
 const prettierConfigFile = await resolveConfigFile(import.meta.dirname)
 assert(typeof prettierConfigFile === 'string')
 const prettierConfig = await resolveConfig(prettierConfigFile)
 assert(prettierConfig !== null)
 
+const pathDirectoryTypes = path.join(import.meta.dirname, '../src/types')
+const pathDirectoryRules = path.join(import.meta.dirname, '../src/rules')
+
+await fs.emptyDir(pathDirectoryTypes)
+await fs.emptyDir(pathDirectoryRules)
+
 const pairs = {
-  javascript: rulesJavascript,
-  json: rulesJSON,
-  json5: rulesJSON5,
-  jsonc: rulesJSONC,
-  typescript: rulesTypescript,
-  vue: rulesVue,
-  yaml: rulesYAML,
+  javascript: {
+    filename: 'rules-javascript.ts',
+    identifier: 'rulesJavaScript',
+    rules: rulesJavascript,
+  },
+  json: { filename: 'rules-json.ts', identifier: 'rulesJSON', rules: rulesJSON },
+  json5: { filename: 'rules-json5.ts', identifier: 'rulesJSON5', rules: rulesJSON5 },
+  jsonc: { filename: 'rules-jsonc.ts', identifier: 'rulesJSONC', rules: rulesJSONC },
+  typescript: {
+    filename: 'rules-typescript.ts',
+    identifier: 'rulesTypeScript',
+    rules: rulesTypescript,
+  },
+  vue: { filename: 'rules-vue.ts', identifier: 'rulesVue', rules: rulesVue },
+  yaml: { filename: 'rules-yaml.ts', identifier: 'rulesYAML', rules: rulesYAML },
 } as const
 
 const collator = new Intl.Collator('en')
 
-for (const [key, value] of Object.entries(pairs)) {
-  await writeFile(
-    path.join(import.meta.dirname, '../src/rules', `${key}.json`),
-    await format(canonicalize(value), { ...prettierConfig, parser: 'json' }),
-  )
+const data = new Map<
+  string,
+  { imports: Array<{ filename: string; name: string }>; rule: RuleDefinition }
+>()
 
-  const asd = `import type { Rules } from '../types'
+for (const [key, rule] of await ruleDefinitions()) {
+  data.set(key, { imports: [], rule })
 
-declare const data: Rules<${Object.keys(value)
-    .sort((a, b) => collator.compare(a, b))
-    .map((value) => `'${value}'`)
-    .join(' | ')}>
-export default data
-`
+  for (const { name, value } of rule.meta.typescript) {
+    const filename = `${kebabCase(name)}.ts`
 
-  await writeFile(
-    path.join(import.meta.dirname, '../src/rules', `${key}.d.json.ts`),
-    await format(asd, { ...prettierConfig, parser: 'typescript' }),
-  )
+    // eslint-disable-next-line typescript/no-non-null-assertion
+    data.get(key)!.imports.push({ filename, name })
+    const filepath = path.join(pathDirectoryTypes, filename)
+
+    await writeFile(
+      filepath,
+      await format(value, { ...prettierConfig, filepath, parser: 'typescript' }),
+    )
+  }
 }
 
-await writeFile(
-  path.join(import.meta.dirname, '../src', `rules-intersection.ts`),
-  await format(
-    `
-/**
- * @public
- */
-export type RulesIntersection = ${uniq(
-      listRules()
-        .map((value) => value[0])
-        .sort((a, b) => collator.compare(a, b)),
-    )
-      .map((value) => `'${value}'`)
-      .join(' | ')}`,
-    { ...prettierConfig, parser: 'typescript' },
+const rulesInterface = [
+  `import type { RuleEntry, RuleSeverity } from '../types'`,
+  '',
+  ...Array.from(data.entries()).flatMap(([_, value]) =>
+    value.imports.map(
+      (value) => `import type { ${value.name} } from './${path.basename(value.filename, '.ts')}'`,
+    ),
   ),
+  '',
+  'export interface Rules extends Partial<{ [key: string]: [RuleSeverity, ...unknown[]] | RuleSeverity}> {',
+  ...Array.from(data.entries()).flatMap(([key, value]) => [
+    ...value.rule.meta.descriptionTypescript,
+    value.imports.length === 0
+      ? `'${key}'?: RuleEntry`
+      : `'${key}'?: RuleEntry<${value.imports.map((value) => value.name).join(', ')}>`,
+  ]),
+  '}',
+  '',
+  `export type { ${Array.from(data.entries())
+    .flatMap(([_, value]) => value.imports.map((value) => value.name))
+    .join(', ')} }`,
+  '',
+]
+
+await writeFile(
+  path.join(pathDirectoryTypes, 'rules.ts'),
+  await format(rulesInterface.join('\n'), { ...prettierConfig, parser: 'typescript' }),
 )
 
-// type RuleMetaData = Rule.RuleMetaData
+for (const [_, { filename, identifier, rules }] of Object.entries(pairs)) {
+  const string = `import type { Rules } from '../types/rules'
 
-// import type { JSONSchema4 } from '@typescript-eslint/utils/json-schema'
-// import { compile } from 'json-schema-to-typescript'
-//
-// for (const [key, value] of listRules()) {
-//   if (isFunction(value)) {
-//     continue
-//   }
-//
-//   const description = value?.meta?.docs?.description
-//   const url = value?.meta?.docs?.url
-//   const type = value?.meta?.type
-//   const schema = value?.meta?.schema
-//
-//   if (Array.isArray(schema) && schema.length >= 2) {
-//
-//   const sc = Array.isArray(schema)
-//     ? schema.length === 1
-//       ? schema[0]
-//       : schema.length === 0
-//         ? undefined
-//         : { prefixItems: schema, type: 'array' }
-//     : schema
-//
-//   const scc = isEmpty(sc)
-//     ? undefined
-//     : (mapValuesDeep(
-//       mapKeys(sc, (_, key) =>
-//         key === 'definitions' ? '$defs' : key === '$definitions' ? '$defs' : key,
-//       ) as JSONSchema4,
-//       (value: unknown, key) => key === '$ref' && typeof value === 'string'
-//         // eslint-disable-next-line regexp/no-unused-capturing-group
-//         ? value.replace(/(#\/definitions\/|#\/items\/\d+\/\$defs\/)/i, `#/$defs/`)
-//         : value,
-//     ) as JSONSchema4)
-//
-//   if (!isEmpty(scc)) {
-//     try {
-//       console.log(key)
-//
-//       console.log(
-//         await compile(scc, key, {
-//           bannerComment: '',
-//           declareExternallyReferenced: true,
-//           format: false,
-//           strictIndexSignatures: true,
-//         }),
-//       )
-//       // console.log('----')
-//     } catch (e) {
-//       console.log(key)
-//       console.log(JSON.stringify(scc, null, 2))
-//
-//       throw e
-//     }
-//   } else {
-//     // console.log(sc, schema)
-//   }
-//   // console.log(value?.meta)
-// }
-//
-// import { isEmpty, isFunction, isObject, isPlainObject, map, mapKeys, mapValues, pickBy } from 'lodash-es'
-// const mapValuesDeep = (object: object | null | undefined, function_: (key: unknown, value: unknown) => unknown, key?: unknown): unknown =>
-//   Array.isArray(object)
-//     ? map(object, (innerObject, index) => mapValuesDeep(innerObject as object, function_, index))
-//     : isPlainObject(object)
-//       ? mapValues(object, (value, key) => mapValuesDeep(value, function_, key))
-//       : isObject(object)
-//         ? object
-//         : function_(object, key)
-//
+export const ${identifier}: Pick<Rules, ${Object.keys(rules)
+    .sort((a, b) => collator.compare(a, b))
+    .map((value) => `'${value}'`)
+    .join(' | ')}> = ${JSON.stringify(rules, null, 2)}
+`
+  await writeFile(
+    path.join(pathDirectoryRules, filename),
+    await format(string, { ...prettierConfig, parser: 'typescript' }),
+  )
+}

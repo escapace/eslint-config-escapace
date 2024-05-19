@@ -43,11 +43,8 @@ const normalizeRuleKey = (key: string) => {
   }
 }
 
-/**
- * @public
- */
 export const normalizeRules = (
-  ...rules: Array<Partial<Record<string, RuleEntryAlphanumeric>> | undefined>
+  ...rules: Array<Partial<Record<string, RuleEntry | RuleEntryAlphanumeric>> | undefined>
 ): Record<string, RuleEntry> => {
   if (rules.length === 0) {
     return {}
