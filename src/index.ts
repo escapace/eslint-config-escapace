@@ -4,19 +4,18 @@ import eslintParserJSON from 'jsonc-eslint-parser'
 import { defaultsDeep, omit } from 'lodash-es'
 import tseslint from 'typescript-eslint'
 import eslintParserYAML from 'yaml-eslint-parser'
-import { interopDefault, pluginsDefault, pluginsVue } from './plugins'
-import rulesJavascript from './rules/javascript.json'
-import rulesJSON from './rules/json.json'
-import rulesJSON5 from './rules/json5.json'
-import rulesJSONC from './rules/jsonc.json'
-import rulesTypescript from './rules/typescript.json'
-import rulesVue from './rules/vue.json'
-import rulesYAML from './rules/yaml.json'
+import { rulesJavaScript } from './rules/rules-javascript'
+import { rulesJSON } from './rules/rules-json'
+import { rulesJSON5 } from './rules/rules-json5'
+import { rulesJSONC } from './rules/rules-jsonc'
+import { rulesTypeScript } from './rules/rules-typescript'
+import { rulesVue } from './rules/rules-vue'
+import { rulesYAML } from './rules/rules-yaml'
 import type { Config } from './types'
 import { normalizeRules } from './utilities/normalize-rules'
+import { interopDefault, pluginsDefault, pluginsVue } from './utilities/plugins'
 
-export type { RulesIntersection } from './rules-intersection'
-export type { Config, Prettify, RuleEntry, RuleEntryAlphanumeric, Rules } from './types'
+export type { Config, Rules } from './types'
 export { normalizeRules }
 
 const globs = {
@@ -27,24 +26,36 @@ const globs = {
   yaml: ['**/*.y?(a)ml'],
 }
 
-/**
- * @public
- */
 export interface Options {
   javascript?: Config
   typescript?: Config
   vue?: { enabled?: boolean } & Config
 }
 
-/**
- * @public
- */
-export const compose = (...configs: Array<Config | undefined>): Config[] =>
-  configs.filter((value): value is Config => value !== undefined).flatMap((config) => [config])
+export const compose = async (
+  ...configs: Array<
+    Config | Config[] | Promise<Config | undefined> | Promise<Config[] | undefined> | undefined
+  >
+): Promise<Config[]> => {
+  const composition: Config[] = []
 
-/**
- * @public
- */
+  for (const _value of configs) {
+    const value = await _value
+
+    if (value === undefined) {
+      continue
+    }
+
+    if (Array.isArray(value)) {
+      composition.push(...value)
+    } else {
+      composition.push(value)
+    }
+  }
+
+  return composition
+}
+
 export const escapace = async (options: Options = {}): Promise<Config[]> => {
   const flags = {
     vue: options?.vue?.enabled === true,
@@ -76,7 +87,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
       },
     },
     rules: {
-      ...rulesTypescript,
+      ...rulesTypeScript,
       ...(flags.vue ? rulesVue : {}),
       ...normalizeRules(options.typescript?.rules),
     },
@@ -97,7 +108,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
       options.javascript,
     ) as Config['languageOptions'],
     rules: {
-      ...rulesJavascript,
+      ...rulesJavaScript,
       ...(flags.vue ? rulesVue : {}),
       ...normalizeRules(options.javascript?.rules),
     },
@@ -118,7 +129,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
       }
     : undefined
 
-  return compose(
+  return await compose(
     {
       ignores: [
         '**/fish_history',
