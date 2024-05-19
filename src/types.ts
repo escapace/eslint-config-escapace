@@ -1,45 +1,50 @@
+/* eslint-disable typescript/no-explicit-any */
 import type { Config as ConfigFile } from 'typescript-eslint'
-import type { RulesIntersection } from './rules-intersection'
+import type { Rules } from './types/rules'
 
-/**
- * @public
- */
 export type Prettify<T> = {
   [K in keyof T]: T[K]
 } & {}
 
-/**
- * @public
- */
-export type RuleEntry = 'error' | 'off' | 'warn' | ['error' | 'off' | 'warn', ...unknown[]]
+export type RuleSeverity = 'error' | 'off' | 'warn'
+export type RuleSeverityNumber = 0 | 1 | 2
 
-/**
- * @public
- */
-export type RuleEntryAlphanumeric =
-  | 'error'
-  | 'off'
-  | 'warn'
-  | ['error' | 'off' | 'warn' | 0 | 1 | 2, ...unknown[]]
-  | 0
-  | 1
-  | 2
+export type Equal<A, B> =
+  (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2 ? true : false
 
-/**
- * @public
- */
-export type Rules<T extends string = string> = Partial<Record<T, RuleEntry>>
+export type RuleOptions<A, B, C> = [
+  ...(Equal<A, unknown> extends true ? unknown[] : A extends any[] ? A : [] | [A]),
+  ...(Equal<B, unknown> extends true ? [] : B extends any[] ? B : [] | [B]),
+  ...(Equal<C, unknown> extends true ? [] : C extends any[] ? C : [] | [C]),
+]
 
-/**
- * @public
- */
+export type RuleEntry<
+  PrimaryOptions = unknown,
+  SecondaryOptions = unknown,
+  TeritaryOptions = unknown,
+> = [RuleSeverity, ...RuleOptions<PrimaryOptions, SecondaryOptions, TeritaryOptions>] | RuleSeverity
+
+export type RuleEntryAlphanumeric<
+  PrimaryOptions = unknown,
+  SecondaryOptions = unknown,
+  TeritaryOptions = unknown,
+> =
+  | [
+      RuleSeverity | RuleSeverityNumber,
+      ...RuleOptions<PrimaryOptions, SecondaryOptions, TeritaryOptions>,
+    ]
+  | RuleSeverity
+  | RuleSeverityNumber
+
+export type { Rules }
+
 export type Config = Prettify<
   {
     /**
-     * An object containing the configured rules.
-     * When `files` or `ignores` are specified, these rule configurations are only available to the matching files.
+     * An object containing the configured rules. When `files` or `ignores` are specified, these
+     * rule configurations are only available to the matching files.
      */
-    rules?: Rules<RulesIntersection>
+    rules?: Rules
   } & Omit<Awaited<ConfigFile> extends Array<infer T> ? T : unknown, 'rules'>
 >
 

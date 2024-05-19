@@ -3,7 +3,6 @@ import { exec as _exec } from 'node:child_process'
 import { promisify } from 'node:util'
 import { it } from 'vitest'
 import {
-  listRules,
   rulesJSON5Defaults,
   rulesJSONCDefaults,
   rulesJSONDefaults,
@@ -16,11 +15,15 @@ import {
   rulesYAMLIncluded,
 } from './config'
 import type { RuleEntry } from './types'
+import { ruleDefinitions } from './utilities/rule-definitions'
 const exec = promisify(_exec)
 
-const rulesAll = listRules().map(([key]) => key)
+const rulesAll = (await ruleDefinitions()).map(([key]) => key)
 
-const checks = (rules: Record<string, RuleEntry>, defaults: Record<string, RuleEntry>) => {
+const checks = (
+  rules: Record<string, RuleEntry | undefined>,
+  defaults: Record<string, RuleEntry | undefined>,
+) => {
   // check if rule exists
   const absent = pickBy(rules, (_, key) => !rulesAll.includes(key))
 
@@ -47,10 +50,6 @@ it('rules', () => {
   checks(rulesVueIncluded, rulesVueDefaults)
 })
 
-it(
-  'eslint',
-  async () => {
-    await exec('eslint')
-  },
-  { timeout: 10_000 },
-)
+it('eslint', { timeout: 10_000 }, async () => {
+  await exec('eslint')
+})
