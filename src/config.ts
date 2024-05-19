@@ -80,9 +80,6 @@ export const rulesVueDefaults: Record<string, RuleEntry> = pickBy(
 export const rulesVue = { ...rulesVueDefaults, ...rulesVueIncluded }
 
 const rulesTypescriptDisable = [
-  'typescript/ban-types',
-  'typescript/consistent-indexed-object-style',
-  'typescript/explicit-function-return-type',
   'array-callback-return',
   'camelcase',
   'no-duplicate-imports',
@@ -95,6 +92,9 @@ const rulesTypescriptDisable = [
   'perfectionist/sort-named-exports',
   'perfectionist/sort-named-imports',
   'perfectionist/sort-vue-attributes',
+  'typescript/ban-types',
+  'typescript/consistent-indexed-object-style',
+  'typescript/explicit-function-return-type',
 ]
 
 // prettier-ignore
@@ -183,17 +183,17 @@ export const rulesTypescriptIncluded: Rules = {
   'no-useless-rename': 'error',
   'object-shorthand': ['warn', 'always'],
   'one-var': ['error', { initialized: 'never' }],
-  'perfectionist/sort-interfaces': ['warn', { "ignore-case": false, 'optionality-order': 'required-first', "order": "asc", 'partition-by-new-line': true, "type": "alphabetical", }],
-  'perfectionist/sort-object-types': ['warn', { "ignore-case": false, "order": "asc", 'partition-by-new-line': true, "type": "alphabetical", }],
-  'perfectionist/sort-objects': ['warn', { "ignore-case": false, "order": "asc", 'partition-by-comment': true, 'partition-by-new-line': true, "type": "alphabetical", }],
-  'perfectionist/sort-union-types': ['warn', { "ignore-case": false, 'nullable-last': true, "order": "asc", "type": "alphabetical" }],
+  'perfectionist/sort-interfaces': ['warn', { 'ignore-case': false, 'optionality-order': 'required-first', 'order': 'asc', 'partition-by-new-line': true, 'type': 'alphabetical' }],
+  'perfectionist/sort-object-types': ['warn', { 'ignore-case': false, 'order': 'asc', 'partition-by-new-line': true, 'type': 'alphabetical' }],
+  'perfectionist/sort-objects': ['warn', { 'ignore-case': false, 'order': 'asc', 'partition-by-comment': true, 'partition-by-new-line': true, 'type': 'alphabetical' }],
+  'perfectionist/sort-union-types': ['warn', { 'ignore-case': false, 'nullable-last': true, 'order': 'asc', 'type': 'alphabetical' }],
   'prefer-const': ['error', { destructuring: 'all' }],
   'prefer-promise-reject-errors': 'error',
   'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
   'regexp/sort-alternatives': 'warn',
   'regexp/unicode-escape': [
     'error',
-    'unicodeCodePointEscape', // or "unicodeEscape"
+    'unicodeCodePointEscape', // or 'unicodeEscape'
   ],
   'regexp/unicode-property': [
     'error',
@@ -207,6 +207,20 @@ export const rulesTypescriptIncluded: Rules = {
       },
     },
   ],
+  'stylistic/comma-dangle': [
+    'warn',
+    {
+      arrays: 'always-multiline',
+      enums: 'always-multiline',
+      exports: 'never',
+      functions: 'always-multiline',
+      generics: 'always-multiline',
+      imports: 'never',
+      objects: 'always-multiline',
+      tuples: 'always-multiline',
+    },
+  ],
+  'stylistic/multiline-ternary': ['warn', 'always-multiline'],
   'stylistic/no-mixed-operators': ['warn', { allowSamePrecedence: true, groups: [['&', '|', '^', '~', '<<', '>>', '>>>'], ['==', '!=', '===', '!==', '>', '>=', '<', '<='], ['&&', '||'], ['in', 'instanceof']] }],
   'stylistic/wrap-iife': 'warn',
   'symbol-description': 'error',
@@ -235,8 +249,8 @@ export const rulesTypescriptIncluded: Rules = {
   yoda: ['error', 'never'],
   ...(Object.assign(
     {},
-    ...rulesTypescriptDisable.map((value) => ({ [value]: 'off' }))
-  ) as Record<string, 'off'>)
+    ...rulesTypescriptDisable.map((value) => ({ [value]: 'off' })),
+  ) as Record<string, 'off'>),
 }
 
 export const rulesTypescriptDefaults = normalizeRules(
