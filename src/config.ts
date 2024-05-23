@@ -212,10 +212,10 @@ export const rulesTypescriptIncluded: Rules = {
     {
       arrays: 'always-multiline',
       enums: 'always-multiline',
-      exports: 'never',
+      exports: 'always-multiline',
       functions: 'always-multiline',
       generics: 'always-multiline',
-      imports: 'never',
+      imports: 'always-multiline',
       objects: 'always-multiline',
       tuples: 'always-multiline',
     },

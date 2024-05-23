@@ -80,10 +80,11 @@
   "scripts": {
     "build": "tsx scripts/codegen.ts && tsx scripts/build.ts",
     "codegen": "tsx scripts/codegen.ts",
-    "format": "eslint --no-warn-ignored --fix && prettier -uw .",
+    "format": "syncpack format && eslint --no-warn-ignored --fix && prettier -uw .",
     "lint": "ls-lint --config .ls-lint.yaml && knip && eslint",
     "pack": "pnpm-pack package --pack-destination lib",
     "prepare": "lefthook install",
+    "syncpack": "syncpack fix-mismatches && syncpack-set-semver-ranges && syncpack format",
     "test": "vitest --no-watch --coverage",
     "typecheck": "tsc --noEmit"
   },
