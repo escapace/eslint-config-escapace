@@ -2,6 +2,11 @@ assert_lefthook_installed: true
 colors: false
 source_dir: scripts/
 
+output:
+  - summary
+  - failure
+  - execution
+
 commit-msg:
   commands:
     'lint commit message':
