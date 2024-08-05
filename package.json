@@ -38,7 +38,7 @@
     "eslint-config-escapace": "link:",
     "eslint-config-prettier": "9.1.0",
     "esroll": "0.2.0",
-    "json-schema-to-typescript": "14.1.0",
+    "json-schema-to-typescript": "15.0.0",
     "knip": "5.26.0",
     "lefthook": "1.7.3",
     "lodash-es": "4.17.21",
