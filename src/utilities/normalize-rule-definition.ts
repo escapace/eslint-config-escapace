@@ -9,7 +9,7 @@ import type { Prettify } from '../types'
 import { toSafeString } from './to-safe-string'
 
 const mapValuesDeep = (
-  object: object | null | undefined,
+  object: null | object | undefined,
   function_: (key: unknown, value: unknown) => unknown,
   key?: unknown,
 ): unknown =>
@@ -36,7 +36,9 @@ const ordinalName = (index: number) => {
 
 const normalizeRuleSchema = (input: Rule.RuleMetaData['schema']): JSONSchema4[] => {
   const _input = input ?? []
-  const schemas = Array.isArray(_input) ? _input : [_input]
+  const schemas = (Array.isArray(_input) ? _input : [_input]).filter(
+    (value): value is JSONSchema4 => value !== false,
+  )
 
   return schemas.map(
     (value) =>

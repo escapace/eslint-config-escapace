@@ -1,13 +1,12 @@
 import eslint from '@eslint/js'
 import type { TSESLint } from '@typescript-eslint/utils'
 import eslintConfigPrettier from 'eslint-config-prettier'
-import type { RuleEntry, Rules } from './types'
-import { normalizeRules } from './utilities/normalize-rules'
-// @ts-expect-error no-types
-import eslintConfigPerfectionist from 'eslint-plugin-perfectionist/configs/recommended-alphabetical'
+import eslintPluginPerfectionist from 'eslint-plugin-perfectionist'
 import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility'
 import { mapValues, pickBy } from 'lodash-es'
 import tseslint from 'typescript-eslint'
+import type { RuleEntry, Rules } from './types'
+import { normalizeRules } from './utilities/normalize-rules'
 import { ok } from './utilities/ok'
 import { pluginsAll } from './utilities/plugins'
 
@@ -92,13 +91,16 @@ const rulesTypescriptDisable = [
   'perfectionist/sort-named-exports',
   'perfectionist/sort-named-imports',
   'perfectionist/sort-vue-attributes',
-  'typescript/ban-types',
   'typescript/consistent-indexed-object-style',
   'typescript/explicit-function-return-type',
+  'typescript/sort-type-constituents',
+  'typescript/adjacent-overload-signatures',
 ]
 
 // prettier-ignore
 export const rulesTypescriptIncluded: Rules = {
+  // "typescript/only-throw-error": "error",
+  // "typescript/prefer-includes": "error",
   'accessor-pairs': ['error', { enforceForClassMembers: true, setWithoutGet: true }],
   'array-callback-return': ['error', { allowImplicit: false, checkForEach: false }],
   'arrow-body-style': ['error', 'as-needed', { requireReturnForObjectLiteral: false }],
@@ -149,8 +151,6 @@ export const rulesTypescriptIncluded: Rules = {
   'typescript/no-use-before-define': ['error', { classes: false, enums: false, functions: false, typedefs: false, variables: false }],
   'typescript/no-useless-constructor': ['error'],
   'typescript/no-useless-empty-export': 'error',
-  'typescript/only-throw-error': 'error',
-  'typescript/prefer-includes': 'error',
   'typescript/prefer-nullish-coalescing': ['error', { ignoreConditionalTests: false, ignoreMixedLogicalExpressions: false }],
   'typescript/prefer-readonly': 'error',
   'typescript/prefer-reduce-type-parameter': 'error',
@@ -183,10 +183,10 @@ export const rulesTypescriptIncluded: Rules = {
   'no-useless-rename': 'error',
   'object-shorthand': ['warn', 'always'],
   'one-var': ['error', { initialized: 'never' }],
-  'perfectionist/sort-interfaces': ['warn', { 'ignore-case': false, 'optionality-order': 'required-first', 'order': 'asc', 'partition-by-new-line': true, 'type': 'alphabetical' }],
-  'perfectionist/sort-object-types': ['warn', { 'ignore-case': false, 'order': 'asc', 'partition-by-new-line': true, 'type': 'alphabetical' }],
-  'perfectionist/sort-objects': ['warn', { 'ignore-case': false, 'order': 'asc', 'partition-by-comment': true, 'partition-by-new-line': true, 'type': 'alphabetical' }],
-  'perfectionist/sort-union-types': ['warn', { 'ignore-case': false, 'nullable-last': true, 'order': 'asc', 'type': 'alphabetical' }],
+  'perfectionist/sort-interfaces': ['warn', { groupKind: 'required-first', /* 'optionalityOrder': 'required-first', */ 'ignoreCase': false, 'order': 'asc', 'partitionByNewLine': true, 'type': 'alphabetical' }],
+  'perfectionist/sort-object-types': ['warn', { groupKind: 'required-first', 'ignoreCase': false, 'order': 'asc', 'partitionByNewLine': true, 'type': 'alphabetical' }],
+  'perfectionist/sort-objects': ['warn', { 'ignoreCase': false, 'order': 'asc', 'partitionByComment': true, 'partitionByNewLine': true, 'type': 'alphabetical' }],
+  'perfectionist/sort-union-types': ['warn', { 'ignoreCase': false, /* 'nullableLast': true, */ 'order': 'asc', 'type': 'alphabetical' }],
   'prefer-const': ['error', { destructuring: 'all' }],
   'prefer-promise-reject-errors': 'error',
   'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
@@ -259,7 +259,8 @@ export const rulesTypescriptDefaults = normalizeRules(
     ...tseslint.configs.recommendedTypeChecked,
     ...tseslint.configs.stylisticTypeChecked,
     plugins.stylistic.configs['disable-legacy'],
-    eslintConfigPerfectionist as TSESLint.FlatConfig.Config,
+    // as TSESLint.FlatConfig.Config,
+    eslintPluginPerfectionist.configs['recommended-alphabetical'],
     plugins.regexp.configs['flat/recommended'] as TSESLint.FlatConfig.Config,
     eslintConfigPrettier,
   ).map((value) => value.rules),
@@ -344,3 +345,15 @@ export const [rulesJSON, rulesJSON5, rulesJSONC] = (
     ...rulesJSONIncluded,
   }),
 )
+
+export const rulesTOMLDefaults = normalizeRules(
+  ...compose(
+    ...plugins.toml.configs['flat/base'],
+    ...plugins.toml.configs['flat/recommended'],
+    ...plugins.toml.configs['flat/standard'],
+  ).map((value) => value.rules),
+)
+
+export const rulesTOMLIncluded = normalizeRules({} satisfies Rules)
+
+export const rulesTOML = { ...rulesTOMLDefaults, ...rulesTOMLIncluded }

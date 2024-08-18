@@ -9,6 +9,7 @@ import {
   rulesJSON,
   rulesJSON5,
   rulesJSONC,
+  rulesTOML,
   rulesTypescript,
   rulesVue,
   rulesYAML,
@@ -36,6 +37,7 @@ const pairs = {
   json: { filename: 'rules-json.ts', identifier: 'rulesJSON', rules: rulesJSON },
   json5: { filename: 'rules-json5.ts', identifier: 'rulesJSON5', rules: rulesJSON5 },
   jsonc: { filename: 'rules-jsonc.ts', identifier: 'rulesJSONC', rules: rulesJSONC },
+  toml: { filename: 'rules-toml.ts', identifier: 'rulesTOML', rules: rulesTOML },
   typescript: {
     filename: 'rules-typescript.ts',
     identifier: 'rulesTypeScript',

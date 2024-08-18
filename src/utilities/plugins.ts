@@ -3,14 +3,13 @@ import eslintPluginStylistic from '@stylistic/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
 import eslintPluginJSON from 'eslint-plugin-jsonc'
 import eslintPluginRegexp from 'eslint-plugin-regexp'
+import eslintPluginTOML from 'eslint-plugin-toml'
 import eslintPluginTSDoc from 'eslint-plugin-tsdoc'
 import eslintPluginYAML from 'eslint-plugin-yml'
 import tseslint from 'typescript-eslint'
 
-// @ts-expect-error no-types
-import eslintConfigPerfectionist from 'eslint-plugin-perfectionist/configs/recommended-alphabetical'
+import eslintConfigPerfectionist from 'eslint-plugin-perfectionist'
 
-// @ts-expect-error no-types
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
 
 type Awaitable<T> = Promise<T> | T
@@ -27,12 +26,13 @@ export async function interopDefault<T>(
 
 export const pluginsDefault = {
   json: eslintPluginJSON,
-  perfectionist: eslintConfigPerfectionist.plugins.perfectionist as TSESLint.FlatConfig.Plugin,
+  perfectionist: eslintConfigPerfectionist,
   regexp: eslintPluginRegexp.configs['flat/all'].plugins.regexp,
   stylistic: eslintPluginStylistic,
+  toml: eslintPluginTOML,
   tsdoc: eslintPluginTSDoc as TSESLint.FlatConfig.Plugin,
   typescript: tseslint.plugin,
-  unicorn: eslintPluginUnicorn as TSESLint.FlatConfig.Plugin,
+  unicorn: eslintPluginUnicorn,
   yaml: eslintPluginYAML,
 } as const
 
