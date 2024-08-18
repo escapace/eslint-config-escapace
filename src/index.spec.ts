@@ -7,6 +7,8 @@ import {
   rulesJSONCDefaults,
   rulesJSONDefaults,
   rulesJSONIncluded,
+  rulesTOMLDefaults,
+  rulesTOMLIncluded,
   rulesTypescriptDefaults,
   rulesTypescriptIncluded,
   rulesVueDefaults,
@@ -44,6 +46,7 @@ const checks = (
 it('rules', () => {
   checks(rulesTypescriptIncluded, rulesTypescriptDefaults)
   checks(rulesYAMLIncluded, rulesYAMLDefaults)
+  checks(rulesTOMLIncluded, rulesTOMLDefaults)
   checks(rulesJSONIncluded, rulesJSONDefaults)
   checks(rulesJSONIncluded, rulesJSON5Defaults)
   checks(rulesJSONIncluded, rulesJSONCDefaults)

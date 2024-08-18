@@ -39,6 +39,9 @@ export const ruleDefinitions = async (): Promise<Array<[string, RuleDefinition]>
           ...Object.entries(plugins.yaml.rules).map(
             ([key, value]) => [`yaml/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
+          ...Object.entries(plugins.toml.rules).map(
+            ([key, value]) => [`toml/${key}`, value] satisfies [string, LooseRuleDefinition],
+          ),
           ...Object.entries(plugins.stylistic.rules).map(
             ([key, value]) => [`stylistic/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),

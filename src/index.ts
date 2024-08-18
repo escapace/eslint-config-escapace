@@ -2,12 +2,14 @@
 import gitignore from 'eslint-config-flat-gitignore'
 import eslintParserJSON from 'jsonc-eslint-parser'
 import { defaultsDeep, omit } from 'lodash-es'
+import eslintParserTOML from 'toml-eslint-parser'
 import tseslint from 'typescript-eslint'
 import eslintParserYAML from 'yaml-eslint-parser'
 import { rulesJavaScript } from './rules/rules-javascript'
 import { rulesJSON } from './rules/rules-json'
 import { rulesJSON5 } from './rules/rules-json5'
 import { rulesJSONC } from './rules/rules-jsonc'
+import { rulesTOML } from './rules/rules-toml'
 import { rulesTypeScript } from './rules/rules-typescript'
 import { rulesVue } from './rules/rules-vue'
 import { rulesYAML } from './rules/rules-yaml'
@@ -160,6 +162,14 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
         '**/__snapshots__',
         '**/auto-import?(s).d.ts',
       ],
+      settings: {
+        perfectionist: {
+          ignoreCase: true,
+          partitionByComment: true,
+          partitionByNewLine: true,
+          type: 'alphabetical',
+        },
+      },
     },
     gitignore({
       files: ['.gitignore', '.eslintignore'],
@@ -175,6 +185,13 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
         parser: eslintParserYAML,
       },
       rules: rulesYAML,
+    },
+    {
+      files: ['**/*.toml'],
+      languageOptions: {
+        parser: eslintParserTOML,
+      },
+      rules: rulesTOML,
     },
     {
       files: ['**/*.json'],
