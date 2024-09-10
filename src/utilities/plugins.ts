@@ -26,7 +26,7 @@ export async function interopDefault<T>(
 
 export const pluginsDefault = {
   json: eslintPluginJSON,
-  perfectionist: eslintConfigPerfectionist,
+  perfectionist: eslintConfigPerfectionist as TSESLint.FlatConfig.Plugin,
   regexp: eslintPluginRegexp.configs['flat/all'].plugins.regexp,
   stylistic: eslintPluginStylistic,
   toml: eslintPluginTOML,
