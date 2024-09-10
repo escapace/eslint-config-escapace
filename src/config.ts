@@ -186,7 +186,7 @@ export const rulesTypescriptIncluded: Rules = {
   'perfectionist/sort-interfaces': ['warn', { groupKind: 'required-first', /* 'optionalityOrder': 'required-first', */ 'ignoreCase': false, 'order': 'asc', 'partitionByNewLine': true, 'type': 'alphabetical' }],
   'perfectionist/sort-object-types': ['warn', { groupKind: 'required-first', 'ignoreCase': false, 'order': 'asc', 'partitionByNewLine': true, 'type': 'alphabetical' }],
   'perfectionist/sort-objects': ['warn', { 'ignoreCase': false, 'order': 'asc', 'partitionByComment': true, 'partitionByNewLine': true, 'type': 'alphabetical' }],
-  'perfectionist/sort-union-types': ['warn', { 'ignoreCase': false, /* 'nullableLast': true, */ 'order': 'asc', 'type': 'alphabetical' }],
+  'perfectionist/sort-union-types': ['warn', { groups: ['conditional', 'function', 'import', 'intersection', 'keyword', 'literal', 'named', 'object', 'operator', 'tuple', 'union', 'nullish', 'unknown'], /* 'nullableLast': true, */ 'ignoreCase': false, 'order': 'asc', 'type': 'alphabetical' }],
   'prefer-const': ['error', { destructuring: 'all' }],
   'prefer-promise-reject-errors': 'error',
   'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
