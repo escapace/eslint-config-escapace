@@ -20,14 +20,6 @@ import { interopDefault, pluginsDefault, pluginsVue } from './utilities/plugins'
 export type { Config, Rules } from './types'
 export { normalizeRules }
 
-const globs = {
-  javascript: ['**/*.?([cm])js', '**/*.?([cm])jsx'],
-  json: ['**/*.json', '**/*.json5', '**/*.jsonc'],
-  typescript: ['**/*.?([cm])ts', '**/*.?([cm])tsx'],
-  vue: ['**/*.vue'],
-  yaml: ['**/*.y?(a)ml'],
-}
-
 export interface Options {
   javascript?: Config
   typescript?: Config
@@ -68,7 +60,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
 
   const typescript: Config = {
     ...options.typescript,
-    files: options.typescript?.files ?? globs.typescript,
+    files: options.typescript?.files ?? ['**/*.?([cm])ts', '**/*.?([cm])tsx'],
     languageOptions: {
       parser,
       parserOptions: {
@@ -97,7 +89,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
 
   const javascript: Config = {
     ...options.javascript,
-    files: options.javascript?.files ?? globs.javascript,
+    files: options.javascript?.files ?? ['**/*.?([cm])js', '**/*.?([cm])jsx'],
     languageOptions: defaultsDeep(
       {},
       {
@@ -119,7 +111,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
   const vue: Config | undefined = flags.vue
     ? {
         ...omit(options.vue, 'enabled'),
-        files: options.vue?.files ?? globs.vue,
+        files: options.vue?.files ?? ['**/*.vue'],
         languageOptions: defaultsDeep(
           {},
           typescript.languageOptions,
