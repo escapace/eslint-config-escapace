@@ -28,7 +28,7 @@ export interface Options {
 
 export const compose = async (
   ...configs: Array<
-    Config | Config[] | Promise<Config | undefined> | Promise<Config[] | undefined> | undefined
+    Config | Config[] | Promise<Config[] | undefined> | Promise<Config | undefined> | undefined
   >
 ): Promise<Config[]> => {
   const composition: Config[] = []
