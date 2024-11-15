@@ -44,6 +44,7 @@ export const rulesVueIncluded = normalizeRules({
       order: ['defineProps', 'defineEmits'],
     },
   ],
+  'vue/first-attribute-linebreak': 'off',
   'vue/multi-word-component-names': 'off',
   'vue/no-boolean-default': ['error', 'default-false'],
   'vue/no-empty-component-block': 'error',
@@ -356,6 +357,8 @@ export const rulesTOMLDefaults = normalizeRules(
   ).map((value) => value.rules),
 )
 
-export const rulesTOMLIncluded = normalizeRules({} satisfies Rules)
+export const rulesTOMLIncluded = normalizeRules({
+  'toml/array-bracket-spacing': ['error', 'never'],
+} satisfies Rules)
 
 export const rulesTOML = { ...rulesTOMLDefaults, ...rulesTOMLIncluded }

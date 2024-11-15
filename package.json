@@ -8,20 +8,20 @@
   },
   "bugs": "https://github.com/escapace/eslint-config-escapace/issues",
   "dependencies": {
-    "@stylistic/eslint-plugin": "^2.9.0",
+    "@stylistic/eslint-plugin": "^2.10.1",
     "eslint-config-flat-gitignore": "^0.3.0",
-    "eslint-plugin-jsonc": "^2.16.0",
+    "eslint-plugin-jsonc": "^2.18.1",
     "eslint-plugin-perfectionist": "^3.9.1",
-    "eslint-plugin-regexp": "^2.6.0",
+    "eslint-plugin-regexp": "^2.7.0",
     "eslint-plugin-toml": "^0.11.1",
     "eslint-plugin-tsdoc": "^0.3.0",
     "eslint-plugin-unicorn": "^56.0.0",
-    "eslint-plugin-vue": "^9.30.0",
+    "eslint-plugin-vue": "^9.31.0",
     "eslint-plugin-vuejs-accessibility": "^2.4.1",
     "eslint-plugin-yml": "^1.15.0",
     "jsonc-eslint-parser": "^2.4.0",
     "toml-eslint-parser": "^0.10.0",
-    "typescript-eslint": "^8.11.0",
+    "typescript-eslint": "^8.14.0",
     "vue-eslint-parser": "^9.4.3",
     "yaml-eslint-parser": "^1.2.3"
   },
@@ -33,15 +33,15 @@
     "@types/eslint__js": "8.42.3",
     "@types/eslint-config-prettier": "6.11.3",
     "@types/lodash-es": "4.17.12",
-    "@types/node": "22.8.7",
-    "@typescript-eslint/utils": "8.11.0",
-    "@vitest/coverage-v8": "2.1.4",
-    "eslint": "9.13.0",
+    "@types/node": "22.9.0",
+    "@typescript-eslint/utils": "8.14.0",
+    "@vitest/coverage-v8": "2.1.5",
+    "eslint": "9.14.0",
     "eslint-config-escapace": "link:",
     "eslint-config-prettier": "9.1.0",
-    "esroll": "0.2.0",
-    "json-schema-to-typescript": "15.0.2",
-    "knip": "5.36.2",
+    "esroll": "0.3.0",
+    "json-schema-to-typescript": "15.0.3",
+    "knip": "5.37.1",
     "lefthook": "1.8.2",
     "lodash-es": "4.17.21",
     "prettier": "3.3.3",
@@ -50,8 +50,8 @@
     "trigram-utils": "2.0.1",
     "tsx": "4.19.2",
     "typescript": "5.6.3",
-    "vitest": "2.1.4",
-    "zx": "8.2.0"
+    "vitest": "2.1.5",
+    "zx": "8.2.2"
   },
   "engines": {
     "node": ">=20.15.0",
@@ -71,7 +71,7 @@
   "license": "MPL-2.0",
   "module": "./lib/node/index.js",
   "peerDependencies": {
-    "eslint": ">=9.13.0"
+    "eslint": ">=9.14.0"
   },
   "private": false,
   "publishConfig": {

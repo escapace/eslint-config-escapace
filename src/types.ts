@@ -22,19 +22,19 @@ export type RuleEntry<
   PrimaryOptions = unknown,
   SecondaryOptions = unknown,
   TeritaryOptions = unknown,
-> = [RuleSeverity, ...RuleOptions<PrimaryOptions, SecondaryOptions, TeritaryOptions>] | RuleSeverity
+> = RuleSeverity | [RuleSeverity, ...RuleOptions<PrimaryOptions, SecondaryOptions, TeritaryOptions>]
 
 export type RuleEntryAlphanumeric<
   PrimaryOptions = unknown,
   SecondaryOptions = unknown,
   TeritaryOptions = unknown,
 > =
+  | RuleSeverity
+  | RuleSeverityNumber
   | [
       RuleSeverity | RuleSeverityNumber,
       ...RuleOptions<PrimaryOptions, SecondaryOptions, TeritaryOptions>,
     ]
-  | RuleSeverity
-  | RuleSeverityNumber
 
 export type { Rules }
 

@@ -9,7 +9,7 @@ import type { Prettify } from '../types'
 import { toSafeString } from './to-safe-string'
 
 const mapValuesDeep = (
-  object: null | object | undefined,
+  object: object | null | undefined,
   function_: (key: unknown, value: unknown) => unknown,
   key?: unknown,
 ): unknown =>
@@ -63,11 +63,11 @@ export type LooseRuleMetaData = {
 } & Omit<Rule.RuleMetaData, 'docs'>
 
 export type LooseRuleDefinition =
+  | LooseRuleCreateFunction
   | {
       meta?: LooseRuleMetaData | undefined
       schema?: LooseRuleMetaData['schema']
     }
-  | LooseRuleCreateFunction
   | undefined
 
 export const normalizeRuleDefinition = async (key: string, value: LooseRuleDefinition) => {
