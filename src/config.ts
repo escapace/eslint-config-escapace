@@ -91,7 +91,6 @@ const rulesTypescriptDisable = [
   'perfectionist/sort-imports',
   'perfectionist/sort-named-exports',
   'perfectionist/sort-named-imports',
-  'perfectionist/sort-vue-attributes',
   'typescript/consistent-indexed-object-style',
   'typescript/explicit-function-return-type',
   'typescript/sort-type-constituents',
