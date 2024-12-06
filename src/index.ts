@@ -14,8 +14,63 @@ import { rulesTypeScript } from './rules/rules-typescript'
 import { rulesVue } from './rules/rules-vue'
 import { rulesYAML } from './rules/rules-yaml'
 import type { Config } from './types'
+import type { RuleYamlSortKeysOptions } from './types/rule-yaml-sort-keys-options'
 import { normalizeRules } from './utilities/normalize-rules'
 import { interopDefault, pluginsDefault, pluginsVue } from './utilities/plugins'
+
+type ValueOf<T> = T extends Array<infer U> ? U : never
+
+const ruleYamlSortKeysOptionsGithubWorkflows = [
+  ...[['run'], ['uses']].map(
+    (hasProperties) =>
+      ({
+        hasProperties,
+        order: [
+          'name',
+          'if',
+          'id',
+          'working-directory',
+          'shell',
+          'env',
+          'continue-on-error',
+          'timeout-minutes',
+          'uses',
+          'with',
+          'run',
+        ],
+        pathPattern: '^jobs\\.[a-zA-Z_][a-zA-Z0-9_-]*\\.steps\\[[0-9]+\\]$',
+      }) satisfies ValueOf<RuleYamlSortKeysOptions>,
+  ),
+  ...[['steps'], ['uses'], ['container'], ['services']].map(
+    (hasProperties) =>
+      ({
+        hasProperties,
+        order: [
+          'name',
+          'if',
+          'needs',
+          'runs-on',
+          'permissions',
+          'environment',
+          'timeout-minutes',
+          'defaults',
+          'env',
+          'secrets',
+          'concurrency',
+          'strategy',
+          'continue-on-error',
+          'outputs',
+          'services',
+          'container',
+          'uses',
+          'with',
+          'steps',
+        ],
+        pathPattern: '^jobs\\.[a-zA-Z_][a-zA-Z0-9_-]*$',
+      }) satisfies ValueOf<RuleYamlSortKeysOptions>,
+  ),
+  ...(rulesYAML['yaml/sort-keys']?.slice(1) ?? []),
+] as unknown as RuleYamlSortKeysOptions
 
 export type { Config, Rules } from './types'
 export { normalizeRules }
@@ -177,6 +232,15 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
         parser: eslintParserYAML,
       },
       rules: rulesYAML,
+    },
+    {
+      files: ['**/.github/workflows/**.{yml,yaml}'],
+      languageOptions: {
+        parser: eslintParserYAML,
+      },
+      rules: {
+        'yaml/sort-keys': ['error', ...ruleYamlSortKeysOptionsGithubWorkflows],
+      },
     },
     {
       files: ['**/*.toml'],
