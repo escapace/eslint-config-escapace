@@ -59,8 +59,9 @@ const normalizeRuleSchema = (input: Rule.RuleMetaData['schema']): JSONSchema4[] 
 }
 
 export type LooseRuleMetaData = {
+  deprecated?: boolean | object | undefined
   docs?: Pick<Exclude<Rule.RuleMetaData['docs'], undefined>, 'description' | 'url'> | undefined
-} & Omit<Rule.RuleMetaData, 'docs'>
+} & Omit<Rule.RuleMetaData, 'deprecated' | 'docs'>
 
 export type LooseRuleDefinition =
   | LooseRuleCreateFunction
@@ -122,7 +123,7 @@ export const normalizeRuleDefinition = async (key: string, value: LooseRuleDefin
 
   return {
     meta: {
-      deprecated: value?.meta?.deprecated === true,
+      deprecated: value?.meta?.deprecated === true || isPlainObject(value?.meta?.deprecated),
       description,
       descriptionTypescript,
       fixable: value?.meta?.fixable,
