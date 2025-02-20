@@ -73,6 +73,12 @@
   "peerDependencies": {
     "eslint": ">=9.20.1"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "lefthook",
+      "esbuild"
+    ]
+  },
   "private": false,
   "publishConfig": {
     "access": "public",
