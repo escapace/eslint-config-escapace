@@ -1,6 +1,5 @@
 import { isEmpty, isEqual, pickBy } from 'lodash-es'
 import { exec as _exec } from 'node:child_process'
-import { promisify } from 'node:util'
 import { it } from 'vitest'
 import {
   rulesJSON5Defaults,
@@ -18,7 +17,8 @@ import {
 } from './config'
 import type { RuleEntry } from './types'
 import { ruleDefinitions } from './utilities/rule-definitions'
-const exec = promisify(_exec)
+// import { promisify } from 'node:util'
+// const exec = promisify(_exec)
 
 const rulesAll = (await ruleDefinitions()).map(([key]) => key)
 
@@ -53,6 +53,6 @@ it('rules', () => {
   checks(rulesVueIncluded, rulesVueDefaults)
 })
 
-it('eslint', { timeout: 30_000 }, async () => {
-  await exec('./node_modules/.bin/eslint')
-})
+// it('eslint', { timeout: 30_000 }, async () => {
+//   await exec('./node_modules/.bin/eslint')
+// })

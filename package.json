@@ -94,7 +94,7 @@
     "pack": "pnpm-pack package --pack-destination lib",
     "prepare": "lefthook install",
     "syncpack": "syncpack fix-mismatches && syncpack set-semver-ranges && syncpack format",
-    "test": "vitest --no-watch --coverage",
+    "test": "vitest --no-watch --coverage && pnpm run lint",
     "typecheck": "tsc --noEmit"
   },
   "sideEffects": false,
