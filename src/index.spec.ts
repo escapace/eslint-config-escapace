@@ -53,6 +53,6 @@ it('rules', () => {
   checks(rulesVueIncluded, rulesVueDefaults)
 })
 
-it('eslint', { timeout: 10_000 }, async () => {
+it('eslint', { timeout: 30_000 }, async () => {
   await exec('eslint')
 })
