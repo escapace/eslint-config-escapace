@@ -54,5 +54,5 @@ it('rules', () => {
 })
 
 it('eslint', { timeout: 30_000 }, async () => {
-  await exec('eslint')
+  await exec('./node_modules/.bin/eslint')
 })
