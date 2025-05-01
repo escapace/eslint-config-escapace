@@ -44,6 +44,7 @@ export const rulesVueIncluded = normalizeRules({
       order: ['defineProps', 'defineEmits'],
     },
   ],
+  'vue/enforce-style-attribute': ['error', { allow: ['scoped', 'plain'] }],
   'vue/first-attribute-linebreak': 'off',
   'vue/multi-word-component-names': 'off',
   'vue/no-boolean-default': ['error', 'default-false'],
@@ -91,10 +92,11 @@ const rulesTypescriptDisable = [
   'perfectionist/sort-imports',
   'perfectionist/sort-named-exports',
   'perfectionist/sort-named-imports',
+  'typescript/triple-slash-reference',
+  'typescript/adjacent-overload-signatures',
   'typescript/consistent-indexed-object-style',
   'typescript/explicit-function-return-type',
   'typescript/sort-type-constituents',
-  'typescript/adjacent-overload-signatures',
 ]
 
 // prettier-ignore
