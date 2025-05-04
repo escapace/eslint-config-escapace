@@ -1,6 +1,8 @@
 /* eslint-disable typescript/no-unsafe-member-access */
 import eslintPluginStylistic from '@stylistic/eslint-plugin'
 import type { TSESLint } from '@typescript-eslint/utils'
+import eslintPluginDeMorgan from 'eslint-plugin-de-morgan'
+import eslintPluginDepend from 'eslint-plugin-depend'
 import eslintPluginJSON from 'eslint-plugin-jsonc'
 import eslintPluginRegexp from 'eslint-plugin-regexp'
 import eslintPluginTOML from 'eslint-plugin-toml'
@@ -10,6 +12,7 @@ import tseslint from 'typescript-eslint'
 
 import eslintConfigPerfectionist from 'eslint-plugin-perfectionist'
 
+import type { ESLint } from 'eslint'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
 
 type Awaitable<T> = Promise<T> | T
@@ -25,15 +28,17 @@ export async function interopDefault<T>(
 }
 
 export const pluginsDefault = {
-  json: eslintPluginJSON,
-  perfectionist: eslintConfigPerfectionist as TSESLint.FlatConfig.Plugin,
-  regexp: eslintPluginRegexp.configs['flat/all'].plugins.regexp,
-  stylistic: eslintPluginStylistic,
-  toml: eslintPluginTOML,
-  tsdoc: eslintPluginTSDoc as TSESLint.FlatConfig.Plugin,
-  typescript: tseslint.plugin,
-  unicorn: eslintPluginUnicorn,
-  yaml: eslintPluginYAML,
+  'de-morgan': eslintPluginDeMorgan as ESLint.Plugin,
+  'depend': eslintPluginDepend,
+  'json': eslintPluginJSON,
+  'perfectionist': eslintConfigPerfectionist as TSESLint.FlatConfig.Plugin,
+  'regexp': eslintPluginRegexp.configs['flat/all'].plugins.regexp,
+  'stylistic': eslintPluginStylistic,
+  'toml': eslintPluginTOML,
+  'tsdoc': eslintPluginTSDoc as TSESLint.FlatConfig.Plugin,
+  'typescript': tseslint.plugin,
+  'unicorn': eslintPluginUnicorn,
+  'yaml': eslintPluginYAML,
 } as const
 
 const resolvePlugins = async <T extends Record<string, () => Promise<unknown>>>(plugins: T) =>

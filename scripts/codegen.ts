@@ -5,6 +5,7 @@ import path from 'node:path'
 import { format, resolveConfig, resolveConfigFile } from 'prettier'
 import { fs } from 'zx'
 import {
+  rulesDepend,
   rulesJavascript,
   rulesJSON,
   rulesJSON5,
@@ -29,6 +30,11 @@ await fs.emptyDir(pathDirectoryTypes)
 await fs.emptyDir(pathDirectoryRules)
 
 const pairs = {
+  depend: {
+    filename: 'rules-depend.ts',
+    identifier: 'rulesDepend',
+    rules: rulesDepend,
+  },
   javascript: {
     filename: 'rules-javascript.ts',
     identifier: 'rulesJavaScript',

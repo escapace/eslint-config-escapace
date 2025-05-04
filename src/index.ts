@@ -5,6 +5,7 @@ import { defaultsDeep, omit } from 'lodash-es'
 import eslintParserTOML from 'toml-eslint-parser'
 import tseslint from 'typescript-eslint'
 import eslintParserYAML from 'yaml-eslint-parser'
+import { rulesDepend } from './rules/rules-depend'
 import { rulesJavaScript } from './rules/rules-javascript'
 import { rulesJSON } from './rules/rules-json'
 import { rulesJSON5 } from './rules/rules-json5'
@@ -279,6 +280,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
     {
       files: ['**/package.json'],
       rules: {
+        ...rulesDepend,
         'json/sort-keys': 'off',
       },
     },

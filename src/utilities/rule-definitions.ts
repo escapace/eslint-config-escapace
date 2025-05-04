@@ -51,6 +51,12 @@ export const ruleDefinitions = async (): Promise<Array<[string, RuleDefinition]>
           ...Object.entries(plugins['vue-a11y'].rules).map(
             ([key, value]) => [`vue-a11y/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
+          ...Object.entries(plugins.depend.rules ?? {}).map(
+            ([key, value]) => [`depend/${key}`, value] satisfies [string, LooseRuleDefinition],
+          ),
+          ...Object.entries(plugins['de-morgan'].rules ?? {}).map(
+            ([key, value]) => [`de-morgan/${key}`, value] satisfies [string, LooseRuleDefinition],
+          ),
         ] satisfies Array<[string, LooseRuleDefinition]>
       ).map(
         async ([key, value]): Promise<[string, RuleDefinition]> => [
