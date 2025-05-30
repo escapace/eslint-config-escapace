@@ -1,7 +1,8 @@
 // import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
+import type { ParserOptions } from '@typescript-eslint/utils/ts-eslint'
 import gitignore from 'eslint-config-flat-gitignore'
 import eslintParserJSON from 'jsonc-eslint-parser'
-import { defaultsDeep, omit } from 'lodash-es'
+import { defaultsDeep, isPlainObject, omit } from 'lodash-es'
 import eslintParserTOML from 'toml-eslint-parser'
 import tseslint from 'typescript-eslint'
 import eslintParserYAML from 'yaml-eslint-parser'
@@ -18,6 +19,8 @@ import type { Config } from './types'
 import type { RuleYamlSortKeysOptions } from './types/rule-yaml-sort-keys-options'
 import { normalizeRules } from './utilities/normalize-rules'
 import { interopDefault, pluginsDefault, pluginsVue } from './utilities/plugins'
+
+type ProjectServiceOptions = Exclude<ParserOptions['projectService'], boolean | undefined>
 
 type ValueOf<T> = T extends Array<infer U> ? U : never
 
@@ -130,15 +133,14 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
           ...(options.typescript?.languageOptions?.parserOptions?.extraFileExtensions ?? []),
         ],
         parser: flags.vue ? tseslint.parser : undefined,
-        project: undefined, // options.typescript?.languageOptions?.parserOptions?.project,
-        // tsconfigRootDir: options.typescript?.languageOptions?.parserOptions?.tsconfigRootDir ?? import.meta.dirname,
-        projectService: options.typescript?.languageOptions?.parserOptions?.projectService ?? {
-          allowDefaultProject: ['*.js', '*.mjs', '*.cjs'],
+        project: false,
+        projectService: {
           defaultProject: 'tsconfig.json',
+          ...(isPlainObject(options.typescript?.languageOptions?.parserOptions?.projectService)
+            ? (options.typescript?.languageOptions?.parserOptions
+                ?.projectService as ProjectServiceOptions)
+            : undefined),
         },
-        // options.typescript?.languageOptions?.parserOptions?.project === undefined
-        //   ? true
-        //   : options.typescript?.languageOptions?.parserOptions?.project,
       },
     },
     rules: {
@@ -157,7 +159,8 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
         ...typescript.languageOptions,
         parserOptions: {
           ...typescript.languageOptions?.parserOptions,
-          project: undefined,
+          project: false,
+          projectService: false,
         },
       } satisfies Config['languageOptions'],
       options.javascript,
