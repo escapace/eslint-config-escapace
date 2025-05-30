@@ -130,10 +130,15 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
           ...(options.typescript?.languageOptions?.parserOptions?.extraFileExtensions ?? []),
         ],
         parser: flags.vue ? tseslint.parser : undefined,
-        project:
-          options.typescript?.languageOptions?.parserOptions?.project === undefined
-            ? true
-            : options.typescript?.languageOptions?.parserOptions?.project,
+        project: undefined, // options.typescript?.languageOptions?.parserOptions?.project,
+        // tsconfigRootDir: options.typescript?.languageOptions?.parserOptions?.tsconfigRootDir ?? import.meta.dirname,
+        projectService: options.typescript?.languageOptions?.parserOptions?.projectService ?? {
+          allowDefaultProject: ['*.js', '*.mjs', '*.cjs'],
+          defaultProject: 'tsconfig.json',
+        },
+        // options.typescript?.languageOptions?.parserOptions?.project === undefined
+        //   ? true
+        //   : options.typescript?.languageOptions?.parserOptions?.project,
       },
     },
     rules: {
