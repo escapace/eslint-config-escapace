@@ -229,7 +229,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
       },
     },
     gitignore({
-      files: ['.gitignore', '.eslintignore'],
+      files: ['.eslintignore', '.gitignore', '.lintignore'],
       strict: false,
     }),
     { plugins },
