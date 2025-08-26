@@ -36,7 +36,7 @@ export const pluginsDefault = {
   'stylistic': eslintPluginStylistic,
   'toml': eslintPluginTOML,
   'tsdoc': eslintPluginTSDoc as TSESLint.FlatConfig.Plugin,
-  'typescript': tseslint.plugin,
+  'typescript': tseslint.plugin as TSESLint.FlatConfig.Plugin,
   'unicorn': eslintPluginUnicorn,
   'yaml': eslintPluginYAML,
 } as const

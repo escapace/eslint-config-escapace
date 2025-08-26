@@ -174,7 +174,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
 
   const vue: Config | undefined = flags.vue
     ? {
-        ...omit(options.vue, 'enabled'),
+        ...omit(options.vue, ['enabled']),
         files: options.vue?.files ?? ['**/*.vue'],
         languageOptions: defaultsDeep(
           {},
