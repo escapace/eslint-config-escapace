@@ -112,6 +112,9 @@ const rulesTypescriptDisable = [
   'typescript/consistent-indexed-object-style',
   'typescript/explicit-function-return-type',
   'typescript/sort-type-constituents',
+  'typescript/prefer-for-of',
+  'typescript/no-dynamic-delete',
+  'typescript/no-non-null-assertion',
 ]
 
 export const rulesDepend: Rules = {
@@ -229,7 +232,6 @@ export const rulesTypescriptIncluded: Rules = {
   'typescript/method-signature-style': 'error',
   'typescript/naming-convention': ['error', { format: ['camelCase', 'PascalCase', 'UPPER_CASE'], leadingUnderscore: 'allowSingleOrDouble', selector: 'variableLike', trailingUnderscore: 'allowSingleOrDouble' }],
   'typescript/no-dupe-class-members': 'off',
-  'typescript/no-dynamic-delete': 'error',
   'typescript/no-empty-interface': ['error', { allowSingleExtends: true }],
   'typescript/no-extraneous-class': ['error', { allowWithDecorator: true }],
   'typescript/no-import-type-side-effects': 'error',
@@ -237,7 +239,6 @@ export const rulesTypescriptIncluded: Rules = {
   'typescript/no-loop-func': 'error',
   'typescript/no-loss-of-precision': ['error'],
   'typescript/no-mixed-enums': 'error',
-  'typescript/no-non-null-assertion': 'error',
   'typescript/no-redeclare': ['error', { builtinGlobals: false }],
   'typescript/no-this-alias': ['error', { allowDestructuring: true }],
   'typescript/no-unnecessary-boolean-literal-compare': 'error',
@@ -254,7 +255,7 @@ export const rulesTypescriptIncluded: Rules = {
   'typescript/prefer-ts-expect-error': 'error',
   'typescript/promise-function-async': 'error',
   'typescript/require-array-sort-compare': ['error', { ignoreStringArrays: true }],
-  'typescript/return-await': ['error', 'always'],
+  'typescript/return-await': ['error', 'in-try-catch'],
   'typescript/strict-boolean-expressions': ['error', { allowAny: false, allowNullableBoolean: false, allowNullableNumber: false, allowNullableObject: false, allowNullableString: false, allowNumber: false, allowString: false }],
   'typescript/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'never' }],
   'typescript/unified-signatures': 'error',
