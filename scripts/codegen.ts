@@ -66,7 +66,6 @@ for (const [key, rule] of await ruleDefinitions()) {
   for (const { name, value } of rule.meta.typescript) {
     const filename = `${kebabCase(name)}.ts`
 
-    // eslint-disable-next-line typescript/no-non-null-assertion
     data.get(key)!.imports.push({ filename, name })
     const filepath = path.join(pathDirectoryTypes, filename)
 

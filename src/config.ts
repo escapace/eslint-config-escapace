@@ -255,7 +255,7 @@ export const rulesTypescriptIncluded: Rules = {
   'typescript/prefer-ts-expect-error': 'error',
   'typescript/promise-function-async': 'error',
   'typescript/require-array-sort-compare': ['error', { ignoreStringArrays: true }],
-  'typescript/return-await': ['error', 'in-try-catch'],
+  'typescript/return-await': ['error', 'always'],
   'typescript/strict-boolean-expressions': ['error', { allowAny: false, allowNullableBoolean: false, allowNullableNumber: false, allowNullableObject: false, allowNullableString: false, allowNumber: false, allowString: false }],
   'typescript/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'never' }],
   'typescript/unified-signatures': 'error',

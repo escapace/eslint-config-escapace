@@ -181,7 +181,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
           typescript.languageOptions,
           options.vue?.languageOptions,
         ) as Config['languageOptions'],
-        // eslint-disable-next-line typescript/no-non-null-assertion
+
         processor: plugins.vue!.processors!['.vue'],
         rules: { ...typescript.rules, ...normalizeRules(options.vue?.rules) },
       }
