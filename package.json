@@ -41,6 +41,7 @@
     "eslint-config-escapace": "link:",
     "eslint-config-prettier": "10.1.8",
     "esroll": "0.4.5",
+    "jsdom": "27.0.0",
     "json-schema-to-typescript": "15.0.4",
     "knip": "5.64.1",
     "lefthook": "1.13.4",
@@ -55,31 +56,40 @@
     "zx": "8.8.4"
   },
   "engines": {
-    "node": ">=22.15.0",
-    "pnpm": ">=10.10.0"
+    "node": ">=24.9.0",
+    "pnpm": ">=10.17.1"
   },
   "exports": {
     ".": {
-      "types": "./lib/types/index.d.ts",
-      "import": "./lib/node/index.js"
+      "node": {
+        "import": {
+          "types": "./lib/types/index.d.ts",
+          "default": "./lib/node/index.js"
+        }
+      },
+      "browser": {
+        "import": {
+          "types": "./lib/types/index.d.ts",
+          "default": "./lib/browser/index.js"
+        }
+      },
+      "default": {
+        "import": {
+          "types": "./lib/types/index.d.ts",
+          "default": "./lib/node/index.js"
+        }
+      }
     }
   },
   "files": [
+    "lib/browser",
     "lib/node",
     "lib/types"
   ],
   "homepage": "https://github.com/escapace/eslint-config-escapace#readme",
   "license": "MPL-2.0",
-  "module": "./lib/node/index.js",
   "peerDependencies": {
-    "eslint": ">=9.34.0"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lefthook",
-      "oxc-resolver"
-    ]
+    "eslint": "^9.36.0"
   },
   "private": false,
   "publishConfig": {
@@ -97,7 +107,8 @@
     "prepare": "lefthook install",
     "syncpack": "syncpack fix-mismatches && syncpack set-semver-ranges && syncpack format",
     "test": "vitest --no-watch --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "update": "ncu --cooldown 7 -p pnpm -u --peer --dep dev,peer,prod,optional && pnpm run syncpack"
   },
   "sideEffects": false,
   "type": "module",

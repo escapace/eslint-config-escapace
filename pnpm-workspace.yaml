@@ -1,0 +1,6 @@
+minimumReleaseAge: 10080
+
+onlyBuiltDependencies:
+  - esbuild
+  - lefthook
+  - oxc-resolver
