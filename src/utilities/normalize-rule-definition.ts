@@ -5,7 +5,6 @@ import { compile } from 'json-schema-to-typescript'
 import { isFunction, isObject, isPlainObject, map, mapKeys, mapValues, omit } from 'lodash-es'
 import assert from 'node:assert'
 import { clean } from 'trigram-utils'
-import type { Prettify } from '../types'
 import { toSafeString } from './to-safe-string'
 
 const mapValuesDeep = (
@@ -71,7 +70,26 @@ export type LooseRuleDefinition =
     }
   | undefined
 
-export const normalizeRuleDefinition = async (key: string, value: LooseRuleDefinition) => {
+export interface RuleDefinition {
+  meta: {
+    deprecated: boolean
+    description: string | undefined
+    descriptionTypescript: string[]
+    fixable: string | undefined
+    schema: JSONSchema4[]
+    type: string | undefined
+    typescript: Array<{
+      name: string
+      value: string
+    }>
+    url: string | undefined
+  }
+}
+
+export const normalizeRuleDefinition = async (
+  key: string,
+  value: LooseRuleDefinition,
+): Promise<RuleDefinition> => {
   assert(!isFunction(value), `${key} LooseRuleCreateFunction not supported`)
 
   const schema = normalizeRuleSchema(value?.meta?.schema ?? value?.schema)
@@ -134,6 +152,3 @@ export const normalizeRuleDefinition = async (key: string, value: LooseRuleDefin
     },
   }
 }
-
-export type RuleDefinition = Prettify<Awaited<ReturnType<typeof normalizeRuleDefinition>>>
-// export type RuleMetaData = RuleDefinition['meta']
