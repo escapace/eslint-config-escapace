@@ -36,7 +36,7 @@
     "@ls-lint/ls-lint": "2.3.1",
     "@types/lodash-es": "4.17.12",
     "@types/node": "24.10.4",
-    "@vitest/coverage-v8": "3.2.4",
+    "@vitest/coverage-v8": "4.0.16",
     "eslint": "9.39.2",
     "eslint-config-escapace": "link:",
     "eslint-config-prettier": "10.1.8",
@@ -52,7 +52,7 @@
     "trigram-utils": "2.0.1",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "vitest": "3.2.4",
+    "vitest": "4.0.16",
     "zx": "8.8.5"
   },
   "engines": {
