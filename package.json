@@ -44,7 +44,7 @@
     "jsdom": "27.4.0",
     "json-schema-to-typescript": "15.0.4",
     "knip": "5.78.0",
-    "lefthook": "1.13.6",
+    "lefthook": "2.0.13",
     "lodash-es": "4.17.22",
     "prettier": "3.7.4",
     "prettier-config-escapace": "1.2.1",
