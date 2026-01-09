@@ -127,6 +127,14 @@ export const rulesDepend: Rules = {
   ],
 }
 
+const perfectionistOptions = {
+  ignoreCase: false,
+  order: 'asc',
+  partitionByComment: true,
+  partitionByNewLine: true,
+  type: 'alphabetical',
+} as const
+
 // prettier-ignore
 export const rulesTypescriptIncluded: Rules = {
   // "typescript/only-throw-error": "error",
@@ -180,12 +188,101 @@ export const rulesTypescriptIncluded: Rules = {
   'no-useless-rename': 'error',
   'object-shorthand': ['warn', 'always'],
   'one-var': ['error', { initialized: 'never' }],
-  'perfectionist/sort-array-includes': ['warn', { ignoreCase: false, order: 'asc', partitionByComment: true, partitionByNewLine: true, type: 'alphabetical' }],
-  'perfectionist/sort-interfaces': ['warn', { groupKind: 'required-first', ignoreCase: false, order: 'asc', partitionByComment: true, partitionByNewLine: true, type: 'alphabetical' }],
-  'perfectionist/sort-maps': ['warn', { ignoreCase: false, order: 'asc', partitionByComment: true, partitionByNewLine: true, type: 'alphabetical' }],
-  'perfectionist/sort-object-types': ['warn', { groupKind: 'required-first', ignoreCase: false, order: 'asc', partitionByComment: true, partitionByNewLine: true, type: 'alphabetical' }],
-  'perfectionist/sort-objects': ['warn', { ignoreCase: false, order: 'asc', partitionByComment: true, partitionByNewLine: true, type: 'alphabetical' }],
-  'perfectionist/sort-union-types': ['warn', { groups: ['conditional', 'function', 'import', 'intersection', 'keyword', 'literal', 'named', 'object', 'operator', 'tuple', 'union', 'nullish', 'unknown'], ignoreCase: false, order: 'asc', partitionByComment: true, partitionByNewLine: true, type: 'alphabetical' }],
+  'perfectionist/sort-array-includes': [ 'warn', perfectionistOptions ],
+  'perfectionist/sort-classes': [
+    'warn',
+    {
+      ...perfectionistOptions,
+      groups: [
+        "index-signature",
+
+        // Static state
+        ["static-property", "static-accessor-property"],
+        "optional-static-property",
+        "static-block",
+
+        // Instance state
+        ["property", "accessor-property"],
+        "optional-property",
+
+        "constructor",
+
+        // Behavior: static then instance, required-ish then optional-ish
+        ["static-method", "static-function-property"],
+        ["optional-static-method", "optional-static-function-property"],
+        ["method", "function-property"],
+        ["optional-method", "optional-function-property"],
+
+        "unknown",
+      ],
+    },
+  ],
+  'perfectionist/sort-interfaces': [
+    'warn',
+    {
+      ...perfectionistOptions,
+      groups: [
+        "index-signature",
+
+        // required (implicitly) → optional
+        "property",
+        "optional-property",
+        "method",
+        "optional-method",
+
+        // keep big shapes last; optional-big last of all
+        "multiline-member",
+        "optional-multiline-member",
+
+        "unknown",
+      ],
+    },
+  ],
+  'perfectionist/sort-maps': [ 'warn', perfectionistOptions ],
+  'perfectionist/sort-object-types': [
+    'warn',
+    {
+      ...perfectionistOptions,
+      groups: [
+        "index-signature",
+        "property",
+        "optional-property",
+        "method",
+        "optional-method",
+        "multiline-member",
+        "optional-multiline-member",
+        "unknown",
+      ],
+    },
+  ],
+  'perfectionist/sort-objects': [
+    'warn',
+    {
+      ...perfectionistOptions,
+      groups: ["property", "method", "multiline-member", "unknown"],
+    },
+  ],
+  'perfectionist/sort-union-types': [
+    'warn',
+    {
+      ...perfectionistOptions,
+      groups: [
+        'conditional',
+        'function',
+        'import',
+        'intersection',
+        'keyword',
+        'literal',
+        'named',
+        'object',
+        'operator',
+        'tuple',
+        'union',
+        'nullish',
+        'unknown',
+      ],
+    },
+  ],
   'prefer-const': ['error', { destructuring: 'all' }],
   'prefer-promise-reject-errors': 'error',
   'prefer-regex-literals': ['error', { disallowRedundantWrapping: true }],
