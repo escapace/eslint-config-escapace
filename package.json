@@ -44,7 +44,7 @@
     "json-schema-to-typescript": "15.0.4",
     "knip": "5.78.0",
     "lefthook": "2.0.13",
-    "lodash-es": "4.17.22",
+    "lodash-es": "4.17.23",
     "prettier": "3.7.4",
     "prettier-config-escapace": "1.2.1",
     "syncpack": "13.0.4",

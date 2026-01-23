@@ -19,6 +19,8 @@ minimumReleaseAgeExclude:
   - prettier-config-escapace
   - seedpods
   - snaproll
+  # Renovate security update: lodash-es@4.17.23
+  - lodash-es@4.17.23
 onlyBuiltDependencies:
   - esbuild
   - lefthook
