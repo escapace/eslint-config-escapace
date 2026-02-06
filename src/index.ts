@@ -3,9 +3,7 @@ import type { ParserOptions } from '@typescript-eslint/utils/ts-eslint'
 import gitignore from 'eslint-config-flat-gitignore'
 import eslintParserJSON from 'jsonc-eslint-parser'
 import { defaultsDeep, isPlainObject, omit } from 'lodash-es'
-import eslintParserTOML from 'toml-eslint-parser'
 import tseslint from 'typescript-eslint'
-import eslintParserYAML from 'yaml-eslint-parser'
 import { rulesDepend } from './rules/rules-depend'
 import { rulesJavaScript } from './rules/rules-javascript'
 import { rulesJSON } from './rules/rules-json'
@@ -238,15 +236,17 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
     vue,
     {
       files: ['**/*.y?(a)ml'],
-      languageOptions: {
-        parser: eslintParserYAML,
+      language: 'yml/yaml',
+      plugins: {
+        yml: plugins.yaml,
       },
       rules: rulesYAML,
     },
     {
       files: ['**/.github/workflows/**.{yml,yaml}'],
-      languageOptions: {
-        parser: eslintParserYAML,
+      language: 'yml/yaml',
+      plugins: {
+        yml: plugins.yaml,
       },
       rules: {
         'yaml/sort-keys': ['error', ...ruleYamlSortKeysOptionsGithubWorkflows],
@@ -254,8 +254,9 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
     },
     {
       files: ['**/*.toml'],
-      languageOptions: {
-        parser: eslintParserTOML,
+      language: 'toml/toml',
+      plugins: {
+        yml: plugins.toml,
       },
       rules: rulesTOML,
     },

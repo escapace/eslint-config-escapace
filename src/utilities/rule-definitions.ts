@@ -24,7 +24,7 @@ export const ruleDefinitions = async (): Promise<Array<[string, RuleDefinition]>
             ([key, value]) =>
               [`perfectionist/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
-          ...Object.entries(plugins.regexp.rules).map(
+          ...Object.entries(plugins.regexp.rules ?? {}).map(
             ([key, value]) => [`regexp/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
           ...Object.entries(ok(plugins.tsdoc.rules)).map(
@@ -36,16 +36,16 @@ export const ruleDefinitions = async (): Promise<Array<[string, RuleDefinition]>
           ...Object.entries(ok(plugins.vue.rules)).map(
             ([key, value]) => [`vue/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
-          ...Object.entries(plugins.yaml.rules).map(
+          ...Object.entries(plugins.yaml.rules!).map(
             ([key, value]) => [`yaml/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
-          ...Object.entries(plugins.toml.rules).map(
+          ...Object.entries(plugins.toml.rules!).map(
             ([key, value]) => [`toml/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
           ...Object.entries(plugins.stylistic.rules).map(
             ([key, value]) => [`stylistic/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
-          ...Object.entries(plugins.typescript.rules ?? {}).map(
+          ...Object.entries(plugins.typescript.rules!).map(
             ([key, value]) => [`typescript/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
           ...Object.entries(plugins['vue-a11y'].rules).map(

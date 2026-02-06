@@ -9,6 +9,7 @@ import type { RuleEntry, Rules } from './types'
 import { normalizeRules } from './utilities/normalize-rules'
 import { ok } from './utilities/ok'
 import { pluginsAll } from './utilities/plugins'
+import assert from 'node:assert'
 
 const plugins = await pluginsAll()
 
@@ -188,7 +189,7 @@ export const rulesTypescriptIncluded: Rules = {
   'no-useless-rename': 'error',
   'object-shorthand': ['warn', 'always'],
   'one-var': ['error', { initialized: 'never' }],
-  'perfectionist/sort-array-includes': [ 'warn', perfectionistOptions ],
+  'perfectionist/sort-array-includes': ['warn', perfectionistOptions],
   'perfectionist/sort-classes': [
     'warn',
     {
@@ -238,7 +239,7 @@ export const rulesTypescriptIncluded: Rules = {
       ],
     },
   ],
-  'perfectionist/sort-maps': [ 'warn', perfectionistOptions ],
+  'perfectionist/sort-maps': ['warn', perfectionistOptions],
   'perfectionist/sort-object-types': [
     'warn',
     {
@@ -385,15 +386,24 @@ export const rulesTypescriptIncluded: Rules = {
   ) as Record<string, 'off'>),
 }
 
+const preset = (config: object | undefined, key: string): TSESLint.FlatConfig.Config[] => {
+  assert(config !== undefined)
+  assert(!Array.isArray(config))
+  const value = Reflect.get(config, key) as TSESLint.FlatConfig.Config
+
+  assert(value !== undefined)
+
+  return Array.isArray(value) ? value : [value]
+}
+
 export const rulesTypescriptDefaults = normalizeRules(
   ...compose(
     eslint.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
     ...tseslint.configs.stylisticTypeChecked,
-    plugins.stylistic.configs['disable-legacy'],
-    // as TSESLint.FlatConfig.Config,
-    eslintPluginPerfectionist.configs['recommended-alphabetical'],
-    plugins.regexp.configs['flat/recommended'] as TSESLint.FlatConfig.Config,
+    ...preset(plugins.stylistic.configs, 'disable-legacy'),
+    ...preset(eslintPluginPerfectionist.configs, 'recommended-alphabetical'),
+    ...preset(plugins.regexp.configs, 'flat/recommended'),
     eslintConfigPrettier,
   ).map((value) => value.rules),
 )
@@ -409,9 +419,9 @@ export const rulesJavascript = normalizeRules(
 
 export const rulesYAMLDefaults = normalizeRules(
   ...compose(
-    ...plugins.yaml.configs['flat/base'],
-    ...plugins.yaml.configs['flat/recommended'],
-    ...plugins.yaml.configs['flat/prettier'],
+    ...preset(plugins.yaml.configs, 'flat/base'),
+    ...preset(plugins.yaml.configs, 'flat/recommended'),
+    ...preset(plugins.yaml.configs, 'flat/prettier'),
   ).map((value) => value.rules),
 )
 
@@ -480,9 +490,9 @@ export const [rulesJSON, rulesJSON5, rulesJSONC] = (
 
 export const rulesTOMLDefaults = normalizeRules(
   ...compose(
-    ...plugins.toml.configs['flat/base'],
-    ...plugins.toml.configs['flat/recommended'],
-    ...plugins.toml.configs['flat/standard'],
+    ...preset(plugins.toml.configs, 'flat/base'),
+    ...preset(plugins.toml.configs, 'flat/recommended'),
+    ...preset(plugins.toml.configs, 'flat/standard'),
   ).map((value) => value.rules),
 )
 
