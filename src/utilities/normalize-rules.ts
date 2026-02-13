@@ -1,4 +1,6 @@
+import type { Linter } from 'eslint'
 import type { RuleEntry, RuleEntryAlphanumeric } from '../types'
+import { ensureDefined } from './ensure-defined'
 
 const levelToString = (
   key: string,
@@ -17,7 +19,7 @@ const levelToString = (
   }
 }
 
-const pairs: Array<[string, string | undefined]> = [
+const ruleKeyAliases: Array<[prefix: string, replacement: string | undefined]> = [
   ['@babel', undefined],
   ['react', undefined],
   ['@typescript-eslint', 'typescript'],
@@ -27,20 +29,16 @@ const pairs: Array<[string, string | undefined]> = [
   ['@stylistic', 'stylistic'],
 ]
 
-const normalizeRuleKey = (key: string) => {
-  const pair = pairs.find(([namespace]) => key.startsWith(`${namespace}/`))
+const normalizeRuleKey = (key: string): string | undefined => {
+  const alias = ruleKeyAliases.find(([prefix]) => key.startsWith(`${prefix}/`))
 
-  if (pair === undefined) {
+  if (alias === undefined) {
     return key
-  } else {
-    const [namespace, newNamespace] = pair
-
-    if (newNamespace === undefined) {
-      return undefined
-    }
-
-    return `${newNamespace}${key.substring(namespace.length)}`
   }
+
+  const [prefix, replacement] = alias
+
+  return replacement === undefined ? undefined : `${replacement}${key.substring(prefix.length)}`
 }
 
 export const normalizeRules = (
@@ -58,22 +56,37 @@ export const normalizeRules = (
           (value): value is Partial<Record<string, RuleEntryAlphanumeric>> => value !== undefined,
         ),
       ) as Partial<Record<string, RuleEntryAlphanumeric>>,
-    )
-      .map(([_key, value]): [string, RuleEntry] | undefined => {
-        const key = normalizeRuleKey(_key)
+    ).flatMap(([rawKey, value]): Array<[string, RuleEntry]> => {
+      const key = normalizeRuleKey(rawKey)
 
-        if (value === undefined || key === undefined) {
-          return undefined
-        }
+      if (value === undefined || key === undefined) {
+        return []
+      }
 
-        if (Array.isArray(value)) {
-          const [level, ...options] = value
+      if (Array.isArray(value)) {
+        const [level, ...options] = value
 
-          return [key, [levelToString(key, level), ...options]]
-        } else {
-          return [key, levelToString(key, value)]
-        }
-      })
-      .filter((value): value is [string, RuleEntry] => value !== undefined),
+        return [[key, [levelToString(key, level), ...options]]]
+      }
+
+      return [[key, levelToString(key, value)]]
+    }),
   )
+}
+
+export function extractRules(
+  ...configs: Array<Linter.Config | readonly Linter.Config[] | undefined>
+): Array<Partial<Linter.RulesRecord> | undefined> {
+  return configs
+    .flat()
+    .filter((value): value is Linter.Config => value !== undefined)
+    .map((value) => value.rules)
+}
+
+export const ensurePreset = (config: object | undefined, key: string): Linter.Config[] => {
+  const value = ensureDefined(
+    Reflect.get(ensureDefined(config), key) as Linter.Config | Linter.Config[] | undefined,
+  )
+
+  return Array.isArray(value) ? value : [value]
 }

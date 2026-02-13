@@ -6,59 +6,38 @@ import {
   type LooseRuleDefinition,
   type RuleDefinition,
 } from './normalize-rule-definition'
-import { ensureDefined } from './ensure-defined.js'
 
 export const ruleDefinitions = async (): Promise<Array<[string, RuleDefinition]>> => {
   const collator = new Intl.Collator('en')
   const plugins = await pluginsAll()
 
+  const pluginEntries: Array<[prefix: string, rules: Record<string, LooseRuleDefinition>]> = [
+    ['', Object.fromEntries(eslintRules as Map<string, LooseRuleDefinition>)],
+    ['de-morgan', plugins['de-morgan'].rules ?? {}],
+    ['depend', plugins.depend.rules ?? {}],
+    ['json', plugins.json.rules as Record<string, LooseRuleDefinition>],
+    ['perfectionist', plugins.perfectionist.rules ?? {}],
+    ['regexp', plugins.regexp.rules ?? {}],
+    ['stylistic', plugins.stylistic.rules as Record<string, LooseRuleDefinition>],
+    ['toml', plugins.toml.rules ?? {}],
+    ['tsdoc', plugins.tsdoc.rules ?? {}],
+    ['typescript', plugins.typescript.rules ?? {}],
+    ['unicorn', plugins.unicorn.rules ?? {}],
+    ['vue', plugins.vue.rules ?? {}],
+    ['vue-a11y', plugins['vue-a11y'].rules as Record<string, LooseRuleDefinition>],
+    ['yaml', plugins.yaml.rules ?? {}],
+  ]
+
+  const entries = pluginEntries.flatMap(([prefix, rules]) =>
+    Object.entries(rules).map(
+      ([key, value]) =>
+        [prefix === '' ? key : `${prefix}/${key}`, value] satisfies [string, LooseRuleDefinition],
+    ),
+  )
+
   return (
     await Promise.all(
-      (
-        [
-          ...Array.from((eslintRules as Map<string, LooseRuleDefinition>).entries()),
-          ...Object.entries(plugins.json.rules).map(
-            ([key, value]) => [`json/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(ensureDefined(plugins.perfectionist.rules)).map(
-            ([key, value]) =>
-              [`perfectionist/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(plugins.regexp.rules ?? {}).map(
-            ([key, value]) => [`regexp/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(ensureDefined(plugins.tsdoc.rules)).map(
-            ([key, value]) => [`tsdoc/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(ensureDefined(plugins.unicorn.rules)).map(
-            ([key, value]) => [`unicorn/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(ensureDefined(plugins.vue.rules)).map(
-            ([key, value]) => [`vue/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(plugins.yaml.rules!).map(
-            ([key, value]) => [`yaml/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(plugins.toml.rules!).map(
-            ([key, value]) => [`toml/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(plugins.stylistic.rules).map(
-            ([key, value]) => [`stylistic/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(plugins.typescript.rules!).map(
-            ([key, value]) => [`typescript/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(plugins['vue-a11y'].rules).map(
-            ([key, value]) => [`vue-a11y/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(plugins.depend.rules ?? {}).map(
-            ([key, value]) => [`depend/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-          ...Object.entries(plugins['de-morgan'].rules ?? {}).map(
-            ([key, value]) => [`de-morgan/${key}`, value] satisfies [string, LooseRuleDefinition],
-          ),
-        ] satisfies Array<[string, LooseRuleDefinition]>
-      ).map(
+      entries.map(
         async ([key, value]): Promise<[string, RuleDefinition]> => [
           key,
           await normalizeRuleDefinition(key, value),
@@ -67,5 +46,3 @@ export const ruleDefinitions = async (): Promise<Array<[string, RuleDefinition]>
     )
   ).sort(([a], [b]) => collator.compare(a, b))
 }
-
-// console.log(JSON.stringify(await ruleDefinitions(), null, 2))

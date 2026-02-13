@@ -17,7 +17,8 @@ import { rulesYAML } from './rules/rules-yaml'
 import type { Config } from './types'
 import type { RuleYamlSortKeysOptions } from './types/rule-yaml-sort-keys-options'
 import { normalizeRules } from './utilities/normalize-rules'
-import { interopDefault, pluginsDefault, pluginsVue } from './utilities/plugins'
+import { interopDefault } from './utilities/interop-default'
+import { pluginsBase, pluginsVue } from './utilities/plugins'
 
 type ProjectServiceOptions = Exclude<ParserOptions['projectService'], boolean | undefined>
 
@@ -113,7 +114,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
     vue: options?.vue?.enabled === true,
   }
 
-  const plugins = { ...pluginsDefault, ...(flags.vue ? await pluginsVue() : undefined) }
+  const plugins = { ...pluginsBase, ...(flags.vue ? await pluginsVue() : undefined) }
   const parser = flags.vue ? await interopDefault(import('vue-eslint-parser')) : tseslint.parser
 
   const typescript: Config = {

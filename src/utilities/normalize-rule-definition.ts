@@ -33,7 +33,7 @@ const mapValuesDeep = (
 const ordinalSeries = new Map<number, string>([
   [1, 'Primary'],
   [2, 'Secondary'],
-  [3, 'Teritary'],
+  [3, 'Tertiary'],
 ])
 
 const ordinalName = (index: number) => {
@@ -44,8 +44,8 @@ const ordinalName = (index: number) => {
 }
 
 const normalizeRuleSchema = (input: Rule.RuleMetaData['schema']): JSONSchema4[] => {
-  const _input = input ?? []
-  const schemas = (Array.isArray(_input) ? _input : [_input]).filter(
+  const raw = input ?? []
+  const schemas = (Array.isArray(raw) ? raw : [raw]).filter(
     (value): value is JSONSchema4 => value !== false,
   )
 
@@ -123,7 +123,7 @@ export const normalizeRuleDefinition = async (
           ? `Rule${toTypeName(key)}${ordinalName(ordinal)}Options`
           : `Rule${toTypeName(key)}Options`
 
-      const value = (
+      const lines = (
         await compile(_schema, name, {
           bannerComment: '',
           declareExternallyReferenced: true,
@@ -132,15 +132,15 @@ export const normalizeRuleDefinition = async (
         })
       ).split(/\r?\n/)
 
-      const index = value.findLastIndex((value) =>
-        new RegExp(`export (?:interface|type) ${name}`, 'i').test(value),
+      const index = lines.findLastIndex((line) =>
+        new RegExp(`export (?:interface|type) ${name}`, 'i').test(line),
       )
 
       assert(index !== -1)
 
-      value.splice(index, 0, ...descriptionTypescript)
+      lines.splice(index, 0, ...descriptionTypescript)
 
-      typescript.push({ name, value: value.join('\n') })
+      typescript.push({ name, value: lines.join('\n') })
     } catch (error) {
       console.log(key, ordinal)
       console.log(JSON.stringify(schema, null, 2))

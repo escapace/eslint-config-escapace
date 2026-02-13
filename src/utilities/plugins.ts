@@ -1,6 +1,5 @@
-/* eslint-disable typescript/no-unsafe-member-access */
 import eslintPluginStylistic from '@stylistic/eslint-plugin'
-import type { TSESLint } from '@typescript-eslint/utils'
+import type { ESLint } from 'eslint'
 import eslintPluginDeMorgan from 'eslint-plugin-de-morgan'
 import eslintPluginDepend from 'eslint-plugin-depend'
 import eslintPluginJSON from 'eslint-plugin-jsonc'
@@ -10,54 +9,51 @@ import eslintPluginTSDoc from 'eslint-plugin-tsdoc'
 import eslintPluginYAML from 'eslint-plugin-yml'
 import tseslint from 'typescript-eslint'
 
-import eslintConfigPerfectionist from 'eslint-plugin-perfectionist'
+import eslintPluginPerfectionist from 'eslint-plugin-perfectionist'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
+import { ensurePlugin } from './ensure-plugin'
 
-type Awaitable<T> = Promise<T> | T
-
-// https://github.com/antfu/eslint-config/blob/main/src/utils.ts
-export async function interopDefault<T>(
-  m: Awaitable<T>,
-): Promise<T extends { default: infer U } ? U : T> {
-  const resolved = await m
-
-  // eslint-disable-next-line typescript/no-unsafe-return, typescript/no-explicit-any
-  return (resolved as any).default ?? resolved
+export interface PluginsBase {
+  'de-morgan': ESLint.Plugin
+  'depend': ESLint.Plugin
+  'json': ESLint.Plugin
+  'perfectionist': ESLint.Plugin
+  'regexp': ESLint.Plugin
+  'stylistic': ESLint.Plugin
+  'toml': ESLint.Plugin
+  'tsdoc': ESLint.Plugin
+  'typescript': ESLint.Plugin
+  'unicorn': ESLint.Plugin
+  'yaml': ESLint.Plugin
 }
 
-export const pluginsDefault = {
-  'de-morgan': eslintPluginDeMorgan as TSESLint.FlatConfig.Plugin,
-  'depend': eslintPluginDepend as TSESLint.FlatConfig.Plugin,
-  'perfectionist': eslintConfigPerfectionist as TSESLint.FlatConfig.Plugin,
-  'regexp': eslintPluginRegexp.configs['flat/all'].plugins.regexp as TSESLint.FlatConfig.Plugin,
-  'stylistic': eslintPluginStylistic,
-  'toml': eslintPluginTOML as TSESLint.FlatConfig.Plugin,
-  'tsdoc': eslintPluginTSDoc as TSESLint.FlatConfig.Plugin,
-  'typescript': tseslint.plugin as TSESLint.FlatConfig.Plugin,
-  'unicorn': eslintPluginUnicorn as TSESLint.FlatConfig.Plugin,
-  get 'json'() {
-    return eslintPluginJSON
-  },
-  get 'yaml'() {
-    return eslintPluginYAML as TSESLint.FlatConfig.Plugin
-  },
-} as const
+export interface PluginsVue {
+  'vue': ESLint.Plugin
+  'vue-a11y': ESLint.Plugin
+}
 
-const resolvePlugins = async <T extends Record<string, () => Promise<unknown>>>(plugins: T) =>
-  Object.fromEntries(
-    await Promise.all(
-      Object.entries(
-        plugins as unknown as Record<string, () => Promise<TSESLint.FlatConfig.Plugin>>,
-      ).map(async ([key, value]) => [key, await value()] as const),
-    ),
-  ) as { [P in keyof T]: Awaited<ReturnType<T[P]>> }
+export type PluginsAll = PluginsBase & PluginsVue
 
-export const pluginsVue = async () =>
-  await resolvePlugins({
-    'vue': async () =>
-      // @ts-expect-error no-types
-      await interopDefault<TSESLint.FlatConfig.Plugin>(import('eslint-plugin-vue')),
-    'vue-a11y': async () => await interopDefault(import('eslint-plugin-vuejs-accessibility')),
-  } as const)
+export const pluginsBase: PluginsBase = {
+  'de-morgan': ensurePlugin(eslintPluginDeMorgan),
+  'depend': ensurePlugin(eslintPluginDepend),
+  'json': ensurePlugin(eslintPluginJSON),
+  'perfectionist': ensurePlugin(eslintPluginPerfectionist),
+  'regexp': ensurePlugin(eslintPluginRegexp.configs['flat/all'].plugins?.regexp),
+  'stylistic': ensurePlugin(eslintPluginStylistic),
+  'toml': ensurePlugin(eslintPluginTOML),
+  'tsdoc': ensurePlugin(eslintPluginTSDoc),
+  'typescript': ensurePlugin(tseslint.plugin),
+  'unicorn': ensurePlugin(eslintPluginUnicorn),
+  'yaml': ensurePlugin(eslintPluginYAML),
+}
 
-export const pluginsAll = async () => ({ ...pluginsDefault, ...(await pluginsVue()) })
+export const pluginsVue = async (): Promise<PluginsVue> => ({
+  'vue': ensurePlugin(await import('eslint-plugin-vue')),
+  'vue-a11y': ensurePlugin(await import('eslint-plugin-vuejs-accessibility')),
+})
+
+export const pluginsAll = async (): Promise<PluginsAll> => ({
+  ...pluginsBase,
+  ...(await pluginsVue()),
+})

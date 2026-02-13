@@ -1,48 +1,12 @@
 import eslint from '@eslint/js'
-import type { TSESLint } from '@typescript-eslint/utils'
 import { mapValues, pickBy } from 'es-toolkit/compat'
 import prettierConfig from 'eslint-config-prettier'
-import assert from 'node:assert'
 import tseslint from 'typescript-eslint'
 import type { RuleEntry, Rules } from './types'
-import { normalizeRules } from './utilities/normalize-rules'
+import { normalizeRules, ensurePreset, extractRules } from './utilities/normalize-rules'
 import { pluginsAll } from './utilities/plugins'
 
 const plugins = await pluginsAll()
-
-function extractRules(
-  ...configs: Array<
-    ReadonlyArray<TSESLint.FlatConfig.Config | undefined> | TSESLint.FlatConfig.Config | undefined
-  >
-): Array<Partial<Record<string, TSESLint.SharedConfig.RuleEntry>> | undefined> {
-  const flattened: Array<TSESLint.FlatConfig.Config | undefined> = []
-
-  for (const value of configs) {
-    if (Array.isArray(value)) {
-      for (const config of value as ReadonlyArray<TSESLint.FlatConfig.Config | undefined>) {
-        flattened.push(config)
-      }
-    } else if (value === undefined) {
-      flattened.push(undefined)
-    } else {
-      flattened.push(value as TSESLint.FlatConfig.Config)
-    }
-  }
-
-  return flattened
-    .filter((value): value is TSESLint.FlatConfig.Config => value !== undefined)
-    .map((value) => value.rules)
-}
-
-const ensurePreset = (config: object | undefined, key: string): TSESLint.FlatConfig.Config[] => {
-  assert(config !== undefined)
-  assert(!Array.isArray(config))
-  const value = Reflect.get(config, key) as TSESLint.FlatConfig.Config
-
-  assert(value !== undefined)
-
-  return Array.isArray(value) ? value : [value]
-}
 
 export const rulesVueIncluded = normalizeRules({
   'vue/block-order': [
