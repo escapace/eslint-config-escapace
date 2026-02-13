@@ -1,6 +1,8 @@
 import type { Linter } from 'eslint'
 import { describe, expect, it } from 'vitest'
-import { ensurePreset, extractRules, normalizeRules } from './normalize-rules'
+import { ensurePreset } from './ensure-preset'
+import { extractRules } from './extract-rules'
+import { normalizeRules } from './normalize-rules'
 
 describe('normalizeRules', () => {
   describe('severity normalization', () => {

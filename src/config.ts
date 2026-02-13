@@ -3,7 +3,9 @@ import { mapValues, pickBy } from 'es-toolkit/compat'
 import prettierConfig from 'eslint-config-prettier'
 import tseslint from 'typescript-eslint'
 import type { RuleEntry, Rules } from './types'
-import { normalizeRules, ensurePreset, extractRules } from './utilities/normalize-rules'
+import { ensurePreset } from './utilities/ensure-preset'
+import { extractRules } from './utilities/extract-rules'
+import { normalizeRules } from './utilities/normalize-rules'
 import { pluginsAll } from './utilities/plugins'
 
 const plugins = await pluginsAll()

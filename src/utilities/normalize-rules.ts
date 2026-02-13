@@ -1,6 +1,4 @@
-import type { Linter } from 'eslint'
 import type { RuleEntry, RuleEntryAlphanumeric } from '../types'
-import { ensureDefined } from './ensure-defined'
 
 const levelToString = (
   key: string,
@@ -72,21 +70,4 @@ export const normalizeRules = (
       return [[key, levelToString(key, value)]]
     }),
   )
-}
-
-export function extractRules(
-  ...configs: Array<Linter.Config | readonly Linter.Config[] | undefined>
-): Array<Partial<Linter.RulesRecord> | undefined> {
-  return configs
-    .flat()
-    .filter((value): value is Linter.Config => value !== undefined)
-    .map((value) => value.rules)
-}
-
-export const ensurePreset = (config: object | undefined, key: string): Linter.Config[] => {
-  const value = ensureDefined(
-    Reflect.get(ensureDefined(config), key) as Linter.Config | Linter.Config[] | undefined,
-  )
-
-  return Array.isArray(value) ? value : [value]
 }
