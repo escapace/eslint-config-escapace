@@ -28,7 +28,7 @@ All options are optional.
 - `javascript`: adjustments for JavaScript
 - `vue`: Vue-related adjustments
 
-Example: enable Vue and turn off one Vue rule:
+Example: enable Vue and adjust one Vue rule:
 
 ```js
 import { escapace } from 'eslint-config-escapace'
@@ -37,7 +37,7 @@ export default escapace({
   vue: {
     enabled: true,
     rules: {
-      'vue/multi-word-component-names': 'off',
+      'vue/max-template-depth': ['error', { maxDepth: 10 }],
     },
   },
 })
@@ -52,7 +52,7 @@ import { compose, escapace } from 'eslint-config-escapace'
 
 export default compose(escapace(), {
   rules: {
-    'no-console': 'off',
+    'unicorn/prevent-abbreviations': 'off',
   },
 })
 ```
