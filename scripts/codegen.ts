@@ -12,6 +12,7 @@ import {
   rulesJSONC,
   rulesTOML,
   rulesTypescript,
+  rulesVitest,
   rulesVue,
   rulesYAML,
 } from '../src/config'
@@ -49,6 +50,7 @@ const pairs = {
     identifier: 'rulesTypeScript',
     rules: rulesTypescript,
   },
+  vitest: { filename: 'rules-vitest.ts', identifier: 'rulesVitest', rules: rulesVitest },
   vue: { filename: 'rules-vue.ts', identifier: 'rulesVue', rules: rulesVue },
   yaml: { filename: 'rules-yaml.ts', identifier: 'rulesYAML', rules: rulesYAML },
 } as const

@@ -10,7 +10,7 @@ it('returns defined nested value', () => {
 })
 
 it('throws for missing nested value', () => {
-  expect(() => ensureDefined({ a: {} }, 'a', 'b')).toThrow(
+  expect(() => ensureDefined({ a: {} }, 'a', 'b')).toThrowError(
     'Expected value at path "a.b" to be defined',
   )
 })

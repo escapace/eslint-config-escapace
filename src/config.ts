@@ -11,6 +11,7 @@ import { pluginsAll } from './utilities/plugins'
 const plugins = await pluginsAll()
 
 export const rulesVueIncluded = normalizeRules({
+  'vue/attribute-hyphenation': ['error', 'always'],
   'vue/block-order': [
     'error',
     {
@@ -37,16 +38,30 @@ export const rulesVueIncluded = normalizeRules({
     },
   ],
   'vue/component-options-name-casing': ['error', 'PascalCase'],
-  'vue/custom-event-name-casing': ['error', 'camelCase'],
+  'vue/custom-event-name-casing': ['error', 'kebab-case'],
   'vue/define-macros-order': [
     'error',
     {
       order: ['defineOptions', 'defineProps', 'defineEmits', 'defineSlots'],
     },
   ],
+  'vue/define-props-destructuring': 'error',
   'vue/enforce-style-attribute': ['error', { allow: ['scoped', 'plain'] }],
   'vue/first-attribute-linebreak': 'off',
-  'vue/multi-word-component-names': 'off',
+  'vue/match-component-file-name': [
+    'error',
+    {
+      extensions: ['vue'],
+      shouldMatchCase: false,
+    },
+  ],
+  'vue/max-template-depth': ['error', { maxDepth: 8 }],
+  'vue/multi-word-component-names': [
+    'error',
+    {
+      ignores: ['App', 'Layout'],
+    },
+  ],
   'vue/no-boolean-default': ['error', 'default-false'],
   'vue/no-empty-component-block': 'error',
   'vue/no-loss-of-precision': 'error',
@@ -60,10 +75,20 @@ export const rulesVueIncluded = normalizeRules({
   'vue/no-restricted-syntax': ['error', 'DebuggerStatement', 'LabeledStatement', 'WithStatement'],
   'vue/no-setup-props-reactivity-loss': 'error',
   'vue/no-sparse-arrays': 'error',
+  'vue/no-unused-emit-declarations': 'error',
+  'vue/no-unused-properties': [
+    'error',
+    {
+      groups: ['props', 'data', 'computed', 'methods'],
+    },
+  ],
   'vue/no-unused-refs': 'error',
   'vue/no-useless-v-bind': 'error',
   'vue/padding-line-between-blocks': ['warn', 'always'],
+  'vue/prefer-use-template-ref': 'error',
   'vue/prop-name-casing': ['error', 'camelCase'],
+  'vue/require-explicit-slots': 'warn',
+  'vue/require-expose': 'warn',
 })
 
 export const rulesVueDefaults: Record<string, RuleEntry> = pickBy(
@@ -383,6 +408,7 @@ export const rulesTypescriptDefaults = normalizeRules(
     ensurePreset(tseslint.configs, 'stylisticTypeChecked'),
     ensurePreset(plugins.stylistic.configs, 'disable-legacy'),
     ensurePreset(plugins.perfectionist.configs, 'recommended-alphabetical'),
+    ensurePreset(plugins.math.configs, 'recommended'),
     ensurePreset(plugins.regexp.configs, 'flat/recommended'),
     prettierConfig,
   ),
@@ -395,6 +421,25 @@ export const rulesJavascript = normalizeRules(
   rulesTypescriptIncluded,
   ...extractRules(ensurePreset(tseslint.configs, 'disableTypeChecked')),
   { 'tsdoc/syntax': 'off' },
+)
+
+const rulesVitestIncluded = normalizeRules({
+  'vitest/consistent-test-it': ['error', { fn: 'it' }],
+  'vitest/consistent-vitest-vi': ['error', { fn: 'vi' }],
+  'vitest/expect-expect': 'off',
+  'vitest/max-nested-describe': ['error', { max: 2 }],
+  'vitest/no-alias-methods': 'error',
+  'vitest/no-test-return-statement': 'error',
+  'vitest/prefer-hooks-in-order': 'error',
+  'vitest/prefer-hooks-on-top': 'error',
+  'vitest/prefer-mock-promise-shorthand': 'error',
+  'vitest/require-awaited-expect-poll': 'error',
+  'vitest/require-to-throw-message': 'warn',
+})
+
+export const rulesVitest = normalizeRules(
+  ...extractRules(ensurePreset(plugins.vitest.configs, 'recommended')),
+  rulesVitestIncluded,
 )
 
 export const rulesYAMLDefaults = normalizeRules(

@@ -1,8 +1,10 @@
 import eslintPluginStylistic from '@stylistic/eslint-plugin'
+import eslintPluginVitest from '@vitest/eslint-plugin'
 import type { ESLint } from 'eslint'
 import eslintPluginDeMorgan from 'eslint-plugin-de-morgan'
 import eslintPluginDepend from 'eslint-plugin-depend'
 import eslintPluginJSON from 'eslint-plugin-jsonc'
+import eslintPluginMath from 'eslint-plugin-math'
 import eslintPluginRegexp from 'eslint-plugin-regexp'
 import eslintPluginTOML from 'eslint-plugin-toml'
 import eslintPluginTSDoc from 'eslint-plugin-tsdoc'
@@ -17,6 +19,7 @@ export interface PluginsBase {
   'de-morgan': ESLint.Plugin
   'depend': ESLint.Plugin
   'json': ESLint.Plugin
+  'math': ESLint.Plugin
   'perfectionist': ESLint.Plugin
   'regexp': ESLint.Plugin
   'stylistic': ESLint.Plugin
@@ -24,6 +27,7 @@ export interface PluginsBase {
   'tsdoc': ESLint.Plugin
   'typescript': ESLint.Plugin
   'unicorn': ESLint.Plugin
+  'vitest': ESLint.Plugin
   'yaml': ESLint.Plugin
 }
 
@@ -38,6 +42,7 @@ export const pluginsBase: PluginsBase = {
   'de-morgan': ensurePlugin(eslintPluginDeMorgan),
   'depend': ensurePlugin(eslintPluginDepend),
   'json': ensurePlugin(eslintPluginJSON),
+  'math': ensurePlugin(eslintPluginMath),
   'perfectionist': ensurePlugin(eslintPluginPerfectionist),
   'regexp': ensurePlugin(eslintPluginRegexp.configs['flat/all'].plugins?.regexp),
   'stylistic': ensurePlugin(eslintPluginStylistic),
@@ -45,6 +50,7 @@ export const pluginsBase: PluginsBase = {
   'tsdoc': ensurePlugin(eslintPluginTSDoc),
   'typescript': ensurePlugin(tseslint.plugin),
   'unicorn': ensurePlugin(eslintPluginUnicorn),
+  'vitest': ensurePlugin(eslintPluginVitest),
   'yaml': ensurePlugin(eslintPluginYAML),
 }
 

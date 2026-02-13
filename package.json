@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-escapace",
-  "description": "",
+  "description": "Single-entry ESLint baseline for consistent linting across code, tests, and configuration files. Covers TypeScript, JavaScript, optional Vue support, Vitest defaults, YAML, TOML, and JSON variants.",
   "version": "0.0.0",
   "author": {
     "name": "escapace",
@@ -10,10 +10,12 @@
   "dependencies": {
     "@stylistic/eslint-plugin": "^5.7.1",
     "@typescript-eslint/utils": "^8.54.0",
+    "@vitest/eslint-plugin": "^1.6.6",
     "eslint-config-flat-gitignore": "^2.1.0",
     "eslint-plugin-de-morgan": "^2.0.0",
     "eslint-plugin-depend": "^1.4.0",
     "eslint-plugin-jsonc": "^2.21.0",
+    "eslint-plugin-math": "^0.13.1",
     "eslint-plugin-perfectionist": "^5.5.0",
     "eslint-plugin-regexp": "^3.0.0",
     "eslint-plugin-toml": "^1.0.3",

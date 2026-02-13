@@ -138,7 +138,7 @@ describe('normalizeRuleDefinition', () => {
     it('rejects a bare function', async () => {
       await expect(
         normalizeRuleDefinition('bad-rule', (() => ({})) as LooseRuleDefinition),
-      ).rejects.toThrow('LooseRuleCreateFunction not supported')
+      ).rejects.toThrowError('LooseRuleCreateFunction not supported')
     })
   })
 

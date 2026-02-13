@@ -12,11 +12,13 @@ import { rulesJSON5 } from './rules/rules-json5'
 import { rulesJSONC } from './rules/rules-jsonc'
 import { rulesTOML } from './rules/rules-toml'
 import { rulesTypeScript } from './rules/rules-typescript'
+import { rulesVitest } from './rules/rules-vitest'
 import { rulesVue } from './rules/rules-vue'
 import { rulesYAML } from './rules/rules-yaml'
 import type { Config } from './types'
 import type { RuleYamlSortKeysOptions } from './types/rule-yaml-sort-keys-options'
 import { normalizeRules } from './utilities/normalize-rules'
+import { ensurePreset } from './utilities/ensure-preset'
 import { interopDefault } from './utilities/interop-default'
 import { pluginsBase, pluginsVue } from './utilities/plugins'
 
@@ -116,6 +118,10 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
 
   const plugins = { ...pluginsBase, ...(flags.vue ? await pluginsVue() : undefined) }
   const parser = flags.vue ? await interopDefault(import('vue-eslint-parser')) : tseslint.parser
+  const vitestEnvironment = ensurePreset(plugins.vitest.configs, 'env').at(0)
+  const vitestGlobals = vitestEnvironment?.languageOptions?.globals as NonNullable<
+    Config['languageOptions']
+  >['globals']
 
   const typescript: Config = {
     ...options.typescript,
@@ -235,6 +241,13 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
     { plugins },
     typescript,
     javascript,
+    {
+      files: ['**/__tests__/**/*.?([cm])[jt]s?(x)', '**/*.{test,spec}.?([cm])[jt]s?(x)'],
+      languageOptions: {
+        globals: vitestGlobals,
+      },
+      rules: rulesVitest,
+    },
     vue,
     {
       files: ['**/*.y?(a)ml'],

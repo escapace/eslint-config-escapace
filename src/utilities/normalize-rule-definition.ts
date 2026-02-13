@@ -36,6 +36,26 @@ const ordinalSeries = new Map<number, string>([
   [3, 'Tertiary'],
 ])
 
+const patchVitestValidTitleTypes = (key: string, value: string): string => {
+  if (key !== 'vitest/valid-title') {
+    return value
+  }
+
+  const token = '[k: string]:'
+  const start = value.indexOf(token)
+  const end = value.lastIndexOf('\n}')
+
+  if (start === -1 || end === -1 || end <= start) {
+    return value
+  }
+
+  const before = value.slice(0, start + token.length)
+  const indexType = value.slice(start + token.length, end).trim()
+  const after = value.slice(end)
+
+  return `${before} (${indexType}) | boolean | string[] | undefined${after}`
+}
+
 const ordinalName = (index: number) => {
   const ordinal = ordinalSeries.get(index)
   assert(ordinal !== undefined)
@@ -123,13 +143,14 @@ export const normalizeRuleDefinition = async (
           ? `Rule${toTypeName(key)}${ordinalName(ordinal)}Options`
           : `Rule${toTypeName(key)}Options`
 
-      const lines = (
+      const lines = patchVitestValidTitleTypes(
+        key,
         await compile(_schema, name, {
           bannerComment: '',
           declareExternallyReferenced: true,
           format: false,
           strictIndexSignatures: true,
-        })
+        }),
       ).split(/\r?\n/)
 
       const index = lines.findLastIndex((line) =>
