@@ -1,8 +1,9 @@
 // import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
 import type { ParserOptions } from '@typescript-eslint/utils/ts-eslint'
+import type { Settings as PerfectionistSettings } from 'eslint-plugin-perfectionist/dist/utils/get-settings'
 import gitignore from 'eslint-config-flat-gitignore'
 import eslintParserJSON from 'jsonc-eslint-parser'
-import { defaultsDeep, isPlainObject, omit } from 'lodash-es'
+import { defaultsDeep, isPlainObject, omit } from 'es-toolkit/compat'
 import tseslint from 'typescript-eslint'
 import { rulesDepend } from './rules/rules-depend'
 import { rulesJavaScript } from './rules/rules-javascript'
@@ -223,7 +224,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
           partitionByComment: true,
           partitionByNewLine: true,
           type: 'alphabetical',
-        },
+        } satisfies PerfectionistSettings,
       },
     },
     gitignore({

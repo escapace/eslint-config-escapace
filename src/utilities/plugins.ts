@@ -28,7 +28,6 @@ export async function interopDefault<T>(
 export const pluginsDefault = {
   'de-morgan': eslintPluginDeMorgan as TSESLint.FlatConfig.Plugin,
   'depend': eslintPluginDepend as TSESLint.FlatConfig.Plugin,
-  'json': eslintPluginJSON,
   'perfectionist': eslintConfigPerfectionist as TSESLint.FlatConfig.Plugin,
   'regexp': eslintPluginRegexp.configs['flat/all'].plugins.regexp as TSESLint.FlatConfig.Plugin,
   'stylistic': eslintPluginStylistic,
@@ -36,6 +35,9 @@ export const pluginsDefault = {
   'tsdoc': eslintPluginTSDoc as TSESLint.FlatConfig.Plugin,
   'typescript': tseslint.plugin as TSESLint.FlatConfig.Plugin,
   'unicorn': eslintPluginUnicorn as TSESLint.FlatConfig.Plugin,
+  get 'json'() {
+    return eslintPluginJSON
+  },
   get 'yaml'() {
     return eslintPluginYAML as TSESLint.FlatConfig.Plugin
   },

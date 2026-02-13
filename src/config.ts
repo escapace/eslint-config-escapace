@@ -1,24 +1,48 @@
 import eslint from '@eslint/js'
 import type { TSESLint } from '@typescript-eslint/utils'
-import eslintConfigPrettier from 'eslint-config-prettier'
-import eslintPluginPerfectionist from 'eslint-plugin-perfectionist'
-import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility'
-import { mapValues, pickBy } from 'lodash-es'
+import { mapValues, pickBy } from 'es-toolkit/compat'
+import prettierConfig from 'eslint-config-prettier'
+import assert from 'node:assert'
 import tseslint from 'typescript-eslint'
 import type { RuleEntry, Rules } from './types'
 import { normalizeRules } from './utilities/normalize-rules'
-import { ok } from './utilities/ok'
 import { pluginsAll } from './utilities/plugins'
-import assert from 'node:assert'
 
 const plugins = await pluginsAll()
 
-const compose = (
-  ...configs: Array<TSESLint.FlatConfig.Config | undefined>
-): TSESLint.FlatConfig.ConfigArray =>
-  configs
+function extractRules(
+  ...configs: Array<
+    ReadonlyArray<TSESLint.FlatConfig.Config | undefined> | TSESLint.FlatConfig.Config | undefined
+  >
+): Array<Partial<Record<string, TSESLint.SharedConfig.RuleEntry>> | undefined> {
+  const flattened: Array<TSESLint.FlatConfig.Config | undefined> = []
+
+  for (const value of configs) {
+    if (Array.isArray(value)) {
+      for (const config of value as ReadonlyArray<TSESLint.FlatConfig.Config | undefined>) {
+        flattened.push(config)
+      }
+    } else if (value === undefined) {
+      flattened.push(undefined)
+    } else {
+      flattened.push(value as TSESLint.FlatConfig.Config)
+    }
+  }
+
+  return flattened
     .filter((value): value is TSESLint.FlatConfig.Config => value !== undefined)
-    .flatMap((config) => [config])
+    .map((value) => value.rules)
+}
+
+const ensurePreset = (config: object | undefined, key: string): TSESLint.FlatConfig.Config[] => {
+  assert(config !== undefined)
+  assert(!Array.isArray(config))
+  const value = Reflect.get(config, key) as TSESLint.FlatConfig.Config
+
+  assert(value !== undefined)
+
+  return Array.isArray(value) ? value : [value]
+}
 
 export const rulesVueIncluded = normalizeRules({
   'vue/block-order': [
@@ -78,19 +102,19 @@ export const rulesVueIncluded = normalizeRules({
 
 export const rulesVueDefaults: Record<string, RuleEntry> = pickBy(
   normalizeRules(
-    ...compose(
-      ...(ok(plugins.vue.configs)['flat/base'] as TSESLint.FlatConfig.Config[]),
-      ...(ok(plugins.vue.configs)['flat/essential'] as TSESLint.FlatConfig.Config[]),
-      ...(ok(plugins.vue.configs)['flat/recommended'] as TSESLint.FlatConfig.Config[]),
-      ...(ok(plugins.vue.configs)['flat/strongly-recommended'] as TSESLint.FlatConfig.Config[]),
-      ...eslintPluginVueA11y.configs['flat/recommended'].map((value) => ({ rules: value.rules })),
+    ...extractRules(
+      ensurePreset(plugins.vue.configs, 'flat/base'),
+      ensurePreset(plugins.vue.configs, 'flat/essential'),
+      ensurePreset(plugins.vue.configs, 'flat/recommended'),
+      ensurePreset(plugins.vue.configs, 'flat/strongly-recommended'),
+      ensurePreset(plugins['vue-a11y'].configs, 'flat/recommended'),
       {
         rules: pickBy(
-          eslintConfigPrettier.rules,
+          prettierConfig.rules,
           (_, key) => key.startsWith('vue/') || key.startsWith('vue-a11y/'),
         ),
       },
-    ).map((value) => value.rules),
+    ),
   ),
 )
 
@@ -122,7 +146,7 @@ export const rulesDepend: Rules = {
   'depend/ban-dependencies': [
     'error',
     {
-      allowed: ['lodash-es', 'execa'],
+      allowed: ['es-toolkit', 'execa'],
       presets: ['microutilities', 'preferred'],
     },
   ],
@@ -386,26 +410,16 @@ export const rulesTypescriptIncluded: Rules = {
   ) as Record<string, 'off'>),
 }
 
-const preset = (config: object | undefined, key: string): TSESLint.FlatConfig.Config[] => {
-  assert(config !== undefined)
-  assert(!Array.isArray(config))
-  const value = Reflect.get(config, key) as TSESLint.FlatConfig.Config
-
-  assert(value !== undefined)
-
-  return Array.isArray(value) ? value : [value]
-}
-
 export const rulesTypescriptDefaults = normalizeRules(
-  ...compose(
+  ...extractRules(
     eslint.configs.recommended,
-    ...tseslint.configs.recommendedTypeChecked,
-    ...tseslint.configs.stylisticTypeChecked,
-    ...preset(plugins.stylistic.configs, 'disable-legacy'),
-    ...preset(eslintPluginPerfectionist.configs, 'recommended-alphabetical'),
-    ...preset(plugins.regexp.configs, 'flat/recommended'),
-    eslintConfigPrettier,
-  ).map((value) => value.rules),
+    ensurePreset(tseslint.configs, 'recommendedTypeChecked'),
+    ensurePreset(tseslint.configs, 'stylisticTypeChecked'),
+    ensurePreset(plugins.stylistic.configs, 'disable-legacy'),
+    ensurePreset(plugins.perfectionist.configs, 'recommended-alphabetical'),
+    ensurePreset(plugins.regexp.configs, 'flat/recommended'),
+    prettierConfig,
+  ),
 )
 
 export const rulesTypescript = normalizeRules(rulesTypescriptDefaults, rulesTypescriptIncluded)
@@ -413,16 +427,16 @@ export const rulesTypescript = normalizeRules(rulesTypescriptDefaults, rulesType
 export const rulesJavascript = normalizeRules(
   rulesTypescriptDefaults,
   rulesTypescriptIncluded,
-  ...compose(tseslint.configs.disableTypeChecked).map((value) => value.rules),
+  ...extractRules(ensurePreset(tseslint.configs, 'disableTypeChecked')),
   { 'tsdoc/syntax': 'off' },
 )
 
 export const rulesYAMLDefaults = normalizeRules(
-  ...compose(
-    ...preset(plugins.yaml.configs, 'flat/base'),
-    ...preset(plugins.yaml.configs, 'flat/recommended'),
-    ...preset(plugins.yaml.configs, 'flat/prettier'),
-  ).map((value) => value.rules),
+  ...extractRules(
+    ensurePreset(plugins.yaml.configs, 'flat/base'),
+    ensurePreset(plugins.yaml.configs, 'flat/recommended'),
+    ensurePreset(plugins.yaml.configs, 'flat/prettier'),
+  ),
 )
 
 export const rulesYAMLIncluded = normalizeRules({
@@ -445,7 +459,7 @@ export const rulesYAMLIncluded = normalizeRules({
     },
   ],
   'yaml/spaced-comment': 'error',
-} satisfies Rules)
+})
 
 export const rulesYAML = { ...rulesYAMLDefaults, ...rulesYAMLIncluded }
 
@@ -458,8 +472,9 @@ export const [rulesJSONDefaults, rulesJSON5Defaults, rulesJSONCDefaults] = (
 ).map(
   (key): Record<string, RuleEntry> =>
     normalizeRules(
-      ...compose(...plugins.json.configs[key], ...plugins.json.configs['flat/prettier']).map(
-        (value) => value.rules,
+      ...extractRules(
+        ensurePreset(plugins.json.configs, key),
+        ensurePreset(plugins.json.configs, 'flat/prettier'),
       ),
     ),
 )
@@ -476,7 +491,7 @@ export const rulesJSONIncluded = normalizeRules({
     },
   ],
   'json/space-unary-ops': 'error',
-} satisfies Rules)
+})
 
 export const [rulesJSON, rulesJSON5, rulesJSONC] = (
   [rulesJSONDefaults, rulesJSON5Defaults, rulesJSONCDefaults] as const
@@ -489,15 +504,15 @@ export const [rulesJSON, rulesJSON5, rulesJSONC] = (
 )
 
 export const rulesTOMLDefaults = normalizeRules(
-  ...compose(
-    ...preset(plugins.toml.configs, 'flat/base'),
-    ...preset(plugins.toml.configs, 'flat/recommended'),
-    ...preset(plugins.toml.configs, 'flat/standard'),
-  ).map((value) => value.rules),
+  ...extractRules(
+    ensurePreset(plugins.toml.configs, 'flat/base'),
+    ensurePreset(plugins.toml.configs, 'flat/recommended'),
+    ensurePreset(plugins.toml.configs, 'flat/standard'),
+  ),
 )
 
 export const rulesTOMLIncluded = normalizeRules({
   'toml/array-bracket-spacing': ['error', 'never'],
-} satisfies Rules)
+})
 
 export const rulesTOML = { ...rulesTOMLDefaults, ...rulesTOMLIncluded }

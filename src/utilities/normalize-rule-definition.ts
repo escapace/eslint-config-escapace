@@ -1,11 +1,21 @@
 import type { JSONSchema4 } from '@typescript-eslint/utils/json-schema'
-import type { LooseRuleCreateFunction } from '@typescript-eslint/utils/ts-eslint'
 import type { Rule } from 'eslint'
 import { compile } from 'json-schema-to-typescript'
-import { isFunction, isObject, isPlainObject, map, mapKeys, mapValues, omit } from 'lodash-es'
+import {
+  isFunction,
+  isObject,
+  isPlainObject,
+  map,
+  mapKeys,
+  mapValues,
+  omit,
+} from 'es-toolkit/compat'
 import assert from 'node:assert'
 import { clean } from 'trigram-utils'
-import { toSafeString } from './to-safe-string'
+import { toTypeName } from './to-type-name'
+
+// eslint-disable-next-line typescript/no-explicit-any, typescript/no-unsafe-function-type
+export type LooseRuleCreateFunction = (context: any) => Record<string, Function | undefined>
 
 const mapValuesDeep = (
   object: object | null | undefined,
@@ -110,8 +120,8 @@ export const normalizeRuleDefinition = async (
     try {
       const name =
         schema.length > 1
-          ? `Rule${toSafeString(key)}${ordinalName(ordinal)}Options`
-          : `Rule${toSafeString(key)}Options`
+          ? `Rule${toTypeName(key)}${ordinalName(ordinal)}Options`
+          : `Rule${toTypeName(key)}Options`
 
       const value = (
         await compile(_schema, name, {

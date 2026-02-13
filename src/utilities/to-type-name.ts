@@ -18,13 +18,13 @@
 //
 // https://github.com/bcherny/json-schema-to-typescript/blob/master/src/utils.ts
 
-import { deburr, trim, upperFirst } from 'lodash-es'
+import { deburr, trim, upperFirst } from 'es-toolkit/compat'
 
 /**
  * Convert a string that might contain spaces or special characters to one that
  * can safely be used as a TypeScript interface or enum name.
  */
-export function toSafeString(string: string) {
+export function toTypeName(string: string) {
   // identifiers in javaScript/ts:
   // First character: a-zA-Z | _ | $
   // Rest: a-zA-Z | _ | $ | 0-9

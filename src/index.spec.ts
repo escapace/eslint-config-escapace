@@ -1,4 +1,4 @@
-import { isEmpty, isEqual, pickBy } from 'lodash-es'
+import { isEmpty, isEqual, pickBy } from 'es-toolkit/compat'
 import { exec as _exec } from 'node:child_process'
 import { it } from 'vitest'
 import {

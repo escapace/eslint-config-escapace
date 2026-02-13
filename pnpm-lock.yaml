@@ -27,8 +27,8 @@ importers:
         specifier: ^2.21.0
         version: 2.21.0(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-perfectionist:
-        specifier: ^5.4.0
-        version: 5.4.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+        specifier: ^5.5.0
+        version: 5.5.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-regexp:
         specifier: ^3.0.0
         version: 3.0.0(eslint@9.39.2(jiti@2.6.1))
@@ -67,23 +67,23 @@ importers:
         specifier: 20.4.1
         version: 20.4.1
       '@escapace/pnpm-pack':
-        specifier: 0.6.1
-        version: 0.6.1(@pnpm/logger@5.2.0)
+        specifier: 0.6.3
+        version: 0.6.3(@pnpm/logger@5.2.0)
       '@eslint/js':
         specifier: 9.39.2
         version: 9.39.2
       '@ls-lint/ls-lint':
         specifier: 2.3.1
         version: 2.3.1
-      '@types/lodash-es':
-        specifier: 4.17.12
-        version: 4.17.12
       '@types/node':
         specifier: 25.2.0
         version: 25.2.0
       '@vitest/coverage-v8':
         specifier: 4.0.18
         version: 4.0.18(vitest@4.0.18(@types/node@25.2.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.2))
+      es-toolkit:
+        specifier: 1.44.0
+        version: 1.44.0
       eslint:
         specifier: 9.39.2
         version: 9.39.2(jiti@2.6.1)
@@ -100,14 +100,11 @@ importers:
         specifier: 15.0.4
         version: 15.0.4
       knip:
-        specifier: 5.82.1
-        version: 5.82.1(@types/node@25.2.0)(typescript@5.9.3)
+        specifier: 5.83.0
+        version: 5.83.0(@types/node@25.2.0)(typescript@5.9.3)
       lefthook:
-        specifier: 2.0.16
-        version: 2.0.16
-      lodash-es:
-        specifier: 4.17.23
-        version: 4.17.23
+        specifier: 2.1.0
+        version: 2.1.0
       prettier:
         specifier: 3.8.1
         version: 3.8.1
@@ -139,8 +136,8 @@ packages:
     resolution: {integrity: sha512-60vepv88RwcJtSHrD6MjIL6Ta3SOYbgfnkHb+ppAVK+o9mXprRtulx7VlRl3lN3bbvysAfCS7WMVfhUYemB0IQ==}
     engines: {node: '>= 16'}
 
-  '@babel/code-frame@7.28.6':
-    resolution: {integrity: sha512-JYgintcMjRiCvS8mMECzaEn+m3PfoQiyqukOMCCVQtoJGYJw8j/8LBJEiqkHLkfwCcs74E3pbAUFNg7d9VNJ+Q==}
+  '@babel/code-frame@7.29.0':
+    resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/helper-string-parser@7.27.1':
@@ -398,9 +395,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@escapace/pnpm-pack@0.6.1':
-    resolution: {integrity: sha512-hNyIddrsUs8k9e5+6/GRgeSdcy0Uj4mwNGx+cGr6/mFTkPt49co8O/TYqO2YKVmHGXqwY1vShxYdrbysCygmDA==}
-    engines: {node: '>=24.9.0', pnpm: '>=10.27.0'}
+  '@escapace/pnpm-pack@0.6.3':
+    resolution: {integrity: sha512-OZjrZvBaf6EtXFbqdNp5BUq/kRsGMjrlCSvsQBrmV7p8ZrJKMWBb9xtWgzrgvyzn6I1s9mk2UGGhFXVGqu36Ew==}
+    engines: {node: '>=24.13.0', pnpm: '>=10.29.2'}
     hasBin: true
 
   '@eslint-community/eslint-utils@4.9.1':
@@ -981,9 +978,6 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/lodash-es@4.17.12':
-    resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
-
   '@types/lodash@4.17.23':
     resolution: {integrity: sha512-RDvF6wTulMPjrNdCoYRC8gNR880JNGT8uB+REUpC2Ns4pRqQJhGz90wh7rgdXDPpCczF3VGktDuFGVnz8zP7HA==}
 
@@ -1541,8 +1535,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-plugin-perfectionist@5.4.0:
-    resolution: {integrity: sha512-XxpUMpeVaSJF5rpF6NHmhj3xavHZrflKcRbDssAUWrHUU/+l3l7PPYnVJ6IOpR2KjQ1Blucaeb0cFL3LIBis0A==}
+  eslint-plugin-perfectionist@5.5.0:
+    resolution: {integrity: sha512-lZX2KUpwOQf7J27gAg/6vt8ugdPULOLmelM8oDJPMbaN7P2zNNeyS9yxGSmJcKX0SF9qR/962l9RWM2Z5jpPzg==}
     engines: {node: ^20.0.0 || >=22.0.0}
     peerDependencies:
       eslint: '>=8.45.0'
@@ -2053,66 +2047,66 @@ packages:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
     engines: {node: '>=6'}
 
-  knip@5.82.1:
-    resolution: {integrity: sha512-1nQk+5AcnkqL40kGQXfouzAEXkTR+eSrgo/8m1d0BMei4eAzFwghoXC4gOKbACgBiCof7hE8wkBVDsEvznf85w==}
+  knip@5.83.0:
+    resolution: {integrity: sha512-FfmaHMntpZB13B1oJQMSs1hTOZxd0TOn+FYB3oWEI02XlxTW3RH4H7d8z5Us3g0ziHCYyl7z0B1xi8ENP3QEKA==}
     engines: {node: '>=18.18.0'}
     hasBin: true
     peerDependencies:
       '@types/node': '>=18'
       typescript: '>=5.0.4 <7'
 
-  lefthook-darwin-arm64@2.0.16:
-    resolution: {integrity: sha512-kjVHkD7rfPa7M0aKJSx/yatdV9uC6o3cJyzM9zk7cg5HD7alSwchFalgF/P0w6nt7C02rAUx8C05qiWCDWaKeA==}
+  lefthook-darwin-arm64@2.1.0:
+    resolution: {integrity: sha512-u2hjHLQXWSFfzO7ln2n/uEydSzfC9sc5cDC7tvKSuOdhvBwaJ0AQ7ZeuqqCQ4YfVIJfYOom1SVE9CBd10FVyig==}
     cpu: [arm64]
     os: [darwin]
 
-  lefthook-darwin-x64@2.0.16:
-    resolution: {integrity: sha512-tbJ0mdT49DNRLqknro0BvWrYNC23TTcqBJFQnQ32pq1/H9B87bTNKvKKAtogp/saxfHUzkIq1i3twZlBZ3G3Xw==}
+  lefthook-darwin-x64@2.1.0:
+    resolution: {integrity: sha512-zz5rcyrtOZpxon7uE+c0KC/o2ypJeLZql5CL0Y9oaTuECbmhfokm8glsGnyWstW/++PuMpZYYr/qsCJA5elxkQ==}
     cpu: [x64]
     os: [darwin]
 
-  lefthook-freebsd-arm64@2.0.16:
-    resolution: {integrity: sha512-wa1KFD5tSUhw3tuetVef/BCSxbbmS7auTDNdoLx3WFeuN5RS15woSN9+E8GPGOOY1g2HCsgdLrhrexEomulfjQ==}
+  lefthook-freebsd-arm64@2.1.0:
+    resolution: {integrity: sha512-+mXNCNuFHNGYLrDqYWDeHH7kWCLCJFPpspx5PAAm+PD37PRMZJrTqDbaNK9qCghC1tdmT4/Lvilf/ewXHPlaKw==}
     cpu: [arm64]
     os: [freebsd]
 
-  lefthook-freebsd-x64@2.0.16:
-    resolution: {integrity: sha512-UXowfn2e94AwNk9UuoePRK+qiF15jZsssiyA15VK5GTtxpn6Sn+Z2QFciofxJczXXxM4abaf7qgx2OoJBt32VA==}
+  lefthook-freebsd-x64@2.1.0:
+    resolution: {integrity: sha512-+AU2HD7szuDsUdHue/E3OnF84B2ae/h7CGKpuIUHJntgoJ4kxf89oDvq2/xl8kDCn9cT76UUjgeZUgFYLRj+6Q==}
     cpu: [x64]
     os: [freebsd]
 
-  lefthook-linux-arm64@2.0.16:
-    resolution: {integrity: sha512-U355elz4Z0AHSVqxfcglN09TGR86ov/GtYlliDknci2mmz6EWLiD3dTYnqJiwa4dYxqmuCDc/DvAL9rgb3YJiQ==}
+  lefthook-linux-arm64@2.1.0:
+    resolution: {integrity: sha512-KM70eV1tsEib1/tk+3TFxIdH84EaYlIg5KTQWAg+LB1N23nTQ7lL4Dnh1je6f6KW4tf21nmoMUqsh0xvMkQk8Q==}
     cpu: [arm64]
     os: [linux]
 
-  lefthook-linux-x64@2.0.16:
-    resolution: {integrity: sha512-7eAvBeWGAgjOKZ23OQbjJINLPImDIuDeX8dXOfk+aI6IFt2X6KCzRkp+ASUvGQtrPuNZQZT43EhW0/1jZU14ZQ==}
+  lefthook-linux-x64@2.1.0:
+    resolution: {integrity: sha512-6Bxmv+l7LiYq9W0IE6v2lmlRtBp6pisnlzhcouMGvH3rDwEGw11NAyRJZA3IPGEMAkIuhnlnVTUwAUzKomfJLg==}
     cpu: [x64]
     os: [linux]
 
-  lefthook-openbsd-arm64@2.0.16:
-    resolution: {integrity: sha512-Fcd+E17ZkWGnRSQINb5gf+rNy2So5PYn5mBljiC31dl+TgWM8Wy46mSEGveHo7lKCO3q+DkmHIa50Qm58G03AQ==}
+  lefthook-openbsd-arm64@2.1.0:
+    resolution: {integrity: sha512-ppJNK0bBSPLC8gqksRw5zI/0uLeMA5cK+hmZ4ofcuGNmdrN1dfl2Tx84fdeef0NcQY0ii9Y3j3icIKngIoid/g==}
     cpu: [arm64]
     os: [openbsd]
 
-  lefthook-openbsd-x64@2.0.16:
-    resolution: {integrity: sha512-uL5nOkz8eBtQHped0/tB5X8clZ5kfnyjQrv1fpKbGAjeFHI2J+GmRqcn6Awq2IeuBbQvkyV6jDjpATyHBp5mCA==}
+  lefthook-openbsd-x64@2.1.0:
+    resolution: {integrity: sha512-8k9lQsMYqQGu4spaQ8RNSOJidxIcOyfaoF2FPZhthtBfRV3cgVFGrsQ0hbIi5pvQRGUlCqYuCN79qauXHmnL3Q==}
     cpu: [x64]
     os: [openbsd]
 
-  lefthook-windows-arm64@2.0.16:
-    resolution: {integrity: sha512-U61bNWzD6Vd2kjuJ7b4voPfTQ4mlBFOyTpCU3k/h0YjpKDQEFT1T5fDKkDothdnw/JVDSgrclIcfAY7Jyr/UIg==}
+  lefthook-windows-arm64@2.1.0:
+    resolution: {integrity: sha512-0WN+grrxt9zP9NGRcztoPXcz25tteem91rfLWgQFab+50csJ47zldlsB7/eOS/eHG5mUg5g5NPR4XefnXtjOcQ==}
     cpu: [arm64]
     os: [win32]
 
-  lefthook-windows-x64@2.0.16:
-    resolution: {integrity: sha512-dCHi2+hebhPI0LQUGRNjPMsGRyXhrTN3Y/b8M4HO8KVyGamKB3Yemf67ya81tZopDkxNVy5XUBXLYWKGhnAfLQ==}
+  lefthook-windows-x64@2.1.0:
+    resolution: {integrity: sha512-XbO/5nAZQLpUn0tPpgCYfFBFJHnymSglQ73jD6wymNrR1j8I5EcXGlP6YcLhnZ83yzsdLC+gup+N6IqUeiyRdw==}
     cpu: [x64]
     os: [win32]
 
-  lefthook@2.0.16:
-    resolution: {integrity: sha512-ABs3M5V9c4nqxFnZO509HXuQTu8GM8hmqc9ruV0acQ81yKlxEq70MRoYP5Z1dr5le326X8vA5qj3arJA36yE3A==}
+  lefthook@2.1.0:
+    resolution: {integrity: sha512-+vS+yywGQW6CN1J1hbGkez//6ixGHIQqfxDN/d3JDm531w9GfGt2lAWTDfZTw/CEl80XsN0raFcnEraR3ldw9g==}
     hasBin: true
 
   levn@0.4.1:
@@ -2129,9 +2123,6 @@ packages:
   locate-path@8.0.0:
     resolution: {integrity: sha512-XT9ewWAC43tiAV7xDAPflMkG0qOPn2QjHqlgX8FOqmWa/rxnyYDulF9T0F7tRy1u+TVTmK/M//6VIOye+2zDXg==}
     engines: {node: '>=20'}
-
-  lodash-es@4.17.23:
-    resolution: {integrity: sha512-kVI48u3PZr38HdYz98UmfPnXl2DXrpdctLrFLCd3kOx1xUkOmpFPx7gCWWM5MPkL/fD8zb+Ph0QzjGFs4+hHWg==}
 
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
@@ -3051,7 +3042,7 @@ snapshots:
       '@types/json-schema': 7.0.15
       js-yaml: 4.1.1
 
-  '@babel/code-frame@7.28.6':
+  '@babel/code-frame@7.29.0':
     dependencies:
       '@babel/helper-validator-identifier': 7.28.5
       js-tokens: 4.0.0
@@ -3275,7 +3266,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.2':
     optional: true
 
-  '@escapace/pnpm-pack@0.6.1(@pnpm/logger@5.2.0)':
+  '@escapace/pnpm-pack@0.6.3(@pnpm/logger@5.2.0)':
     dependencies:
       '@pnpm/lockfile-file': 9.1.3(@pnpm/logger@5.2.0)
       arg: 5.0.2
@@ -3831,10 +3822,6 @@ snapshots:
   '@types/estree@1.0.8': {}
 
   '@types/json-schema@7.0.15': {}
-
-  '@types/lodash-es@4.17.12':
-    dependencies:
-      '@types/lodash': 4.17.23
 
   '@types/lodash@4.17.23': {}
 
@@ -4420,7 +4407,7 @@ snapshots:
     transitivePeerDependencies:
       - '@eslint/json'
 
-  eslint-plugin-perfectionist@5.4.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3):
+  eslint-plugin-perfectionist@5.5.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3):
     dependencies:
       '@typescript-eslint/utils': 8.54.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint: 9.39.2(jiti@2.6.1)
@@ -4988,7 +4975,7 @@ snapshots:
 
   kleur@3.0.3: {}
 
-  knip@5.82.1(@types/node@25.2.0)(typescript@5.9.3):
+  knip@5.83.0(@types/node@25.2.0)(typescript@5.9.3):
     dependencies:
       '@nodelib/fs.walk': 1.2.8
       '@types/node': 25.2.0
@@ -5005,48 +4992,48 @@ snapshots:
       typescript: 5.9.3
       zod: 4.3.6
 
-  lefthook-darwin-arm64@2.0.16:
+  lefthook-darwin-arm64@2.1.0:
     optional: true
 
-  lefthook-darwin-x64@2.0.16:
+  lefthook-darwin-x64@2.1.0:
     optional: true
 
-  lefthook-freebsd-arm64@2.0.16:
+  lefthook-freebsd-arm64@2.1.0:
     optional: true
 
-  lefthook-freebsd-x64@2.0.16:
+  lefthook-freebsd-x64@2.1.0:
     optional: true
 
-  lefthook-linux-arm64@2.0.16:
+  lefthook-linux-arm64@2.1.0:
     optional: true
 
-  lefthook-linux-x64@2.0.16:
+  lefthook-linux-x64@2.1.0:
     optional: true
 
-  lefthook-openbsd-arm64@2.0.16:
+  lefthook-openbsd-arm64@2.1.0:
     optional: true
 
-  lefthook-openbsd-x64@2.0.16:
+  lefthook-openbsd-x64@2.1.0:
     optional: true
 
-  lefthook-windows-arm64@2.0.16:
+  lefthook-windows-arm64@2.1.0:
     optional: true
 
-  lefthook-windows-x64@2.0.16:
+  lefthook-windows-x64@2.1.0:
     optional: true
 
-  lefthook@2.0.16:
+  lefthook@2.1.0:
     optionalDependencies:
-      lefthook-darwin-arm64: 2.0.16
-      lefthook-darwin-x64: 2.0.16
-      lefthook-freebsd-arm64: 2.0.16
-      lefthook-freebsd-x64: 2.0.16
-      lefthook-linux-arm64: 2.0.16
-      lefthook-linux-x64: 2.0.16
-      lefthook-openbsd-arm64: 2.0.16
-      lefthook-openbsd-x64: 2.0.16
-      lefthook-windows-arm64: 2.0.16
-      lefthook-windows-x64: 2.0.16
+      lefthook-darwin-arm64: 2.1.0
+      lefthook-darwin-x64: 2.1.0
+      lefthook-freebsd-arm64: 2.1.0
+      lefthook-freebsd-x64: 2.1.0
+      lefthook-linux-arm64: 2.1.0
+      lefthook-linux-x64: 2.1.0
+      lefthook-openbsd-arm64: 2.1.0
+      lefthook-openbsd-x64: 2.1.0
+      lefthook-windows-arm64: 2.1.0
+      lefthook-windows-x64: 2.1.0
 
   levn@0.4.1:
     dependencies:
@@ -5062,8 +5049,6 @@ snapshots:
   locate-path@8.0.0:
     dependencies:
       p-locate: 6.0.0
-
-  lodash-es@4.17.23: {}
 
   lodash.camelcase@4.3.0: {}
 
@@ -5503,7 +5488,7 @@ snapshots:
 
   parse-json@5.2.0:
     dependencies:
-      '@babel/code-frame': 7.28.6
+      '@babel/code-frame': 7.29.0
       error-ex: 1.3.4
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4

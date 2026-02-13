@@ -6,7 +6,7 @@ import {
   type LooseRuleDefinition,
   type RuleDefinition,
 } from './normalize-rule-definition'
-import { ok } from './ok.js'
+import { ensureDefined } from './ensure-defined.js'
 
 export const ruleDefinitions = async (): Promise<Array<[string, RuleDefinition]>> => {
   const collator = new Intl.Collator('en')
@@ -20,20 +20,20 @@ export const ruleDefinitions = async (): Promise<Array<[string, RuleDefinition]>
           ...Object.entries(plugins.json.rules).map(
             ([key, value]) => [`json/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
-          ...Object.entries(ok(plugins.perfectionist.rules)).map(
+          ...Object.entries(ensureDefined(plugins.perfectionist.rules)).map(
             ([key, value]) =>
               [`perfectionist/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
           ...Object.entries(plugins.regexp.rules ?? {}).map(
             ([key, value]) => [`regexp/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
-          ...Object.entries(ok(plugins.tsdoc.rules)).map(
+          ...Object.entries(ensureDefined(plugins.tsdoc.rules)).map(
             ([key, value]) => [`tsdoc/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
-          ...Object.entries(ok(plugins.unicorn.rules)).map(
+          ...Object.entries(ensureDefined(plugins.unicorn.rules)).map(
             ([key, value]) => [`unicorn/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
-          ...Object.entries(ok(plugins.vue.rules)).map(
+          ...Object.entries(ensureDefined(plugins.vue.rules)).map(
             ([key, value]) => [`vue/${key}`, value] satisfies [string, LooseRuleDefinition],
           ),
           ...Object.entries(plugins.yaml.rules!).map(

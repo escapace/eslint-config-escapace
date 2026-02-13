@@ -1,4 +1,4 @@
-import { kebabCase } from 'lodash-es'
+import { kebabCase } from 'es-toolkit/compat'
 import assert from 'node:assert'
 import { writeFile } from 'node:fs/promises'
 import path from 'node:path'
