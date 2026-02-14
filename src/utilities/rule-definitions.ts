@@ -13,6 +13,7 @@ export const ruleDefinitions = async (): Promise<Array<[string, RuleDefinition]>
 
   const pluginEntries: Array<[prefix: string, rules: Record<string, LooseRuleDefinition>]> = [
     ['', Object.fromEntries(eslintRules as Map<string, LooseRuleDefinition>)],
+    ['baseline-js', plugins['baseline-js'].rules ?? {}],
     ['de-morgan', plugins['de-morgan'].rules ?? {}],
     ['depend', plugins.depend.rules ?? {}],
     ['json', plugins.json.rules as Record<string, LooseRuleDefinition>],

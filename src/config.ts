@@ -157,6 +157,15 @@ export const rulesTypescriptIncluded: Rules = {
   // "typescript/prefer-includes": "error",
   // 'no-new-symbol': 'error',
   ...rulesDepend,
+  'baseline-js/use-baseline': [
+    'error',
+    {
+      available: 'widely',
+      ignoreFeatures: ['top-level-await'],
+      includeJsBuiltins: { preset: 'type-aware' },
+      includeWebApis: { preset: 'type-aware' },
+    },
+  ],
   'de-morgan/no-negated-conjunction': 'error',
   'de-morgan/no-negated-disjunction': 'error',
 
@@ -420,7 +429,18 @@ export const rulesJavascript = normalizeRules(
   rulesTypescriptDefaults,
   rulesTypescriptIncluded,
   ...extractRules(ensurePreset(tseslint.configs, 'disableTypeChecked')),
-  { 'tsdoc/syntax': 'off' },
+  {
+    'baseline-js/use-baseline': [
+      'error',
+      {
+        available: 'widely',
+        ignoreFeatures: ['top-level-await'],
+        includeJsBuiltins: { preset: 'auto' },
+        includeWebApis: { preset: 'auto' },
+      },
+    ],
+    'tsdoc/syntax': 'off',
+  },
 )
 
 const rulesVitestIncluded = normalizeRules({
