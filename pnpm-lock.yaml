@@ -94,7 +94,7 @@ importers:
         specifier: 1.44.0
         version: 1.44.0
       eslint:
-        specifier: '>=9.39.2 <10'
+        specifier: 9.39.2
         version: 9.39.2(jiti@2.6.1)
       eslint-config-escapace:
         specifier: 'link:'
