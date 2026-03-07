@@ -2,7 +2,7 @@
 import type { ParserOptions } from '@typescript-eslint/utils/ts-eslint'
 import type { Settings as PerfectionistSettings } from 'eslint-plugin-perfectionist/dist/utils/get-settings'
 import gitignore from 'eslint-config-flat-gitignore'
-import eslintParserJSON from 'jsonc-eslint-parser'
+import * as eslintParserJSON from 'jsonc-eslint-parser'
 import { defaultsDeep, isPlainObject, omit } from 'es-toolkit/compat'
 import tseslint from 'typescript-eslint'
 import { rulesDepend } from './rules/rules-depend'
@@ -204,6 +204,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
         '**/package-lock.json',
         '**/pnpm-lock.yaml',
         '**/yarn.lock',
+        '**/lake-manifest.json',
 
         '**/.cache',
         '**/.changeset',
