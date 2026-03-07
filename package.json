@@ -32,7 +32,7 @@
   "devDependencies": {
     "@commitlint/cli": "20.4.2",
     "@commitlint/config-conventional": "20.4.2",
-    "@escapace/pnpm-pack": "0.7.0",
+    "@escapace/pnpm-pack": "0.8.0",
     "@escapace/syncpack-configuration": "0.1.0",
     "@eslint/js": "9.39.3",
     "@ls-lint/ls-lint": "2.3.1",
