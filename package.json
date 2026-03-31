@@ -44,7 +44,7 @@
     "eslint-config-prettier": "10.1.8",
     "esroll": "1.1.5",
     "json-schema-to-typescript": "15.0.4",
-    "knip": "6.0.4",
+    "knip": "6.0.5",
     "lefthook": "2.1.4",
     "prettier": "3.8.1",
     "prettier-config-escapace": "1.2.2",
