@@ -217,10 +217,10 @@ describe('ensurePreset', () => {
   })
 
   it('throws for undefined config object', () => {
-    expect(() => ensurePreset(undefined, 'x')).toThrowError(/.+/)
+    expect(() => ensurePreset(undefined, 'x')).toThrow(/.+/)
   })
 
   it('throws for missing key', () => {
-    expect(() => ensurePreset({}, 'missing')).toThrowError(/.+/)
+    expect(() => ensurePreset({}, 'missing')).toThrow(/.+/)
   })
 })
