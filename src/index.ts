@@ -208,6 +208,7 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
 
         '**/.cache',
         '**/.changeset',
+        '**/.firecrawl',
         '**/.history',
         '**/.idea',
         '**/.next',
