@@ -42,7 +42,7 @@
     "eslint": "10.2.0",
     "eslint-config-escapace": "link:",
     "eslint-config-prettier": "10.1.8",
-    "esroll": "1.2.2",
+    "esroll": "1.2.3",
     "json-schema-to-typescript": "15.0.4",
     "knip": "6.4.1",
     "lefthook": "2.1.5",
