@@ -15,16 +15,24 @@ import { rulesTypeScript } from './rules/rules-typescript'
 import { rulesVitest } from './rules/rules-vitest'
 import { rulesVue } from './rules/rules-vue'
 import { rulesYAML } from './rules/rules-yaml'
+import {
+  ruleYamlSortKeysOptionsAnsibleMeta,
+  ruleYamlSortKeysOptionsAnsiblePlaybooks,
+  ruleYamlSortKeysOptionsAnsibleRequirements,
+  ruleYamlSortKeysOptionsAnsibleTasks,
+  ruleYamlSortKeysOptionsMolecule,
+} from './extensions/ansible'
+import {
+  ruleYamlSortKeysOptionsGithubActions,
+  ruleYamlSortKeysOptionsGithubWorkflows,
+} from './extensions/github'
 import type { Config } from './types'
-import type { RuleYamlSortKeysOptions } from './types/rule-yaml-sort-keys-options'
 import { normalizeRules } from './utilities/normalize-rules'
 import { ensurePreset } from './utilities/ensure-preset'
 import { interopDefault } from './utilities/interop-default'
 import { pluginsBase, pluginsVue } from './utilities/plugins'
 
 type ProjectServiceOptions = Exclude<ParserOptions['projectService'], boolean | undefined>
-
-type ValueOf<T> = T extends Array<infer U> ? U : never
 
 const ensureProjectServiceOptions = (
   projectService: ParserOptions['projectService'],
@@ -35,58 +43,6 @@ const ensureProjectServiceOptions = (
 
   return isPlainObject(projectService) ? projectService : undefined
 }
-
-const ruleYamlSortKeysOptionsGithubWorkflows = [
-  ...[['run'], ['uses']].map(
-    (hasProperties) =>
-      ({
-        hasProperties,
-        order: [
-          'name',
-          'if',
-          'id',
-          'working-directory',
-          'shell',
-          'env',
-          'continue-on-error',
-          'timeout-minutes',
-          'uses',
-          'with',
-          'run',
-        ],
-        pathPattern: '^jobs\\.[a-zA-Z_][a-zA-Z0-9_-]*\\.steps\\[[0-9]+\\]$',
-      }) satisfies ValueOf<RuleYamlSortKeysOptions>,
-  ),
-  ...[['steps'], ['uses'], ['container'], ['services']].map(
-    (hasProperties) =>
-      ({
-        hasProperties,
-        order: [
-          'name',
-          'if',
-          'needs',
-          'runs-on',
-          'permissions',
-          'environment',
-          'timeout-minutes',
-          'defaults',
-          'env',
-          'secrets',
-          'concurrency',
-          'strategy',
-          'continue-on-error',
-          'outputs',
-          'services',
-          'container',
-          'uses',
-          'with',
-          'steps',
-        ],
-        pathPattern: '^jobs\\.[a-zA-Z_][a-zA-Z0-9_-]*$',
-      }) satisfies ValueOf<RuleYamlSortKeysOptions>,
-  ),
-  ...(rulesYAML['yaml/sort-keys']?.slice(1) ?? []),
-] as unknown as RuleYamlSortKeysOptions
 
 export type { Config, Rules } from './types'
 export { normalizeRules }
@@ -269,6 +225,60 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
       rules: rulesYAML,
     },
     {
+      files: ['**/{tasks,handlers}/**/*.{yml,yaml}'],
+      language: 'yml/yaml',
+      plugins: {
+        yml: plugins.yaml,
+      },
+      rules: {
+        'yaml/sort-keys': ['error', ...ruleYamlSortKeysOptionsAnsibleTasks],
+      },
+    },
+    {
+      files: [
+        '**/{playbooks,plays}/**/*.{yml,yaml}',
+        '**/molecule/**/{cleanup,converge,create,destroy,prepare,side_effect,verify}.{yml,yaml}',
+        '**/{playbook,site}.{yml,yaml}',
+      ],
+      language: 'yml/yaml',
+      plugins: {
+        yml: plugins.yaml,
+      },
+      rules: {
+        'yaml/sort-keys': ['error', ...ruleYamlSortKeysOptionsAnsiblePlaybooks],
+      },
+    },
+    {
+      files: ['**/meta/{argument_specs,main}.{yml,yaml}'],
+      language: 'yml/yaml',
+      plugins: {
+        yml: plugins.yaml,
+      },
+      rules: {
+        'yaml/sort-keys': ['error', ...ruleYamlSortKeysOptionsAnsibleMeta],
+      },
+    },
+    {
+      files: ['**/requirements.{yml,yaml}'],
+      language: 'yml/yaml',
+      plugins: {
+        yml: plugins.yaml,
+      },
+      rules: {
+        'yaml/sort-keys': ['error', ...ruleYamlSortKeysOptionsAnsibleRequirements],
+      },
+    },
+    {
+      files: ['**/molecule/**/molecule.{yml,yaml}'],
+      language: 'yml/yaml',
+      plugins: {
+        yml: plugins.yaml,
+      },
+      rules: {
+        'yaml/sort-keys': ['error', ...ruleYamlSortKeysOptionsMolecule],
+      },
+    },
+    {
       files: ['**/.github/workflows/**.{yml,yaml}'],
       language: 'yml/yaml',
       plugins: {
@@ -276,6 +286,16 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
       },
       rules: {
         'yaml/sort-keys': ['error', ...ruleYamlSortKeysOptionsGithubWorkflows],
+      },
+    },
+    {
+      files: ['action.{yml,yaml}', '**/action.{yml,yaml}'],
+      language: 'yml/yaml',
+      plugins: {
+        yml: plugins.yaml,
+      },
+      rules: {
+        'yaml/sort-keys': ['error', ...ruleYamlSortKeysOptionsGithubActions],
       },
     },
     {
