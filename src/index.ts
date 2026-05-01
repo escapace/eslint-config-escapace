@@ -26,6 +26,16 @@ type ProjectServiceOptions = Exclude<ParserOptions['projectService'], boolean | 
 
 type ValueOf<T> = T extends Array<infer U> ? U : never
 
+const ensureProjectServiceOptions = (
+  projectService: ParserOptions['projectService'],
+): ProjectServiceOptions | undefined => {
+  if (projectService === undefined || typeof projectService === 'boolean') {
+    return undefined
+  }
+
+  return isPlainObject(projectService) ? projectService : undefined
+}
+
 const ruleYamlSortKeysOptionsGithubWorkflows = [
   ...[['run'], ['uses']].map(
     (hasProperties) =>
@@ -142,10 +152,9 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
         project: false,
         projectService: {
           defaultProject: 'tsconfig.json',
-          ...(isPlainObject(options.typescript?.languageOptions?.parserOptions?.projectService)
-            ? (options.typescript?.languageOptions?.parserOptions
-                ?.projectService as ProjectServiceOptions)
-            : undefined),
+          ...ensureProjectServiceOptions(
+            options.typescript?.languageOptions?.parserOptions?.projectService,
+          ),
         },
       },
     },

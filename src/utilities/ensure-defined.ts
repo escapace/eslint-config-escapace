@@ -29,7 +29,7 @@ export function ensureDefined<T>(value: T, ...path: readonly PropertyKey[]): unk
   let current: unknown = value
 
   for (const key of path) {
-    current = current == null ? undefined : Reflect.get(current as object, key)
+    current = current == null ? undefined : Reflect.get(current, key)
   }
 
   assert(current !== undefined, `Expected value at path "${pathString}" to be defined`)
