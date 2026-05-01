@@ -6,6 +6,8 @@ export default defineConfig({
       exclude: [
         '**/example*.ts',
         'src/test-support/**',
+        'src/vendor/tsdoc/*.md',
+        'src/vendor/tsdoc/LICENSE',
         ...(configDefaults.coverage.exclude ?? []),
         'src/rules/**',
         'src/types/**',

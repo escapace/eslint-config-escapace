@@ -8,7 +8,7 @@ import eslintPluginJSON from 'eslint-plugin-jsonc'
 import eslintPluginMath from 'eslint-plugin-math'
 import eslintPluginRegexp from 'eslint-plugin-regexp'
 import eslintPluginTOML from 'eslint-plugin-toml'
-import eslintPluginTSDoc from 'eslint-plugin-tsdoc'
+import eslintPluginTSDocument from '../vendor/tsdoc'
 import eslintPluginYAML from 'eslint-plugin-yml'
 import tseslint from 'typescript-eslint'
 
@@ -50,7 +50,7 @@ export const pluginsBase: PluginsBase = {
   'regexp': ensurePlugin(eslintPluginRegexp.configs['flat/all'].plugins?.regexp),
   'stylistic': ensurePlugin(eslintPluginStylistic),
   'toml': ensurePlugin(eslintPluginTOML),
-  'tsdoc': ensurePlugin(eslintPluginTSDoc),
+  'tsdoc': ensurePlugin(eslintPluginTSDocument),
   'typescript': ensurePlugin(tseslint.plugin),
   'unicorn': ensurePlugin(eslintPluginUnicorn),
   'vitest': ensurePlugin(eslintPluginVitest),
