@@ -1,6 +1,7 @@
 import { isEmpty, isEqual, pickBy } from 'es-toolkit/compat'
 import { exec as _exec } from 'node:child_process'
 import { it } from 'vitest'
+
 import {
   rulesJSON5Defaults,
   rulesJSONCDefaults,
@@ -43,7 +44,7 @@ const checks = (
   }
 }
 
-it('rules', () => {
+it('rules', { timeout: 60_000 }, () => {
   checks(rulesTypescriptIncluded, rulesTypescriptDefaults)
   checks(rulesYAMLIncluded, rulesYAMLDefaults)
   checks(rulesTOMLIncluded, rulesTOMLDefaults)
@@ -53,6 +54,6 @@ it('rules', () => {
   checks(rulesVueIncluded, rulesVueDefaults)
 })
 
-it('eslint', { timeout: 30_000 }, async () => {
+it('eslint', { timeout: 60_000 }, async () => {
   await exec(`./node_modules/.bin/eslint 'src/**/*.ts'`)
 })

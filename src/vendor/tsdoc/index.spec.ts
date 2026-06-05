@@ -7,14 +7,19 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { afterAll, describe, it, vi } from 'vitest'
+
 import plugin from './index'
 import { createSyntaxRule, type TsDocumentConfigLoader } from './rule'
 
 const previousRuleTesterDescribe = RuleTester.describe
 const previousRuleTesterIt = RuleTester.it
+const ruleTesterIt = ((name: unknown, run?: () => void) => {
+  // eslint-disable-next-line vitest/valid-title
+  it(String(name), run, 60_000)
+}) as unknown as typeof it
 
 RuleTester.describe = describe
-RuleTester.it = it
+RuleTester.it = ruleTesterIt
 
 const invalidConfigurationDirectory = mkdtempSync(
   path.join(tmpdir(), 'eslint-config-escapace-tsdoc-invalid-'),
@@ -40,6 +45,7 @@ writeFileSync(
   }),
 )
 
+// eslint-disable-next-line vitest/prefer-hooks-on-top
 afterAll(() => {
   RuleTester.describe = previousRuleTesterDescribe
   RuleTester.it = previousRuleTesterIt

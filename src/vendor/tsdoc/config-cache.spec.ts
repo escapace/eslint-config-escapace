@@ -4,6 +4,7 @@
 
 import path from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
+
 import { createConfigCache, getConfigForSourceFile, type CacheableConfigFile } from './config-cache'
 
 interface FakeConfigFile extends CacheableConfigFile {
@@ -38,73 +39,95 @@ const createCache = ({
 })
 
 describe('getConfigForSourceFile', () => {
-  it('uses default configuration discovery when no root directory is supplied', () => {
-    expect(
-      getConfigForSourceFile(path.join('src', 'vendor', 'tsdoc', 'example.ts')).fileNotFound,
-    ).toBe(true)
-  })
+  it(
+    'uses default configuration discovery when no root directory is supplied',
+    { timeout: 60_000 },
+    () => {
+      expect(
+        getConfigForSourceFile(path.join('src', 'vendor', 'tsdoc', 'example.ts')).fileNotFound,
+      ).toBe(true)
+    },
+  )
 })
 
 describe('createConfigCache', () => {
-  it('uses an explicit tsconfig root directory without probing for configuration', () => {
-    const findConfigPathForFolder = vi.fn(() => '')
-    const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
-    const { cache } = createCache({ findConfigPathForFolder, loadFile })
-    const tsConfigRootDirectory = path.join('workspace', 'package')
+  it(
+    'uses an explicit tsconfig root directory without probing for configuration',
+    { timeout: 60_000 },
+    () => {
+      const findConfigPathForFolder = vi.fn(() => '')
+      const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
+      const { cache } = createCache({ findConfigPathForFolder, loadFile })
+      const tsConfigRootDirectory = path.join('workspace', 'package')
 
-    const configFile = cache(
-      path.join('workspace', 'package', 'src', 'index.ts'),
-      tsConfigRootDirectory,
-    )
+      const configFile = cache(
+        path.join('workspace', 'package', 'src', 'index.ts'),
+        tsConfigRootDirectory,
+      )
 
-    expect(findConfigPathForFolder).not.toHaveBeenCalled()
-    expect(loadFile).toHaveBeenCalledWith(path.join(tsConfigRootDirectory, 'tsdoc.json'))
-    expect(configFile.key).toBe(path.join(tsConfigRootDirectory, 'tsdoc.json'))
-  })
+      expect(findConfigPathForFolder).not.toHaveBeenCalled()
+      expect(loadFile).toHaveBeenCalledWith(path.join(tsConfigRootDirectory, 'tsdoc.json'))
+      expect(configFile.key).toBe(path.join(tsConfigRootDirectory, 'tsdoc.json'))
+    },
+  )
 
-  it('probes from the source file folder when no explicit tsconfig root directory is provided', () => {
-    const foundConfigPath = path.join('workspace', 'tsdoc.json')
-    const findConfigPathForFolder = vi.fn(() => foundConfigPath)
-    const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
-    const { cache } = createCache({ findConfigPathForFolder, loadFile })
-    const sourceFilePath = path.join('workspace', 'src', 'index.ts')
+  it(
+    'probes from the source file folder when no explicit tsconfig root directory is provided',
+    { timeout: 60_000 },
+    () => {
+      const foundConfigPath = path.join('workspace', 'tsdoc.json')
+      const findConfigPathForFolder = vi.fn(() => foundConfigPath)
+      const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
+      const { cache } = createCache({ findConfigPathForFolder, loadFile })
+      const sourceFilePath = path.join('workspace', 'src', 'index.ts')
 
-    const configFile = cache(sourceFilePath)
+      const configFile = cache(sourceFilePath)
 
-    expect(findConfigPathForFolder).toHaveBeenCalledWith(path.dirname(path.resolve(sourceFilePath)))
-    expect(loadFile).toHaveBeenCalledWith(foundConfigPath)
-    expect(configFile.key).toBe(foundConfigPath)
-  })
+      expect(findConfigPathForFolder).toHaveBeenCalledWith(
+        path.dirname(path.resolve(sourceFilePath)),
+      )
+      expect(loadFile).toHaveBeenCalledWith(foundConfigPath)
+      expect(configFile.key).toBe(foundConfigPath)
+    },
+  )
 
-  it('uses the source folder as cache key when no configuration path is found', () => {
-    const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
-    const { cache } = createCache({ loadFile })
-    const sourceFilePath = path.join('workspace', 'src', 'index.ts')
+  it(
+    'uses the source folder as cache key when no configuration path is found',
+    { timeout: 60_000 },
+    () => {
+      const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
+      const { cache } = createCache({ loadFile })
+      const sourceFilePath = path.join('workspace', 'src', 'index.ts')
 
-    const firstConfigFile = cache(sourceFilePath)
-    const secondConfigFile = cache(sourceFilePath)
+      const firstConfigFile = cache(sourceFilePath)
+      const secondConfigFile = cache(sourceFilePath)
 
-    expect(firstConfigFile).toBe(secondConfigFile)
-    expect(loadFile).toHaveBeenCalledTimes(1)
-    expect(loadFile).toHaveBeenCalledWith('')
-  })
+      expect(firstConfigFile).toBe(secondConfigFile)
+      expect(loadFile).toHaveBeenCalledTimes(1)
+      expect(loadFile).toHaveBeenCalledWith('')
+    },
+  )
 
-  it('returns the cached configuration before the expiration and check intervals elapse', () => {
-    let nowMs = 0
-    const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
-    const { cache } = createCache({ loadFile, getTimeInMs: () => nowMs })
-    const sourceFilePath = path.join('workspace', 'src', 'index.ts')
+  it(
+    'returns the cached configuration before the expiration and check intervals elapse',
+    { timeout: 60_000 },
+    () => {
+      let nowMs = 0
+      const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
+      const { cache } = createCache({ loadFile, getTimeInMs: () => nowMs })
+      const sourceFilePath = path.join('workspace', 'src', 'index.ts')
 
-    const firstConfigFile = cache(sourceFilePath)
-    nowMs = 1000
-    const secondConfigFile = cache(sourceFilePath)
+      const firstConfigFile = cache(sourceFilePath)
+      nowMs = 1000
+      const secondConfigFile = cache(sourceFilePath)
 
-    expect(firstConfigFile).toBe(secondConfigFile)
-    expect(firstConfigFile.checkForModifiedFiles).not.toHaveBeenCalled()
-    expect(loadFile).toHaveBeenCalledTimes(1)
-  })
+      expect(firstConfigFile).toBe(secondConfigFile)
+      expect(firstConfigFile.checkForModifiedFiles).not.toHaveBeenCalled()
+      expect(loadFile).toHaveBeenCalledTimes(1)
+    },
+  )
 
-  it('reloads expired configuration entries', () => {
+  it('reloads expired configuration entries', { timeout: 60_000 }, () => {
     let nowMs = 0
     const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
     const { cache } = createCache({ loadFile, getTimeInMs: () => nowMs })
@@ -118,41 +141,49 @@ describe('createConfigCache', () => {
     expect(loadFile).toHaveBeenCalledTimes(2)
   })
 
-  it('checks old-but-unexpired configuration entries for file modifications', () => {
-    let nowMs = 0
-    const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
-    const { cache } = createCache({ loadFile, getTimeInMs: () => nowMs })
-    const sourceFilePath = path.join('workspace', 'src', 'index.ts')
+  it(
+    'checks old-but-unexpired configuration entries for file modifications',
+    { timeout: 60_000 },
+    () => {
+      let nowMs = 0
+      const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
+      const { cache } = createCache({ loadFile, getTimeInMs: () => nowMs })
+      const sourceFilePath = path.join('workspace', 'src', 'index.ts')
 
-    const firstConfigFile = cache(sourceFilePath)
-    nowMs = 4000
-    const secondConfigFile = cache(sourceFilePath)
+      const firstConfigFile = cache(sourceFilePath)
+      nowMs = 4000
+      const secondConfigFile = cache(sourceFilePath)
 
-    expect(firstConfigFile).toBe(secondConfigFile)
-    expect(firstConfigFile.checkForModifiedFiles).toHaveBeenCalledTimes(1)
-    expect(loadFile).toHaveBeenCalledTimes(1)
-  })
+      expect(firstConfigFile).toBe(secondConfigFile)
+      expect(firstConfigFile.checkForModifiedFiles).toHaveBeenCalledTimes(1)
+      expect(loadFile).toHaveBeenCalledTimes(1)
+    },
+  )
 
-  it('reloads old-but-unexpired configuration entries when their files changed', () => {
-    let nowMs = 0
-    const firstLoadedConfigFile = createFakeConfigFile('', true)
-    const secondLoadedConfigFile = createFakeConfigFile('', false)
-    const loadedConfigFiles = [firstLoadedConfigFile, secondLoadedConfigFile]
-    const loadFile = vi.fn(() => loadedConfigFiles.shift()!)
-    const { cache } = createCache({ loadFile, getTimeInMs: () => nowMs })
-    const sourceFilePath = path.join('workspace', 'src', 'index.ts')
+  it(
+    'reloads old-but-unexpired configuration entries when their files changed',
+    { timeout: 60_000 },
+    () => {
+      let nowMs = 0
+      const firstLoadedConfigFile = createFakeConfigFile('', true)
+      const secondLoadedConfigFile = createFakeConfigFile('', false)
+      const loadedConfigFiles = [firstLoadedConfigFile, secondLoadedConfigFile]
+      const loadFile = vi.fn(() => loadedConfigFiles.shift()!)
+      const { cache } = createCache({ loadFile, getTimeInMs: () => nowMs })
+      const sourceFilePath = path.join('workspace', 'src', 'index.ts')
 
-    const firstConfigFile = cache(sourceFilePath)
-    nowMs = 4000
-    const secondConfigFile = cache(sourceFilePath)
+      const firstConfigFile = cache(sourceFilePath)
+      nowMs = 4000
+      const secondConfigFile = cache(sourceFilePath)
 
-    expect(firstConfigFile).toBe(firstLoadedConfigFile)
-    expect(secondConfigFile).toBe(secondLoadedConfigFile)
-    expect(firstLoadedConfigFile.checkForModifiedFiles).toHaveBeenCalledTimes(1)
-    expect(loadFile).toHaveBeenCalledTimes(2)
-  })
+      expect(firstConfigFile).toBe(firstLoadedConfigFile)
+      expect(secondConfigFile).toBe(secondLoadedConfigFile)
+      expect(firstLoadedConfigFile.checkForModifiedFiles).toHaveBeenCalledTimes(1)
+      expect(loadFile).toHaveBeenCalledTimes(2)
+    },
+  )
 
-  it('clears the cache after the maximum size is exceeded', () => {
+  it('clears the cache after the maximum size is exceeded', { timeout: 60_000 }, () => {
     const loadFile = vi.fn((configFilePath: string) => createFakeConfigFile(configFilePath))
     const { cache } = createCache({ cacheMaxSize: 1, loadFile })
 

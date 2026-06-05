@@ -1,6 +1,7 @@
 allowBuilds:
   esbuild: true
   lefthook: true
+  msgpackr-extract: false
   oxc-resolver: true
 blockExoticSubdeps: true
 childConcurrency: 1
@@ -8,6 +9,7 @@ dedupePeers: true
 minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
   - '@caslon/*'
+  - effect
   - '@cassiopeia/*'
   - '@cepheus/*'
   - '@escapace/*'
@@ -38,6 +40,7 @@ strictDepBuilds: true
 trustPolicy: no-downgrade
 trustPolicyExclude:
   - '@eslint/*'
+  - effect
   - eslint
   - tinyexec@1.2.1
   - tinyexec@1.2.2

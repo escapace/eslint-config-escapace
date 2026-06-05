@@ -16,6 +16,7 @@ export const ruleDefinitions = async (): Promise<Array<[string, RuleDefinition]>
     ['baseline-js', plugins['baseline-js'].rules ?? {}],
     ['de-morgan', plugins['de-morgan'].rules ?? {}],
     ['depend', plugins.depend.rules ?? {}],
+    ['escapace', plugins.escapace.rules ?? {}],
     ['json', plugins.json.rules as Record<string, LooseRuleDefinition>],
     ['math', plugins.math.rules ?? {}],
     ['perfectionist', plugins.perfectionist.rules ?? {}],

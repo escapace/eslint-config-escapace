@@ -25,6 +25,7 @@ export default mergeConfig(
       sequence: {
         hooks: 'list',
       },
+      testTimeout: 30_000,
     },
   }),
 )

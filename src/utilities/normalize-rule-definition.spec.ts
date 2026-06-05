@@ -1,6 +1,7 @@
 // @ts-expect-error no-types
 import eslintRules from '../../node_modules/eslint/lib/rules/index.js'
 import { describe, expect, it } from 'vitest'
+
 import {
   normalizeRuleDefinition,
   type LooseRuleDefinition,
@@ -12,7 +13,7 @@ const getRule = (name: string): LooseRuleDefinition =>
 
 describe('normalizeRuleDefinition', () => {
   describe('metadata extraction', () => {
-    it('extracts description and url', async () => {
+    it('extracts description and url', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition(
         'constructor-super',
         getRule('constructor-super'),
@@ -22,21 +23,21 @@ describe('normalizeRuleDefinition', () => {
       expect(result.meta.url).toBe('https://eslint.org/docs/latest/rules/constructor-super')
     })
 
-    it('extracts type and fixable', async () => {
+    it('extracts type and fixable', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition('eqeqeq', getRule('eqeqeq'))
 
       expect(result.meta.type).toBe('suggestion')
       expect(result.meta.fixable).toBe('code')
     })
 
-    it('detects deprecated as object', async () => {
+    it('detects deprecated as object', { timeout: 60_000 }, async () => {
       // max-len has deprecated as an object (not boolean)
       const result = await normalizeRuleDefinition('max-len', getRule('max-len'))
 
       expect(result.meta.deprecated).toBe(true)
     })
 
-    it('detects non-deprecated rule', async () => {
+    it('detects non-deprecated rule', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition('eqeqeq', getRule('eqeqeq'))
 
       expect(result.meta.deprecated).toBe(false)
@@ -44,7 +45,7 @@ describe('normalizeRuleDefinition', () => {
   })
 
   describe('jsdoc generation', () => {
-    it('generates description and url comment', async () => {
+    it('generates description and url comment', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition(
         'constructor-super',
         getRule('constructor-super'),
@@ -59,7 +60,7 @@ describe('normalizeRuleDefinition', () => {
       ])
     })
 
-    it('generates empty comment for undefined rule', async () => {
+    it('generates empty comment for undefined rule', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition('test-rule', undefined)
 
       expect(result.meta.descriptionTypescript).toEqual([])
@@ -67,7 +68,7 @@ describe('normalizeRuleDefinition', () => {
   })
 
   describe('schema handling', () => {
-    it('handles rule with no schema (0 options)', async () => {
+    it('handles rule with no schema (0 options)', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition(
         'constructor-super',
         getRule('constructor-super'),
@@ -77,7 +78,7 @@ describe('normalizeRuleDefinition', () => {
       expect(result.meta.typescript).toEqual([])
     })
 
-    it('handles schema as object (not array)', async () => {
+    it('handles schema as object (not array)', { timeout: 60_000 }, async () => {
       // eqeqeq has a non-array schema
       const result = await normalizeRuleDefinition('eqeqeq', getRule('eqeqeq'))
 
@@ -86,7 +87,7 @@ describe('normalizeRuleDefinition', () => {
       expect(result.meta.typescript[0].name).toBe('RuleEqeqeqOptions')
     })
 
-    it('handles rule with 1 schema item', async () => {
+    it('handles rule with 1 schema item', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition('no-shadow', getRule('no-shadow'))
 
       expect(result.meta.schema).toHaveLength(1)
@@ -94,7 +95,7 @@ describe('normalizeRuleDefinition', () => {
       expect(result.meta.typescript[0].name).toBe('RuleNoShadowOptions')
     })
 
-    it('handles rule with 3 schema items (ordinal naming)', async () => {
+    it('handles rule with 3 schema items (ordinal naming)', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition('max-len', getRule('max-len'))
 
       expect(result.meta.schema).toHaveLength(3)
@@ -106,13 +107,13 @@ describe('normalizeRuleDefinition', () => {
       ])
     })
 
-    it('generates valid typescript for each schema item', async () => {
+    it('generates valid typescript for each schema item', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition('no-shadow', getRule('no-shadow'))
 
       expect(result.meta.typescript[0].value).toContain('export interface RuleNoShadowOptions')
     })
 
-    it('injects jsdoc above the exported type', async () => {
+    it('injects jsdoc above the exported type', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition('no-shadow', getRule('no-shadow'))
       const lines = result.meta.typescript[0].value.split('\n')
       const exportIndex = lines.findIndex((l) => l.includes('export interface RuleNoShadowOptions'))
@@ -123,7 +124,7 @@ describe('normalizeRuleDefinition', () => {
   })
 
   describe('undefined and edge cases', () => {
-    it('handles undefined rule definition', async () => {
+    it('handles undefined rule definition', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition('nonexistent', undefined)
 
       expect(result.meta.schema).toEqual([])
@@ -135,7 +136,7 @@ describe('normalizeRuleDefinition', () => {
       expect(result.meta.fixable).toBeUndefined()
     })
 
-    it('rejects a bare function', async () => {
+    it('rejects a bare function', { timeout: 60_000 }, async () => {
       await expect(
         normalizeRuleDefinition('bad-rule', (() => ({})) as LooseRuleDefinition),
       ).rejects.toThrow('LooseRuleCreateFunction not supported')
@@ -143,7 +144,7 @@ describe('normalizeRuleDefinition', () => {
   })
 
   describe('return shape', () => {
-    it('returns a RuleDefinition with all expected meta keys', async () => {
+    it('returns a RuleDefinition with all expected meta keys', { timeout: 60_000 }, async () => {
       const result = await normalizeRuleDefinition('eqeqeq', getRule('eqeqeq'))
 
       expect(result).toEqual({

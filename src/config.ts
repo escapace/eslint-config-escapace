@@ -119,6 +119,8 @@ const rulesTypescriptDisable = [
   'no-shadow',
   'no-useless-return',
   'no-void',
+  'require-yield',
+  'unicorn/consistent-function-scoping',
   'perfectionist/sort-exports',
   'perfectionist/sort-imports',
   'perfectionist/sort-named-exports',
@@ -168,6 +170,10 @@ export const rulesTypescriptIncluded: Rules = {
   ],
   'de-morgan/no-negated-conjunction': 'error',
   'de-morgan/no-negated-disjunction': 'error',
+
+  'escapace/consistent-function-scoping': 'error',
+  'escapace/no-effect-untraced': 'error',
+  'escapace/no-import-shadows-global': 'error',
 
   'accessor-pairs': ['error', { enforceForClassMembers: true, setWithoutGet: true }],
   'array-callback-return': ['error', { allowImplicit: false, checkForEach: false }],
@@ -439,6 +445,9 @@ export const rulesJavascript = normalizeRules(
         includeWebApis: { preset: 'auto' },
       },
     ],
+    'escapace/consistent-function-scoping': 'off',
+    'escapace/no-effect-untraced': 'off',
+    'escapace/no-import-shadows-global': 'off',
     'tsdoc/syntax': 'off',
   },
 )

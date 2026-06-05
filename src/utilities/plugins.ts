@@ -9,6 +9,7 @@ import eslintPluginMath from 'eslint-plugin-math'
 import eslintPluginRegexp from 'eslint-plugin-regexp'
 import eslintPluginTOML from 'eslint-plugin-toml'
 import eslintPluginTSDocument from '../vendor/tsdoc'
+import eslintPluginEscapace from '../plugin'
 import eslintPluginYAML from 'eslint-plugin-yml'
 import tseslint from 'typescript-eslint'
 
@@ -20,6 +21,7 @@ export interface PluginsBase {
   'baseline-js': ESLint.Plugin
   'de-morgan': ESLint.Plugin
   'depend': ESLint.Plugin
+  'escapace': ESLint.Plugin
   'json': ESLint.Plugin
   'math': ESLint.Plugin
   'perfectionist': ESLint.Plugin
@@ -44,6 +46,7 @@ export const pluginsBase: PluginsBase = {
   'baseline-js': ensurePlugin(eslintPluginBaselineJs),
   'de-morgan': ensurePlugin(eslintPluginDeMorgan),
   'depend': ensurePlugin(eslintPluginDepend),
+  'escapace': ensurePlugin(eslintPluginEscapace),
   'json': ensurePlugin(eslintPluginJSON),
   'math': ensurePlugin(eslintPluginMath),
   'perfectionist': ensurePlugin(eslintPluginPerfectionist),

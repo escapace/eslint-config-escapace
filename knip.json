@@ -18,6 +18,7 @@
     "@commitlint/cli",
     "@escapace/syncpack-configuration",
     "@microsoft/api-extractor",
+    "effect",
     "eslint-config-escapace",
     "prettier",
     "syncpack"

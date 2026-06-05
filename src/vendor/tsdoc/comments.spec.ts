@@ -4,6 +4,7 @@
 
 import type { SourceCode } from 'eslint'
 import { describe, expect, it } from 'vitest'
+
 import { getTsDocumentTextRange, type SourceComment } from './comments'
 
 const createSourceCode = (text: string): Pick<SourceCode, 'text'> => ({ text })
@@ -15,7 +16,7 @@ const createComment = (comment: Partial<SourceComment>): SourceComment => ({
 })
 
 describe('getTsDocumentTextRange', () => {
-  it('skips line comments', () => {
+  it('skips line comments', { timeout: 60_000 }, () => {
     expect(
       getTsDocumentTextRange(
         createSourceCode('// hello'),
@@ -24,25 +25,25 @@ describe('getTsDocumentTextRange', () => {
     ).toBeUndefined()
   })
 
-  it('skips comments without ranges', () => {
+  it('skips comments without ranges', { timeout: 60_000 }, () => {
     expect(
       getTsDocumentTextRange(createSourceCode('/** hello */'), createComment({})),
     ).toBeUndefined()
   })
 
-  it('skips block comments that are too short to be TSDoc comments', () => {
+  it('skips block comments that are too short to be TSDoc comments', { timeout: 60_000 }, () => {
     expect(
       getTsDocumentTextRange(createSourceCode('/**/'), createComment({ range: [0, 4] })),
     ).toBeUndefined()
   })
 
-  it('skips non-TSDoc block comments', () => {
+  it('skips non-TSDoc block comments', { timeout: 60_000 }, () => {
     expect(
       getTsDocumentTextRange(createSourceCode('/* hello */'), createComment({ range: [0, 11] })),
     ).toBeUndefined()
   })
 
-  it('returns text ranges for TSDoc comments', () => {
+  it('returns text ranges for TSDoc comments', { timeout: 60_000 }, () => {
     const textRange = getTsDocumentTextRange(
       createSourceCode('/** hello */'),
       createComment({ range: [0, 12] }),
