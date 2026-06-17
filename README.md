@@ -18,7 +18,7 @@ import { escapace } from 'eslint-config-escapace'
 export default escapace()
 ```
 
-Defaults include `.gitignore`-aware ignoring and support for `.eslintignore` and `.lintignore`, plus Prettier compatibility via `eslint-config-prettier`.
+Defaults include `.gitignore`-aware ignoring and support for `.eslintignore` and `.lintignore` via ESLint’s built-in ignore helpers, plus Prettier compatibility via `eslint-config-prettier`.
 
 ## Options
 

@@ -39,13 +39,16 @@ beforeAll(async () => {
   symlinkSync(repoNodeModules, path.join(rootDirectory, 'node_modules'), 'dir')
 
   const composed = await compose(escapace())
-  // Rewrite projectService to point at our fixture tsconfig and drop the
-  // gitignore + repo-level `ignores` entries that target the source tree.
+  // Rewrite projectService to point at our fixture tsconfig and drop pure
+  // ignore configs that target the source tree rather than this temp fixture.
   config = composed
-    .filter(
-      (entry) =>
-        !Array.isArray((entry as { ignores?: unknown }).ignores) || Object.keys(entry).length !== 1,
-    )
+    .filter((entry) => {
+      const ignoreEntry = entry as { basePath?: unknown; ignores?: unknown; name?: unknown }
+      return (
+        !Array.isArray(ignoreEntry.ignores) ||
+        !Object.keys(ignoreEntry).every((key) => ['basePath', 'ignores', 'name'].includes(key))
+      )
+    })
     .map((entry) => {
       const parserOptions = entry.languageOptions?.parserOptions
       if (parserOptions?.projectService === undefined) {

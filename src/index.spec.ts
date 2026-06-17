@@ -1,6 +1,7 @@
+import { ESLint } from 'eslint'
 import { isEmpty, isEqual, pickBy } from 'es-toolkit/compat'
 import { exec as _exec } from 'node:child_process'
-import { it } from 'vitest'
+import { it, expect } from 'vitest'
 
 import {
   rulesJSON5Defaults,
@@ -17,6 +18,7 @@ import {
   rulesYAMLIncluded,
 } from './config'
 import type { RuleEntry } from './types'
+import { compose, escapace } from './index'
 import { ruleDefinitions } from './utilities/rule-definitions'
 import { promisify } from 'node:util'
 const exec = promisify(_exec)
@@ -52,6 +54,18 @@ it('rules', { timeout: 60_000 }, () => {
   checks(rulesJSONIncluded, rulesJSON5Defaults)
   checks(rulesJSONIncluded, rulesJSONCDefaults)
   checks(rulesVueIncluded, rulesVueDefaults)
+})
+
+it('ignores generated artifacts and imported ignore files', { timeout: 60_000 }, async () => {
+  const eslint = new ESLint({
+    overrideConfig: (await compose(escapace())) as never,
+    overrideConfigFile: true,
+  })
+
+  await expect(eslint.isPathIgnored('out/generated.ts')).resolves.toBe(true)
+  await expect(eslint.isPathIgnored('components/__snapshots__/button.ts')).resolves.toBe(true)
+  await expect(eslint.isPathIgnored('src/auto-imports.d.ts')).resolves.toBe(true)
+  await expect(eslint.isPathIgnored('src/index.ts')).resolves.toBe(false)
 })
 
 it('eslint', { timeout: 60_000 }, async () => {

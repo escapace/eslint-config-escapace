@@ -1,7 +1,9 @@
 // import type { FlatConfig } from '@typescript-eslint/utils/ts-eslint'
 import type { ParserOptions } from '@typescript-eslint/utils/ts-eslint'
+import { existsSync } from 'node:fs'
+import path from 'node:path'
+import { includeIgnoreFile, globalIgnores } from 'eslint/config'
 import type { Settings as PerfectionistSettings } from 'eslint-plugin-perfectionist/dist/utils/get-settings'
-import gitignore from 'eslint-config-flat-gitignore'
 import * as eslintParserJSON from 'jsonc-eslint-parser'
 import { defaultsDeep, isPlainObject, omit } from 'es-toolkit/compat'
 import tseslint from 'typescript-eslint'
@@ -34,6 +36,8 @@ import { pluginsBase, pluginsVue } from './utilities/plugins'
 
 type ProjectServiceOptions = Exclude<ParserOptions['projectService'], boolean | undefined>
 
+const projectIgnoreFiles = ['.eslintignore', '.gitignore', '.lintignore']
+
 const ensureProjectServiceOptions = (
   projectService: ParserOptions['projectService'],
 ): ProjectServiceOptions | undefined => {
@@ -42,6 +46,21 @@ const ensureProjectServiceOptions = (
   }
 
   return isPlainObject(projectService) ? projectService : undefined
+}
+
+const includeProjectIgnoreFiles = (): Config[] => {
+  const ignoreFiles = projectIgnoreFiles
+    .map((filePath) => path.resolve(filePath))
+    .filter((filePath) => existsSync(filePath))
+
+  if (ignoreFiles.length === 0) {
+    return []
+  }
+
+  return includeIgnoreFile(ignoreFiles, {
+    gitignoreResolution: true,
+    name: 'escapace/imported ignore files',
+  }) as Config[]
 }
 
 export type { Config, Rules } from './types'
@@ -159,39 +178,44 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
     : undefined
 
   return await compose(
-    {
-      ignores: [
+    globalIgnores(
+      [
         '**/fish_history',
 
         '**/bun.lockb',
-        '**/dist',
-        '**/node_modules',
+        '**/dist/',
+        '**/node_modules/',
         '**/package-lock.json',
         '**/pnpm-lock.yaml',
         '**/yarn.lock',
         '**/lake-manifest.json',
 
-        '**/.cache',
-        '**/.changeset',
-        '**/.firecrawl',
-        '**/.history',
-        '**/.idea',
-        '**/.next',
-        '**/.nuxt',
-        '**/.output',
-        '**/.vercel',
-        '**/.vite-inspect',
-        '**/.vitepress/cache',
-        '**/.wrangler',
-        '**/.yarn',
-        '**/coverage',
+        '**/.cache/',
+        '**/.changeset/',
+        '**/.firecrawl/',
+        '**/.history/',
+        '**/.idea/',
+        '**/.next/',
+        '**/.nuxt/',
+        '**/.output/',
+        '**/.vercel/',
+        '**/.vite-inspect/',
+        '**/.vitepress/cache/',
+        '**/.wrangler/',
+        '**/.yarn/',
+        '**/coverage/',
 
         '**/*.min.*',
         '**/CHANGELOG*.md',
         '**/LICENSE*',
-        '**/__snapshots__',
-        '**/auto-import?(s).d.ts',
+        '**/__snapshots__/',
+        '**/auto-import.d.ts',
+        '**/auto-imports.d.ts',
       ],
+      'escapace/global ignores',
+    ) as Config,
+    includeProjectIgnoreFiles(),
+    {
       settings: {
         perfectionist: {
           ignoreCase: true,
@@ -201,10 +225,6 @@ export const escapace = async (options: Options = {}): Promise<Config[]> => {
         } satisfies PerfectionistSettings,
       },
     },
-    gitignore({
-      files: ['.eslintignore', '.gitignore', '.lintignore'],
-      strict: false,
-    }),
     { plugins },
     typescript,
     javascript,
