@@ -5,6 +5,8 @@
 import {
   TSDocConfiguration as TSDocumentConfiguration,
   TSDocParser as TSDocumentParser,
+  TSDocTagDefinition as TSDocumentTagDefinition,
+  TSDocTagSyntaxKind as TSDocumentTagSyntaxKind,
   type ParserContext,
 } from '@microsoft/tsdoc'
 import type { TSDocConfigFile as TSDocumentConfigFile } from '@microsoft/tsdoc-config'
@@ -33,6 +35,28 @@ interface SyntaxRuleOptions {
 }
 
 const CONFIG_ERROR_LOCATION = { column: 1, line: 1 } as const
+const DOCUMENTATION_HIDDEN_TAG_NAME = '@hidden'
+
+const configureDocumentationHiddenTag = (configuration: TSDocumentConfiguration): void => {
+  // Setting the first supported tag enables support validation for every known tag. Preserve
+  // TSDoc's default behavior when the project has not enabled that validation.
+  const validatesSupportedTags = configuration.supportedTagDefinitions.length > 0
+  let definition = configuration.tryGetTagDefinition(DOCUMENTATION_HIDDEN_TAG_NAME)
+
+  if (definition === undefined) {
+    definition = new TSDocumentTagDefinition({
+      syntaxKind: TSDocumentTagSyntaxKind.ModifierTag,
+      tagName: DOCUMENTATION_HIDDEN_TAG_NAME,
+    })
+    configuration.addTagDefinition(definition)
+  } else if (definition.syntaxKind !== TSDocumentTagSyntaxKind.ModifierTag) {
+    throw new Error(`${DOCUMENTATION_HIDDEN_TAG_NAME} must be defined as a TSDoc modifier tag`)
+  }
+
+  if (validatesSupportedTags) {
+    configuration.setSupportForTag(definition, true)
+  }
+}
 
 const tsDocumentMessageIds: Readonly<Record<string, string>> = Object.freeze(
   Object.fromEntries(
@@ -113,6 +137,12 @@ export const createSyntaxRule = ({
         `Unexpected exception: ${getErrorMessage(error)}`,
         'error-loading-config-file',
       )
+    }
+
+    try {
+      configureDocumentationHiddenTag(tsDocumentConfiguration)
+    } catch (error) {
+      reportConfigurationError(context, getErrorMessage(error), 'error-applying-config')
     }
 
     const tsDocumentParser: TSDocumentParser = new TSDocumentParser(tsDocumentConfiguration)

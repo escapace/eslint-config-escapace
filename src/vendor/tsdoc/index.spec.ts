@@ -27,6 +27,9 @@ const invalidConfigurationDirectory = mkdtempSync(
 const customConfigurationDirectory = mkdtempSync(
   path.join(tmpdir(), 'eslint-config-escapace-tsdoc-custom-'),
 )
+const incompatibleConfigurationDirectory = mkdtempSync(
+  path.join(tmpdir(), 'eslint-config-escapace-tsdoc-incompatible-'),
+)
 
 writeFileSync(path.join(invalidConfigurationDirectory, 'tsdoc.json'), '{')
 writeFileSync(
@@ -44,6 +47,21 @@ writeFileSync(
     ],
   }),
 )
+writeFileSync(
+  path.join(incompatibleConfigurationDirectory, 'tsdoc.json'),
+  JSON.stringify({
+    $schema: 'https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json',
+    supportForTags: {
+      '@hidden': true,
+    },
+    tagDefinitions: [
+      {
+        syntaxKind: 'block',
+        tagName: '@hidden',
+      },
+    ],
+  }),
+)
 
 // eslint-disable-next-line vitest/prefer-hooks-on-top
 afterAll(() => {
@@ -51,6 +69,7 @@ afterAll(() => {
   RuleTester.it = previousRuleTesterIt
   rmSync(invalidConfigurationDirectory, { force: true, recursive: true })
   rmSync(customConfigurationDirectory, { force: true, recursive: true })
+  rmSync(incompatibleConfigurationDirectory, { force: true, recursive: true })
 })
 
 const createRuleConfigFile = (
@@ -104,6 +123,20 @@ ruleTester.run('"tsdoc/syntax" rule', plugin.rules.syntax, {
         },
       ],
     },
+    {
+      code: '/**\n * Hidden from generated documentation.\n *\n * @hidden\n */\nfunction foobar() {}\n',
+      errors: [
+        {
+          messageId: 'error-applying-config',
+        },
+      ],
+      filename: path.join(incompatibleConfigurationDirectory, 'example.ts'),
+      languageOptions: {
+        parserOptions: {
+          tsconfigRootDir: incompatibleConfigurationDirectory,
+        },
+      },
+    },
   ],
   valid: [
     '/**\nA great function!\n */\nfunction foobar() {}\n',
@@ -113,8 +146,18 @@ ruleTester.run('"tsdoc/syntax" rule', plugin.rules.syntax, {
     '// This is a line comment.\nfunction foobar() {}\n',
     '/**/\nfunction foobar() {}\n',
     '/** A great function! */\nfunction foobar() {}\n',
+    '/**\n * Hidden from generated documentation.\n *\n * @hidden\n */\nfunction foobar() {}\n',
     {
       code: '/**\n * A custom-tagged function.\n * @myTag\n */\nfunction foobar() {}\n',
+      filename: path.join(customConfigurationDirectory, 'example.ts'),
+      languageOptions: {
+        parserOptions: {
+          tsconfigRootDir: customConfigurationDirectory,
+        },
+      },
+    },
+    {
+      code: '/**\n * Hidden from generated documentation.\n *\n * @hidden\n */\nfunction foobar() {}\n',
       filename: path.join(customConfigurationDirectory, 'example.ts'),
       languageOptions: {
         parserOptions: {
