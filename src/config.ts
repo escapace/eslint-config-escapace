@@ -120,7 +120,6 @@ const rulesTypescriptDisable = [
   'no-useless-return',
   'no-void',
   'require-yield',
-  'unicorn/consistent-function-scoping',
   'perfectionist/sort-exports',
   'perfectionist/sort-imports',
   'perfectionist/sort-named-exports',
@@ -387,7 +386,6 @@ export const rulesTypescriptIncluded: Rules = {
   'typescript/strict-boolean-expressions': ['error', { allowAny: false, allowNullableBoolean: false, allowNullableNumber: false, allowNullableObject: false, allowNullableString: false, allowNumber: false, allowString: false }],
   'typescript/triple-slash-reference': ['error', { lib: 'never', path: 'never', types: 'never' }],
   'typescript/unified-signatures': 'error',
-  'unicorn/consistent-function-scoping': 'error',
   'unicorn/error-message': 'error',
   'unicorn/no-instanceof-array': 'error',
   'unicorn/no-keyword-prefix': 'off',
@@ -509,14 +507,13 @@ export const [rulesJSONDefaults, rulesJSON5Defaults, rulesJSONCDefaults] = (
     'flat/recommended-with-json5',
     'flat/recommended-with-jsonc',
   ] as const
-).map(
-  (key): Record<string, RuleEntry> =>
-    normalizeRules(
-      ...extractRules(
-        ensurePreset(plugins.json.configs, key),
-        ensurePreset(plugins.json.configs, 'flat/prettier'),
-      ),
+).map((key): Record<string, RuleEntry> =>
+  normalizeRules(
+    ...extractRules(
+      ensurePreset(plugins.json.configs, key),
+      ensurePreset(plugins.json.configs, 'flat/prettier'),
     ),
+  ),
 )
 
 export const rulesJSONIncluded = normalizeRules({
@@ -535,13 +532,11 @@ export const rulesJSONIncluded = normalizeRules({
 
 export const [rulesJSON, rulesJSON5, rulesJSONC] = (
   [rulesJSONDefaults, rulesJSON5Defaults, rulesJSONCDefaults] as const
-).map(
-  (object): Record<string, RuleEntry> => ({
-    ...mapValues(rulesJSONDefaults, () => 'off'),
-    ...object,
-    ...rulesJSONIncluded,
-  }),
-)
+).map((object): Record<string, RuleEntry> => ({
+  ...mapValues(rulesJSONDefaults, () => 'off'),
+  ...object,
+  ...rulesJSONIncluded,
+}))
 
 export const rulesTOMLDefaults = normalizeRules(
   ...extractRules(
