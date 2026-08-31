@@ -52,7 +52,7 @@ import { compose, escapace } from 'eslint-config-escapace'
 
 export default compose(escapace(), {
   rules: {
-    'unicorn/prevent-abbreviations': 'off',
+    'unicorn/name-replacements': 'off',
   },
 })
 ```

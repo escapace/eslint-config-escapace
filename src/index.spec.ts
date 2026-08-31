@@ -1,6 +1,7 @@
-import { ESLint } from 'eslint'
+import { ESLint, Linter } from 'eslint'
 import { isEmpty, isEqual, pickBy } from 'es-toolkit/compat'
 import { exec as _exec } from 'node:child_process'
+import path from 'node:path'
 import { it, expect } from 'vitest'
 
 import {
@@ -23,17 +24,26 @@ import { ruleDefinitions } from './utilities/rule-definitions'
 import { promisify } from 'node:util'
 const exec = promisify(_exec)
 
-const rulesAll = (await ruleDefinitions()).map(([key]) => key)
+const ruleDefinitionsById = new Map(await ruleDefinitions())
 
 const checks = (
   rules: Record<string, RuleEntry | undefined>,
   defaults: Record<string, RuleEntry | undefined>,
 ) => {
   // check if rule exists
-  const absent = pickBy(rules, (_, key) => !rulesAll.includes(key))
+  const absent = pickBy(rules, (_, key) => !ruleDefinitionsById.has(key))
 
   if (!isEmpty(absent)) {
     throw new Error(`The following rules do not exist: ${JSON.stringify(absent, null, 2)}`)
+  }
+
+  const deprecated = pickBy(
+    rules,
+    (_, key) => ruleDefinitionsById.get(key)?.meta.deprecated === true,
+  )
+
+  if (!isEmpty(deprecated)) {
+    throw new Error(`The following rules are deprecated: ${JSON.stringify(deprecated, null, 2)}`)
   }
 
   // check if rule is default
@@ -54,6 +64,38 @@ it('rules', { timeout: 60_000 }, () => {
   checks(rulesJSONIncluded, rulesJSON5Defaults)
   checks(rulesJSONIncluded, rulesJSONCDefaults)
   checks(rulesVueIncluded, rulesVueDefaults)
+})
+
+it('preserves behavior while replacing deprecated rules', { timeout: 60_000 }, async () => {
+  const config = (await compose(escapace())) as Linter.Config[]
+  const filename = path.resolve('src/index.ts')
+  const lintRuleIds = (code: string): string[] =>
+    new Linter({ cwd: process.cwd() })
+      .verify(code, config, { filename })
+      .map((message) => message.ruleId ?? `<${message.message}>`)
+
+  expect(
+    lintRuleIds('interface Parent { value: string }\ninterface Child extends Parent {}\n'),
+  ).not.toContain('typescript/no-empty-object-type')
+  expect(lintRuleIds('interface Empty {}\n')).toContain('typescript/no-empty-object-type')
+
+  const loopRuleIds = lintRuleIds(
+    'for (var index = 0; index < 2; index += 1) { setTimeout(() => index) }\n',
+  )
+  expect(loopRuleIds).toContain('no-loop-func')
+  expect(loopRuleIds).not.toContain('typescript/no-loop-func')
+
+  const precisionRuleIds = lintRuleIds('const value = 9007199254740993\nvoid value\n')
+  expect(precisionRuleIds).toContain('no-loss-of-precision')
+  expect(precisionRuleIds).not.toContain('typescript/no-loss-of-precision')
+
+  const directiveRuleIds = lintRuleIds('// @ts-ignore\nconst value: string = 1\nvoid value\n')
+  expect(directiveRuleIds).toContain('typescript/ban-ts-comment')
+  expect(directiveRuleIds).not.toContain('typescript/prefer-ts-expect-error')
+
+  const unionRuleIds = lintRuleIds('type Value = string | boolean\nvoid (0 as unknown as Value)\n')
+  expect(unionRuleIds).toContain('perfectionist/sort-union-types')
+  expect(unionRuleIds).not.toContain('typescript/sort-type-constituents')
 })
 
 it('ignores generated artifacts and imported ignore files', { timeout: 60_000 }, async () => {

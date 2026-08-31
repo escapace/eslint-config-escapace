@@ -91,9 +91,14 @@ describe('escapace config against effect@beta', () => {
     () => {
       const messages = lintFixture('subpath.ts', `import * as Arr from 'effect/Array'\nvoid Arr\n`)
       expect(ruleIds(messages)).not.toContain('escapace/no-import-shadows-global')
-      expect(ruleIds(messages)).not.toContain('unicorn/prevent-abbreviations')
+      expect(ruleIds(messages)).not.toContain('unicorn/name-replacements')
     },
   )
+
+  it('enforces name replacements', () => {
+    const messages = lintFixture('abbreviation.ts', `const err = new Error()\nvoid err\n`)
+    expect(ruleIds(messages)).toContain('unicorn/name-replacements')
+  })
 
   it('flags `import { Array } from "effect"` as a global shadow', { timeout: 60_000 }, () => {
     const messages = lintFixture('shadow-array.ts', `import { Array } from 'effect'\nvoid Array\n`)
