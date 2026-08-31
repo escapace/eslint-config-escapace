@@ -309,8 +309,8 @@ importers:
         specifier: 10.1.8
         version: 10.1.8(eslint@10.9.0)
       esroll:
-        specifier: 1.3.0
-        version: 1.3.0(@types/node@24.13.3)(supports-color@8.1.1)
+        specifier: 1.3.1
+        version: 1.3.1(@types/node@24.13.3)(supports-color@8.1.1)
       json-schema-to-typescript:
         specifier: 15.0.4
         version: 15.0.4
@@ -1452,9 +1452,6 @@ packages:
   '@types/node@24.13.3':
     resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
 
-  '@types/node@26.2.0':
-    resolution: {integrity: sha512-5IviulTZeRNp2vAJ514cc/HUlY5nZ9fCbq9DMyC52BrhFZACo3nI0R7qBxhQmo/d27NFe96ur/b7Wwxklda+kg==}
-
   '@types/ssri@7.1.5':
     resolution: {integrity: sha512-odD/56S3B51liILSk5aXJlnYt99S6Rt9EFDDqGtJM26rKHApHcwyU/UoYHrzKkdkHMAIquGWCuHtQTbes+FRQw==}
 
@@ -2108,8 +2105,8 @@ packages:
     resolution: {integrity: sha512-KmfKL3b6G+RXvP8N1vr3Tq1kL/oCFgn2NYXEtqP8/L3pKapUA4G8cFVaoF3SU323CD4XypR/ffioHmkti6/Tag==}
     engines: {node: '>=4.0'}
 
-  esroll@1.3.0:
-    resolution: {integrity: sha512-6PDVrGotyDHqFu1/+YxsNR5b3Nle88rflLQrTz+hApRF2nJ9ZbyBosABL0HF0mt51CRBXssUphP6ScnycJOXmA==}
+  esroll@1.3.1:
+    resolution: {integrity: sha512-Yjo3QjyrTGgP9RgpDRsnSwqcBbaeh5sBD42+Hvda6YjY+vwyGww9FKxL+RJCjLufzDL6XawFh1+KB783bgs1gA==}
     engines: {node: '>=24'}
 
   estraverse@5.3.0:
@@ -3051,8 +3048,8 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
 
-  source-map@0.7.6:
-    resolution: {integrity: sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==}
+  source-map@0.8.0:
+    resolution: {integrity: sha512-d8EqvL+k/SOXCreS/SUzg2ciyHqBBLcN/yuRjFsbvVhHTE2pgei7oAhmPM7kWFbkX6OSMQfUq4KbkF3au9lhYQ==}
     engines: {node: '>= 12'}
 
   split2@4.2.0:
@@ -3265,9 +3262,6 @@ packages:
 
   undici-types@7.18.2:
     resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
-
-  undici-types@8.3.0:
-    resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
   unicorn-magic@0.3.0:
     resolution: {integrity: sha512-+QBBXBCvifc56fsbuxZQ6Sic3wqqc3WWaqxs58gvJrcOuN83HGTCwz3oS5phzU9LthRNE9VrJCFCLUgHeeFnfA==}
@@ -4386,13 +4380,9 @@ snapshots:
     dependencies:
       undici-types: 7.18.2
 
-  '@types/node@26.2.0':
-    dependencies:
-      undici-types: 8.3.0
-
   '@types/ssri@7.1.5':
     dependencies:
-      '@types/node': 26.2.0
+      '@types/node': 24.13.3
 
   '@types/unist@3.0.3': {}
 
@@ -5123,7 +5113,7 @@ snapshots:
     dependencies:
       estraverse: 5.3.0
 
-  esroll@1.3.0(@types/node@24.13.3)(supports-color@8.1.1):
+  esroll@1.3.1(@types/node@24.13.3)(supports-color@8.1.1):
     dependencies:
       '@microsoft/api-extractor': 7.59.0(@types/node@24.13.3)
       '@microsoft/api-extractor-model': 7.33.11(@types/node@24.13.3)
@@ -5155,7 +5145,7 @@ snapshots:
       mlly: 1.8.2
       pretty-bytes: 7.1.1
       rollup: 4.62.5
-      source-map: 0.7.6
+      source-map: 0.8.0
       unist-util-visit: 5.1.0
       zx: 8.8.5
     transitivePeerDependencies:
@@ -6217,7 +6207,7 @@ snapshots:
 
   source-map@0.6.1: {}
 
-  source-map@0.7.6: {}
+  source-map@0.8.0: {}
 
   split2@4.2.0: {}
 
@@ -6417,8 +6407,6 @@ snapshots:
   unbash@4.0.10: {}
 
   undici-types@7.18.2: {}
-
-  undici-types@8.3.0: {}
 
   unicorn-magic@0.3.0: {}
 
