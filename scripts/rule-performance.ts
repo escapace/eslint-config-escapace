@@ -250,14 +250,14 @@ const renderRankings = (rules: readonly RulePerformance[], limit: number): strin
     })
     .join('\n\n')
 
-const repoIgnorePatterns = ['src/types/*.ts', 'src/rules/*.ts']
+const repositoryIgnorePatterns = ['src/types/*.ts', 'src/rules/*.ts']
 
 const main = async (): Promise<void> => {
   const options = parseOptions()
   // `compose(escapace())` returns the runtime shape ESLint accepts, but the
   // package types come from typescript-eslint's flat-config definitions.
   const overrideConfig = (await compose(escapace(), {
-    ignores: repoIgnorePatterns,
+    ignores: repositoryIgnorePatterns,
   })) as unknown as Linter.Config[]
   const eslint = new ESLint({
     concurrency: options.concurrency,

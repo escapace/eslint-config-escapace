@@ -26,6 +26,15 @@ const exec = promisify(_exec)
 
 const ruleDefinitionsById = new Map(await ruleDefinitions())
 
+const lintMessages = (
+  code: string,
+  config: Linter.Config[],
+  filename = 'src/index.ts',
+): Linter.LintMessage[] =>
+  new Linter({ cwd: process.cwd() }).verify(code, config, {
+    filename: path.resolve(filename),
+  })
+
 const checks = (
   rules: Record<string, RuleEntry | undefined>,
   defaults: Record<string, RuleEntry | undefined>,
@@ -68,11 +77,8 @@ it('rules', { timeout: 60_000 }, () => {
 
 it('preserves behavior while replacing deprecated rules', { timeout: 60_000 }, async () => {
   const config = (await compose(escapace())) as Linter.Config[]
-  const filename = path.resolve('src/index.ts')
   const lintRuleIds = (code: string): string[] =>
-    new Linter({ cwd: process.cwd() })
-      .verify(code, config, { filename })
-      .map((message) => message.ruleId ?? `<${message.message}>`)
+    lintMessages(code, config).map((message) => message.ruleId ?? `<${message.message}>`)
 
   expect(
     lintRuleIds('interface Parent { value: string }\ninterface Child extends Parent {}\n'),
@@ -96,6 +102,65 @@ it('preserves behavior while replacing deprecated rules', { timeout: 60_000 }, a
   const unionRuleIds = lintRuleIds('type Value = string | boolean\nvoid (0 as unknown as Value)\n')
   expect(unionRuleIds).toContain('perfectionist/sort-union-types')
   expect(unionRuleIds).not.toContain('typescript/sort-type-constituents')
+})
+
+it('extends the preset name replacements by default', { timeout: 60_000 }, async () => {
+  const config = (await compose(escapace(), {
+    rules: {
+      'unicorn/name-replacements': [
+        'warn',
+        {
+          replacements: {
+            usr: { user: true },
+          },
+        },
+      ],
+    },
+  })) as Linter.Config[]
+  const messages = lintMessages(
+    'const app = 1\nconst usr = 2\nconst err = new Error()\nvoid [app, usr, err]\n',
+    config,
+  ).filter(({ ruleId }) => ruleId === 'unicorn/name-replacements')
+
+  expect(messages).toHaveLength(3)
+  expect(messages.every(({ severity }) => severity === 1)).toBe(true)
+  expect(messages.map(({ message }) => message)).toEqual(
+    expect.arrayContaining([
+      expect.stringContaining('`app` should be named `application`'),
+      expect.stringContaining('`usr` should be named `user`'),
+      expect.stringContaining('`err` should be named `error`'),
+    ]),
+  )
+})
+
+it('ignores conventional config filenames', async () => {
+  const config = (await escapace()) as Linter.Config[]
+  const messages = lintMessages('export default {}\n', config, 'eslint.config.mjs')
+
+  expect(messages.map(({ ruleId }) => ruleId)).not.toContain('unicorn/name-replacements')
+})
+
+it('allows replacement of all name replacements when explicitly requested', async () => {
+  const config = (await compose(escapace(), {
+    rules: {
+      'unicorn/name-replacements': [
+        'error',
+        {
+          extendDefaultReplacements: false,
+          replacements: {
+            usr: { user: true },
+          },
+        },
+      ],
+    },
+  })) as Linter.Config[]
+  const messages = lintMessages(
+    'const app = 1\nconst usr = 2\nconst err = new Error()\nvoid [app, usr, err]\n',
+    config,
+  ).filter(({ ruleId }) => ruleId === 'unicorn/name-replacements')
+
+  expect(messages).toHaveLength(1)
+  expect(messages[0]?.message).toContain('`usr` should be named `user`')
 })
 
 it('ignores generated artifacts and imported ignore files', { timeout: 60_000 }, async () => {

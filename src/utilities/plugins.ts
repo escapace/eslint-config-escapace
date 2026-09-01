@@ -16,6 +16,7 @@ import tseslint from 'typescript-eslint'
 import eslintPluginPerfectionist from 'eslint-plugin-perfectionist'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
 import { ensurePlugin } from './ensure-plugin'
+import { withPresetNameReplacements } from './preset-name-replacements'
 
 export interface PluginsBase {
   'baseline-js': ESLint.Plugin
@@ -55,7 +56,7 @@ export const pluginsBase: PluginsBase = {
   'toml': ensurePlugin(eslintPluginTOML),
   'tsdoc': ensurePlugin(eslintPluginTSDocument),
   'typescript': ensurePlugin(tseslint.plugin),
-  'unicorn': ensurePlugin(eslintPluginUnicorn),
+  'unicorn': withPresetNameReplacements(ensurePlugin(eslintPluginUnicorn)),
   'vitest': ensurePlugin(eslintPluginVitest),
   'yaml': ensurePlugin(eslintPluginYAML),
 }

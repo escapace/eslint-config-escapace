@@ -11,7 +11,7 @@ import { compose, escapace } from './index'
 // in REPORT.md / TODO.md §4.2 — that the rules are registered, ordered, and
 // composed correctly with the rest of the preset.
 
-const repoNodeModules = path.resolve(import.meta.dirname, '../node_modules')
+const repositoryNodeModules = path.resolve(import.meta.dirname, '../node_modules')
 
 let rootDirectory: string
 let linter: Linter
@@ -36,7 +36,7 @@ beforeAll(async () => {
       include: ['./**/*.ts'],
     }),
   )
-  symlinkSync(repoNodeModules, path.join(rootDirectory, 'node_modules'), 'dir')
+  symlinkSync(repositoryNodeModules, path.join(rootDirectory, 'node_modules'), 'dir')
 
   const composed = await compose(escapace())
   // Rewrite projectService to point at our fixture tsconfig and drop pure
@@ -95,9 +95,33 @@ describe('escapace config against effect@beta', () => {
     },
   )
 
-  it('enforces name replacements', () => {
+  it('enforces abbreviation expansions', () => {
     const messages = lintFixture('abbreviation.ts', `const err = new Error()\nvoid err\n`)
     expect(ruleIds(messages)).toContain('unicorn/name-replacements')
+  })
+
+  it('prefers complete names over their corresponding abbreviations', () => {
+    const messages = lintFixture(
+      'expanded-names.ts',
+      `const app = 1\nconst apps = 2\nconst config = 3\nconst configs = 4\nconst repo = 5\nvoid [app, apps, config, configs, repo]\n`,
+    ).filter(({ ruleId }) => ruleId === 'unicorn/name-replacements')
+
+    expect(messages).toHaveLength(3)
+    expect(messages.map(({ message }) => message)).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('`app` should be named `application`'),
+        expect.stringContaining('`apps` should be named `applications`'),
+        expect.stringContaining('`repo` should be named `repository`'),
+      ]),
+    )
+  })
+
+  it('does not replace complete names with abbreviations', () => {
+    const messages = lintFixture(
+      'complete-names.ts',
+      `const application = 1\nconst applications = 2\nconst configuration = 3\nconst repository = 4\nvoid [application, applications, configuration, repository]\n`,
+    )
+    expect(ruleIds(messages)).not.toContain('unicorn/name-replacements')
   })
 
   it('flags `import { Array } from "effect"` as a global shadow', { timeout: 60_000 }, () => {
