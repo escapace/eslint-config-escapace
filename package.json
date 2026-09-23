@@ -37,7 +37,7 @@
     "@eslint/js": "10.0.1",
     "@ls-lint/ls-lint": "2.3.1",
     "@types/node": "24.13.5",
-    "@vitest/coverage-v8": "4.1.11",
+    "@vitest/coverage-v8": "5.0.1",
     "effect": "4.0.0-rc.115",
     "es-toolkit": "1.52.0",
     "eslint": "10.10.0",
